@@ -227,7 +227,133 @@ class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        this.onXMLMinorError("To do: Parse views and create cameras.");
+        //this.onXMLMinorError("To do: Parse views and create cameras.");
+
+        var defaultView = this.reader.getString(viewsNode, 'default');
+
+        var children = viewsNode.children;
+
+        this.views = [];
+        var numViews = 0;
+
+        var grandChildren = [];
+        var nodeNames = [];
+
+        for (var i = 0; i < children.length; i++){
+
+            var global = [];
+            var attributeNames = [];
+            var attributeTypes = [];
+
+            if (children[i].nodeName != "perspective" && children[i].nodeName != "ortho") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+            else {
+                attributeNames.push(...["from", "to"]);
+                attributeTypes.push(...["position", "position"]);
+            }
+
+
+            // Get id of the current view.
+            var viewId = this.reader.getString(children[i], 'id');
+            if (viewId == null)
+                return "no ID defined for light";
+
+            // Checks for repeated IDs.
+            if (this.views[viewId] != null)
+                return "ID must be unique for each light (conflict: ID = " + viewId + ")";
+            
+            // Default view
+            var enableView = false;
+            if (defaultView == this.reader.getString(children[i], 'id'))
+                enableView = true;
+
+            global.push(enableView);
+            global.push(children[i].nodeName);
+
+            grandChildren = children[i].children;
+
+            nodeNames = [];
+            for (var j = 0; j < grandChildren.length; j++) {
+                nodeNames.push(grandChildren[j].nodeName);
+            }
+
+            for (var j = 0; j < attributeNames.length; j++) {
+                var attributeIndex = nodeNames.indexOf(attributeNames[j]);
+
+                if (attributeIndex != -1) {
+                    var aux = this.parseCoordinates3D(grandChildren[attributeIndex], "view position for ID" + viewId);
+                    if (!Array.isArray(aux))
+                        return aux;
+
+                    global.push(aux);
+                }
+                else
+                    return "view " + attributeNames[i] + " undefined for ID = " + lightId;
+            }
+
+            var near = this.reader.getFloat(children[i], 'near');
+            if (!(near != null && !isNaN(near)))
+                    return "unable to parse near of the view for ID = " + viewId;
+
+            var far = this.reader.getFloat(children[i], 'far');
+            if (!(far != null && !isNaN(far)))
+                    return "unable to parse far of the view for ID = " + viewId;
+
+            if (children[i].nodeName == "perspective") {
+                var angle = this.reader.getFloat(children[i], 'angle');
+                if (!(angle != null && !isNaN(angle)))
+                    return "unable to parse angle of the view for ID = " + viewId;
+ 
+                    global.push(...[near, far, angle])
+            }
+            // If nodeName == "ortho"
+            else {
+                var left = this.reader.getFloat(children[i], 'left');
+                if (!(left != null && !isNaN(left)))
+                    return "unable to parse left of the view for ID = " + viewId;
+
+                var right = this.reader.getFloat(children[i], 'right');
+                if (!(right != null && !isNaN(right)))
+                    return "unable to parse right of the view for ID = " + viewId;
+
+                var top = this.reader.getFloat(children[i], 'top');
+                if (!(top != null && !isNaN(top)))
+                    return "unable to parse top of the view for ID = " + viewId;
+
+                var bottom = this.reader.getFloat(children[i], 'bottom');
+                if (!(bottom != null && !isNaN(bottom)))
+                    return "unable to parse bottom of the view for ID = " + viewId;
+
+                var upIndex = nodeNames.indexOf("up");
+
+                // Retrieves the light target.
+                var upPosition = [];
+                if (upIndex != -1) {
+                    var aux = this.parseCoordinates3D(grandChildren[upIndex], "target light for ID " + viewId);
+                    if (!Array.isArray(aux))
+                        return aux;
+
+                    upPosition = aux;
+                }
+                else {
+                    upPosition = [0,1,0];
+                }
+
+                global.push(...[near, far, left, right, top, bottom, upPosition]);
+            }
+            
+        
+            this.views[viewId] = global;
+
+            numViews++;
+        }
+
+        if (numViews < 1)
+            return "at least one view must be defined";
+
+        this.log("Parsed views");
 
         return null;
     }
@@ -393,7 +519,43 @@ class MySceneGraph {
     parseTextures(texturesNode) {
 
         //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        //this.onXMLMinorError("To do: Parse textures.");
+
+        var children = texturesNode.children;
+        
+        this.textures = [];
+        var numTextures = 0;
+        
+        for (var i = 0; i < children.length; i++){
+
+            if (children[i].nodeName != "texture") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current texture.
+            var textureId = this.reader.getString(children[i], 'id');
+            if (textureId == null)
+                return "no ID defined for texture";
+
+            // Checks for repeated IDs.
+            if (this.textures[textureId] != null)
+                return "ID must be unique for each texture (conflict: ID = " + textureId + ")";
+
+            var URL = this.reader.getString(children[i], "file");
+            if (URL == null)
+                return "no URL defined for texture";
+
+            this.textures.push(...[textureId, URL]);
+
+            numTextures++;
+        }
+
+        if (numTextures == 0)
+            return "at least one texture must be defined";
+
+        this.log("Parsed lights");
+
         return null;
     }
 
@@ -427,10 +589,35 @@ class MySceneGraph {
                 return "ID must be unique for each light (conflict: ID = " + materialID + ")";
 
             //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
+            //this.onXMLMinorError("To do: Parse materials.");
+
+            var materialShininess = this.reader.getString(children[i], 'shininess');
+
+            if (materialShininess == null)
+                return "no Shininess defined for material";
+
+            this.materials.push(...[materialID, materialShininess]);
+            
+            grandChildren = children[i].children;
+
+            for (var j = 0; j < grandChildren.length; j++){
+                var attributeName = grandChildren[j].nodeName;
+
+                if (attributeName == "emission" || attributeName == "ambient" || attributeName == "diffuse"|| attributeName == "specular"){
+                    //var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
+                    var aux = this.parseColor(grandChildren[j], attributeName + " material for ID" + materialID);
+
+                    if (!Array.isArray(aux))
+                        return aux;
+
+                    this.materials.push(aux);
+                }
+                else return "material " + attributeName + " undefined for ID = " + materialID;
+            }
+ 
         }
 
-        //this.log("Parsed materials");
+        this.log("Parsed materials");
         return null;
     }
 
@@ -477,11 +664,36 @@ class MySceneGraph {
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
                     case 'scale':                        
-                        this.onXMLMinorError("To do: Parse scale transformations.");
+                        //this.onXMLMinorError("To do: Parse scale transformations.");
+                        
+                        var coordinates = this.parseCoordinates3D(grandChildren[j], "scale transformation for ID " + transformationID);
+                        if (!Array.isArray(coordinates))
+                            return coordinates;
+
+                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
                         break;
                     case 'rotate':
-                        // angle
-                        this.onXMLMinorError("To do: Parse rotate transformations.");
+                        //this.onXMLMinorError("To do: Parse rotate transformations.");
+
+                        var axis = this.reader.getString(grandChildren[j], 'axis');
+                        var angle = this.reader.getFloat(grandChildren[j], 'angle');
+                        
+                        if (axis == null)
+                            return "no axis defined for transformation " + transformationID;
+                        if (angle == null)
+                            return "no angle defined for transformation " + transformationID;
+
+                        switch (axis) {
+                            case 'x':
+                                transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, vec3.fromValues(1,0,0));
+                                break;
+                            case 'y':
+                                transfMatrix = mat4.translate(transfMatrix, transfMatrix, angle, vec3.fromValues(0,1,0));
+                            case 'z':
+                                transfMatrix = mat4.translate(transfMatrix, transfMatrix, angle, vec3.fromValues(0,0,1));
+                            default:
+                                break;
+                        }
                         break;
                 }
             }
