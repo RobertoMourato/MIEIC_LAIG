@@ -23,7 +23,7 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        this.initCameras();
+        this.initBackupCamera();
 
         this.enableTextures(true);
 
@@ -36,11 +36,23 @@ class XMLscene extends CGFscene {
         this.setUpdatePeriod(100);
     }
 
+    initBackupCamera(){
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+    }
+
     /**
      * Initializes the scene cameras.
      */
     initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        this.cameras = [];
+
+        for (var i = 0; i < this.graph.views.length; i++){
+            var cam = this.graph.views[i];
+            this.cameras[i] = new CGFcamera(cam.angle, cam.near, cam.far, vec3.fromValues(cam.from[0], cam.from[1], cam.from[2]), vec3.fromValues(cam.to[0], cam.to[1], cam.to[2]));
+            if (cam.enableView)
+                this.camera = this.cameras[i];
+        }
+
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -81,6 +93,45 @@ class XMLscene extends CGFscene {
         }
     }
 
+    initMaterials(){
+        this.materials = [];
+
+        for (var i = 0; i < this.graph.materials.length; i++){
+            var mat = this.graph.materials[i];
+            var key = mat.materialId;
+            
+            this.materials[key] = new CGFappearance(this);
+
+            var aux = mat.emission;
+            this.materials[key].setEmission(aux[0], aux[1], aux[2], aux[3]);
+
+            aux = mat.ambient;
+            this.materials[key].setAmbient(aux[0], aux[1], aux[2], aux[3]);
+
+            aux = mat.diffuse;
+            this.materials[key].setDiffuse(aux[0], aux[1], aux[2], aux[3]);
+
+            aux = mat.specular;
+            this.materials[key].setSpecular(aux[0], aux[1], aux[2], aux[3]);
+
+            this.materials[key].setShininess(mat.shininess);
+        }
+
+    }
+
+    initTextures(){
+        this.textures = [];
+
+        for (var i = 0; i < this.graph.textures.length; i++){
+            var tex = this.graph.textures[i];
+            this.textures[tex.texId] = new CGFtexture(this, tex.url);
+        }
+    }
+
+    getTransformations(){
+        
+    }
+
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
@@ -97,7 +148,13 @@ class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
+        this.initCameras();
+
         this.initLights();
+
+        this.initMaterials();
+
+        this.initTextures();
 
         this.sceneInited = true;
     }

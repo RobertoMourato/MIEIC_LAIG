@@ -239,7 +239,7 @@ class MySceneGraph {
         var grandChildren = [];
         var nodeNames = [];
 
-        for (var i = 0; i < children.length; i++){
+        for (var i = 0; i < children.length; i++) {
 
             var global = [];
             var attributeNames = [];
@@ -263,14 +263,14 @@ class MySceneGraph {
             // Checks for repeated IDs.
             if (this.views[viewId] != null)
                 return "ID must be unique for each light (conflict: ID = " + viewId + ")";
-            
+
             // Default view
             var enableView = false;
             if (defaultView == this.reader.getString(children[i], 'id'))
                 enableView = true;
 
-            global.push(enableView);
-            global.push(children[i].nodeName);
+            //global.push({ enableView: enableView, type: children[i].nodeName });
+            //global.push(children[i].nodeName);
 
             grandChildren = children[i].children;
 
@@ -279,6 +279,7 @@ class MySceneGraph {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
+            var from, to;
             for (var j = 0; j < attributeNames.length; j++) {
                 var attributeIndex = nodeNames.indexOf(attributeNames[j]);
 
@@ -287,26 +288,27 @@ class MySceneGraph {
                     if (!Array.isArray(aux))
                         return aux;
 
-                    global.push(aux);
+                    if (attributeNames[j] == "from") from = aux;
+                    else if (attributeNames[j] == "to") to = aux;
                 }
                 else
-                    return "view " + attributeNames[i] + " undefined for ID = " + lightId;
+                    return "view " + attributeNames[j] + " undefined for ID = " + lightId;
             }
 
             var near = this.reader.getFloat(children[i], 'near');
             if (!(near != null && !isNaN(near)))
-                    return "unable to parse near of the view for ID = " + viewId;
+                return "unable to parse near of the view for ID = " + viewId;
 
             var far = this.reader.getFloat(children[i], 'far');
             if (!(far != null && !isNaN(far)))
-                    return "unable to parse far of the view for ID = " + viewId;
+                return "unable to parse far of the view for ID = " + viewId;
 
             if (children[i].nodeName == "perspective") {
                 var angle = this.reader.getFloat(children[i], 'angle');
                 if (!(angle != null && !isNaN(angle)))
                     return "unable to parse angle of the view for ID = " + viewId;
- 
-                    global.push(...[near, far, angle])
+
+                this.views.push({ enableView: enableView, type: children[i].nodeName, near: near, far: far, angle: angle, from: from, to: to });
             }
             // If nodeName == "ortho"
             else {
@@ -338,14 +340,14 @@ class MySceneGraph {
                     upPosition = aux;
                 }
                 else {
-                    upPosition = [0,1,0];
+                    upPosition = [0, 1, 0];
                 }
 
-                global.push(...[near, far, left, right, top, bottom, upPosition]);
+                this.views.push({ enableView: enableView, type: children[i].nodeName, near: near, far: far, left: left, right: right, top: top, bottom: bottom, from: from, to: to, up: upPosition });
             }
-            
-        
-            this.views[viewId] = global;
+
+
+            //this.views[viewId] = global;
 
             numViews++;
         }
@@ -522,11 +524,11 @@ class MySceneGraph {
         //this.onXMLMinorError("To do: Parse textures.");
 
         var children = texturesNode.children;
-        
+
         this.textures = [];
         var numTextures = 0;
-        
-        for (var i = 0; i < children.length; i++){
+
+        for (var i = 0; i < children.length; i++) {
 
             if (children[i].nodeName != "texture") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -546,7 +548,7 @@ class MySceneGraph {
             if (URL == null)
                 return "no URL defined for texture";
 
-            this.textures.push(...[textureId, URL]);
+            this.textures.push({ texId: textureId, url: URL });
 
             numTextures++;
         }
@@ -554,7 +556,7 @@ class MySceneGraph {
         if (numTextures == 0)
             return "at least one texture must be defined";
 
-        this.log("Parsed lights");
+        this.log("Parsed textures");
 
         return null;
     }
@@ -596,25 +598,43 @@ class MySceneGraph {
             if (materialShininess == null)
                 return "no Shininess defined for material";
 
-            this.materials.push(...[materialID, materialShininess]);
-            
             grandChildren = children[i].children;
 
-            for (var j = 0; j < grandChildren.length; j++){
+            var emission, ambient, diffuse, specular;
+
+            for (var j = 0; j < grandChildren.length; j++) {
                 var attributeName = grandChildren[j].nodeName;
 
-                if (attributeName == "emission" || attributeName == "ambient" || attributeName == "diffuse"|| attributeName == "specular"){
+                if (attributeName == "emission" || attributeName == "ambient" || attributeName == "diffuse" || attributeName == "specular") {
                     //var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
                     var aux = this.parseColor(grandChildren[j], attributeName + " material for ID" + materialID);
 
                     if (!Array.isArray(aux))
                         return aux;
 
-                    this.materials.push(aux);
+                    switch (attributeName) {
+                        case "emission":
+                            emission = aux;
+                            break;
+                        case "ambient":
+                            ambient = aux;
+                            break
+                        case "diffuse":
+                            diffuse = aux;
+                            break;
+                        case "specular":
+                            specular = aux;
+                            break;
+                        default:
+                            break;
+                    }
+
                 }
                 else return "material " + attributeName + " undefined for ID = " + materialID;
             }
- 
+
+            this.materials.push({matId: materialID, shininess: materialShininess, emission: emission, ambient: ambient, diffuse: diffuse, specular: specular});
+
         }
 
         this.log("Parsed materials");
@@ -663,9 +683,9 @@ class MySceneGraph {
 
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
-                    case 'scale':                        
+                    case 'scale':
                         //this.onXMLMinorError("To do: Parse scale transformations.");
-                        
+
                         var coordinates = this.parseCoordinates3D(grandChildren[j], "scale transformation for ID " + transformationID);
                         if (!Array.isArray(coordinates))
                             return coordinates;
@@ -677,7 +697,7 @@ class MySceneGraph {
 
                         var axis = this.reader.getString(grandChildren[j], 'axis');
                         var angle = this.reader.getFloat(grandChildren[j], 'angle');
-                        
+
                         if (axis == null)
                             return "no axis defined for transformation " + transformationID;
                         if (angle == null)
@@ -685,12 +705,12 @@ class MySceneGraph {
 
                         switch (axis) {
                             case 'x':
-                                transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, vec3.fromValues(1,0,0));
+                                transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, vec3.fromValues(1, 0, 0));
                                 break;
                             case 'y':
-                                transfMatrix = mat4.translate(transfMatrix, transfMatrix, angle, vec3.fromValues(0,1,0));
+                                transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, vec3.fromValues(0, 1, 0));
                             case 'z':
-                                transfMatrix = mat4.translate(transfMatrix, transfMatrix, angle, vec3.fromValues(0,0,1));
+                                transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, vec3.fromValues(0, 0, 1));
                             default:
                                 break;
                         }
