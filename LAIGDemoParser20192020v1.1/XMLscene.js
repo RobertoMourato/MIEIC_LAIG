@@ -23,7 +23,7 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        //this.initBackupCamera();
+        this.initBackupCamera();
 
         this.enableTextures(true);
 

@@ -633,7 +633,7 @@ class MySceneGraph {
                 else return "material " + attributeName + " undefined for ID = " + materialID;
             }
 
-            this.materials.push({matId: materialID, shininess: materialShininess, emission: emission, ambient: ambient, diffuse: diffuse, specular: specular});
+            this.materials.push({ matId: materialID, shininess: materialShininess, emission: emission, ambient: ambient, diffuse: diffuse, specular: specular });
 
         }
 
@@ -836,7 +836,7 @@ class MySceneGraph {
                 var z3 = this.reader.getFloat(grandChildren[0], 'z3');
                 if (!(z3 != null && !isNaN(z3)))
                     return "unable to parse z3 of the primitive coordinates for ID = " + primitiveId;
-                    
+
                 var triangle = new MyTriangle(this.scene, primitiveId, x1, y1, z1, x2, y2, z2, x3, y3, z3);
                 this.primitives[primitiveId] = triangle;
                 console.warn("To Do: 'unable to parse' conditions");
@@ -856,9 +856,9 @@ class MySceneGraph {
                 var st = this.reader.getFloat(grandChildren[0], 'stacks');
                 if (!(st != null && !isNaN(st)))
                     return "unable to parse st of the primitive coordinates for ID = " + primitiveId;
-                
-                    var cylinder = new MyCylinder(this.scene, sl, st);
-                    this.primitives[primitiveId] = cylinder;
+
+                var cylinder = new MyCylinder(this.scene, sl, st);
+                this.primitives[primitiveId] = cylinder;
 
 
             }
@@ -883,7 +883,8 @@ class MySceneGraph {
             else {
                 //console.warn("To do: Parse other primitives.");
                 this.onXMLMinorError("Unexistant primitive.");
-            
+
+            }
         }
 
         this.log("Parsed primitives");
@@ -934,7 +935,7 @@ class MySceneGraph {
 
             this.onXMLMinorError("To do: Parse components.");
             // Transformations
-            
+
             // Materials
 
             // Texture
@@ -1065,5 +1066,7 @@ class MySceneGraph {
         this.primitives['demoRectangle'].display();
         this.primitives['demoTriangle'].display();
         this.primitives['demoCylinder'].display();
+
+        //var sphere = new MySemiSphere(this.scene);
     }
 }
