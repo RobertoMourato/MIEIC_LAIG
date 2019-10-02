@@ -791,8 +791,86 @@ class MySceneGraph {
 
                 this.primitives[primitiveId] = rect;
             }
+            else if (primitiveType == 'triangle') {
+                // x1
+                var x1 = this.reader.getFloat(grandChildren[0], 'x1');
+                if (!(x1 != null && !isNaN(x1)))
+                    return "unable to parse x1 of the primitive coordinates for ID = " + primitiveId;
+
+                // y1
+                var y1 = this.reader.getFloat(grandChildren[0], 'y1');
+                if (!(y1 != null && !isNaN(y1)))
+                    return "unable to parse y1 of the primitive coordinates for ID = " + primitiveId;
+
+                // z1
+                var z1 = this.reader.getFloat(grandChildren[0], 'z1');
+                if (!(z1 != null && !isNaN(z1)))
+                    return "unable to parse z1 of the primitive coordinates for ID = " + primitiveId;
+
+                // x2
+                var x2 = this.reader.getFloat(grandChildren[0], 'x2');
+                if (!(x2 != null && !isNaN(x2) && x2 > x1))
+                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+
+                // y2
+                var y2 = this.reader.getFloat(grandChildren[0], 'y2');
+                if (!(y2 != null && !isNaN(y2) && y2 > y1))
+                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+
+                // z2
+                var z2 = this.reader.getFloat(grandChildren[0], 'z2');
+                if (!(z2 != null && !isNaN(z2)))
+                    return "unable to parse z2 of the primitive coordinates for ID = " + primitiveId;
+
+                // x3
+                var x3 = this.reader.getFloat(grandChildren[0], 'x3');
+                if (!(x3 != null && !isNaN(x3) && x3 > x1))
+                    return "unable to parse x3 of the primitive coordinates for ID = " + primitiveId;
+
+                // y3
+                var y3 = this.reader.getFloat(grandChildren[0], 'y3');
+                if (!(y3 != null && !isNaN(y3) && y3 > y1))
+                    return "unable to parse y3 of the primitive coordinates for ID = " + primitiveId;
+
+                // z3
+                var z3 = this.reader.getFloat(grandChildren[0], 'z3');
+                if (!(z3 != null && !isNaN(z3)))
+                    return "unable to parse z3 of the primitive coordinates for ID = " + primitiveId;
+                
+                console.warn("To Do: 'unable to parse' conditions");
+            }
+            else if (primitiveType == 'cylinder') {
+                var base, top, height, slices_c, stacks_c;
+
+                base = this.reader.getFloat(grandChildren[0], 'base');
+                top = this.reader.getFloat(grandChildren[0], 'top');
+                height = this.reader.getFloat(grandChildren[0], 'height');
+                slices_c = this.reader.getFloat(grandChildren[0], 'slices_c');
+                stacks_c = this.reader.getFloat(grandChildren[0], 'stacks_c');
+
+
+            }
+            else if (primitiveType == 'sphere') {
+                var radius, slices_s, stacks_s;
+
+                radius = this.reader.getFloat(grandChildren[0], 'radius');
+                slices_s = this.reader.getFloat(grandChildren[0], 'slices_s');
+                stacks_s = this.reader.getFloat(grandChildren[0], 'stacks_s');
+
+
+            }
+            else if (primitiveType == 'torus') {
+                var inner, outter, slices_t, stacks_t;
+
+                inner = this.reader.getFloat(grandChildren[0], 'inner');
+                outter = this.reader.getFloat(grandChildren[0], 'outter');
+                slices_t = this.reader.getFloat(grandChildren[0], 'slices_t');
+                stacks_t = this.reader.getFloat(grandChildren[0], 'stacks_t');
+
+            }
             else {
-                console.warn("To do: Parse other primitives.");
+                //console.warn("To do: Parse other primitives.");
+                this.onXMLMinorError("Unexistant primitive.");
             }
         }
 
@@ -844,7 +922,7 @@ class MySceneGraph {
 
             this.onXMLMinorError("To do: Parse components.");
             // Transformations
-
+            
             // Materials
 
             // Texture

@@ -23,7 +23,7 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        this.initBackupCamera();
+        //this.initBackupCamera();
 
         this.enableTextures(true);
 
@@ -127,11 +127,6 @@ class XMLscene extends CGFscene {
             this.textures[tex.texId] = new CGFtexture(this, tex.url);
         }
     }
-
-    getTransformations(){
-        
-    }
-
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
