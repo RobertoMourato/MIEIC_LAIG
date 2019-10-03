@@ -847,12 +847,12 @@ class MySceneGraph {
                 var base, top, height, slices_c, stacks_c;
 
                 // slices
-                var slices_c = this.reader.getFloat(grandChildren[0], 'slices_c');
+                var slices_c = this.reader.getFloat(grandChildren[0], 'slices');
                 if (!(slices_c != null && !isNaN(slices_c)))
                     return "unable to parse slices of the primitive coordinates with ID = " + primitiveId;
 
                 // stacks
-                var stacks_c = this.reader.getFloat(grandChildren[0], 'stacks_c');
+                var stacks_c = this.reader.getFloat(grandChildren[0], 'stacks');
                 if (!(stacks_c != null && !isNaN(stacks_c)))
                     return "unable to parse stacks of the primitive coordinates with ID = " + primitiveId;
 
@@ -895,8 +895,8 @@ class MySceneGraph {
 
                 inner = this.reader.getFloat(grandChildren[0], 'inner');
                 outter = this.reader.getFloat(grandChildren[0], 'outter');
-                slices_t = this.reader.getFloat(grandChildren[0], 'slices_t');
-                stacks_t = this.reader.getFloat(grandChildren[0], 'stacks_t');
+                slices_t = this.reader.getFloat(grandChildren[0], 'slices');
+                stacks_t = this.reader.getFloat(grandChildren[0], 'stacks');
                 
                 console.warn("To Do: Torus");
                 console.warn("To Do: 'unable to parse' conditions");
