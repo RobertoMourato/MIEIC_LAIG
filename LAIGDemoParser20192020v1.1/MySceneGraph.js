@@ -545,7 +545,7 @@ class MySceneGraph {
             if (URL == null)
                 return "no URL defined for texture";
 
-            this.textures[tex.texId] = new CGFtexture(this, tex.url);
+            this.textures[textureId] = new CGFtexture(this, URL);
 
             numTextures++;
         }
@@ -846,25 +846,33 @@ class MySceneGraph {
             else if (primitiveType == 'cylinder') {
                 var base, top, height, slices_c, stacks_c;
 
-                base = this.reader.getFloat(grandChildren[0], 'base');
-                top = this.reader.getFloat(grandChildren[0], 'top');
-                height = this.reader.getFloat(grandChildren[0], 'height');
-
-                console.warn("To Do: 'unable to parse' conditions");
-
                 // slices
-                var sl = this.reader.getFloat(grandChildren[0], 'slices');
-                if (!(sl != null && !isNaN(sl)))
-                    return "unable to parse sl of the primitive coordinates for ID = " + primitiveId;
+                var slices_c = this.reader.getFloat(grandChildren[0], 'slices_c');
+                if (!(slices_c != null && !isNaN(slices_c)))
+                    return "unable to parse slices of the primitive coordinates with ID = " + primitiveId;
 
                 // stacks
-                var st = this.reader.getFloat(grandChildren[0], 'stacks');
-                if (!(st != null && !isNaN(st)))
-                    return "unable to parse st of the primitive coordinates for ID = " + primitiveId;
+                var stacks_c = this.reader.getFloat(grandChildren[0], 'stacks_c');
+                if (!(stacks_c != null && !isNaN(stacks_c)))
+                    return "unable to parse stacks of the primitive coordinates with ID = " + primitiveId;
 
-                var cylinder = new MyCylinder(this.scene, sl, st);
+                // height
+                var height = this.reader.getFloat(grandChildren[0], 'height');
+                if (!(height != null && !isNaN(height)))
+                    return "unable to parse height of the primitive coordinates with ID = " + primitiveId;
+
+                // base
+                var base = this.reader.getFloat(grandChildren[0], 'base');
+                if (!(base != null && !isNaN(base)))
+                    return "unable to parse base radius of the primitive coordinates with ID = " + primitiveId;
+
+                // top
+                var top = this.reader.getFloat(grandChildren[0], 'top');
+                if (!(top != null && !isNaN(top)))
+                    return "unable to parse top radius of the primitive coordinates with ID = " + primitiveId;
+                
+                var cylinder = new MyCylinder(this.scene, slices_c, stacks_c, height, base, top);
                 this.primitives[primitiveId] = cylinder;
-
 
             }
             else if (primitiveType == 'sphere') {
