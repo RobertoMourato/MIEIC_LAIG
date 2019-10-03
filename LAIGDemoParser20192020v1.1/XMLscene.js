@@ -23,7 +23,7 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        this.initBackupCamera();
+        //this.initBackupCamera();
 
         this.enableTextures(true);
 
@@ -52,7 +52,7 @@ class XMLscene extends CGFscene {
             if (cam.enableView)
                 this.camera = this.cameras[i];
         }
-
+        this.interface.setActiveCamera(this.camera);
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -93,6 +93,7 @@ class XMLscene extends CGFscene {
         }
     }
 
+    /*
     initMaterials(){
         this.materials = [];
 
@@ -118,7 +119,7 @@ class XMLscene extends CGFscene {
         }
 
     }
-
+    
     initTextures(){
         this.textures = [];
 
@@ -127,6 +128,8 @@ class XMLscene extends CGFscene {
             this.textures[tex.texId] = new CGFtexture(this, tex.url);
         }
     }
+    */
+
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
@@ -143,13 +146,9 @@ class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
-        //this.initCameras();
+        this.initCameras();
 
         this.initLights();
-
-        this.initMaterials();
-
-        this.initTextures();
 
         this.sceneInited = true;
     }
