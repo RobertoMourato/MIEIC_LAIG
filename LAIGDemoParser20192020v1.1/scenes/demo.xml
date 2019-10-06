@@ -56,6 +56,9 @@
         <primitive id="demoSphere">
             <sphere radius="2" slices="100" stacks="100"/>
         </primitive>
+        <primitive id="demoTorus">
+            <torus inner = "0.1" outer = "0.5" slices="100" loops="100" />
+        </primitive>
     </primitives>
 
     <components>
@@ -69,8 +72,24 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
+                <componentref id="Rectangle" />
+                <!--<componentref id="demoTriangle" />
+                <componentref id="demoCylinder" />
+                <componentref id="demoSphere" />
+                <componentref id="demoTorus" />-->
+            </children>
+        </component>
+
+        <component id="Rectangle">
+            <transformation>
+            <translate x="0" y="0" z="5" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
                 <primitiveref id="demoRectangle" />
-                <primitiveref id="demoTriangle" />
             </children>
         </component>
     </components>

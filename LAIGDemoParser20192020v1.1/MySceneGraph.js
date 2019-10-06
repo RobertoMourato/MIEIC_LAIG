@@ -891,15 +891,15 @@ class MySceneGraph {
 
             }
             else if (primitiveType == 'torus') {
-                var inner, outter, slices_t, stacks_t;
+                var inner, outer, slices_t, loops_t;
 
                 inner = this.reader.getFloat(grandChildren[0], 'inner');
-                outter = this.reader.getFloat(grandChildren[0], 'outter');
+                outer = this.reader.getFloat(grandChildren[0], 'outer');
                 slices_t = this.reader.getFloat(grandChildren[0], 'slices');
-                stacks_t = this.reader.getFloat(grandChildren[0], 'stacks');
+                loops_t = this.reader.getFloat(grandChildren[0], 'loops');
                 
-                console.warn("To Do: Torus");
-                console.warn("To Do: 'unable to parse' conditions");
+                var torus = new MyTorus(this.scene, inner, outer, slices_t, loops_t);
+                this.primitives[primitiveId] = torus;
 
             }
             else {
@@ -1207,10 +1207,10 @@ class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        /*this.primitives['demoRectangle'].display();
+        this.primitives['demoRectangle'].display();
         this.primitives['demoTriangle'].display();
-        this.primitives['demoCylinder'].display();*/
+        this.primitives['demoCylinder'].display();
         this.primitives['demoSphere'].display();
-        
+        this.primitives['demoTorus'].display();
     }
 }
