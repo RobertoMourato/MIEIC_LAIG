@@ -73,10 +73,10 @@
             <texture id="demoTexture"/>
             <children>
                 <componentref id="Rectangle" />
-                <!--<componentref id="demoTriangle" />
-                <componentref id="demoCylinder" />
-                <componentref id="demoSphere" />
-                <componentref id="demoTorus" />-->
+                <componentref id="Triangle" />
+                <componentref id="Cylinder" />
+                <componentref id="Sphere" />
+                <componentref id="transfTorus" />
             </children>
         </component>
 
@@ -90,6 +90,71 @@
             <texture id="demoTexture"/>
             <children>
                 <primitiveref id="demoRectangle" />
+            </children>
+        </component>
+
+        <component id="Triangle">
+            <transformation>
+            <translate x="5" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoTriangle" />
+            </children>
+        </component>
+
+        <component id="Cylinder">
+            <transformation>
+            <translate x="0" y="5" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="Sphere">
+            <transformation>
+            <translate x="0" y="0" z="-1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="TranfTorus">
+            <transformation>
+            <translate x="5" y="5" z="5" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="Torus" />
+            </children>
+        </component>
+
+        <component id="Torus">
+            <transformation>
+            <translate x="-5" y="0" z="-10" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoTorus" />
             </children>
         </component>
     </components>
