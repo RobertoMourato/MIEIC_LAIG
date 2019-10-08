@@ -891,15 +891,15 @@ class MySceneGraph {
 
             }
             else if (primitiveType == 'torus') {
-                var inner, outter, slices_t, stacks_t;
+                var inner, outer, slices_t, loops_t;
 
                 inner = this.reader.getFloat(grandChildren[0], 'inner');
-                outter = this.reader.getFloat(grandChildren[0], 'outter');
+                outer = this.reader.getFloat(grandChildren[0], 'outer');
                 slices_t = this.reader.getFloat(grandChildren[0], 'slices');
-                stacks_t = this.reader.getFloat(grandChildren[0], 'stacks');
+                loops_t = this.reader.getFloat(grandChildren[0], 'loops');
                 
-                console.warn("To Do: Torus");
-                console.warn("To Do: 'unable to parse' conditions");
+                var torus = new MyTorus(this.scene, inner, outer, slices_t, loops_t);
+                this.primitives[primitiveId] = torus;
 
             }
             else {
@@ -988,22 +988,22 @@ class MySceneGraph {
             if (tranformationType == "reference" && grandgrandChildren.length > 1)
                 this.onXMLMinorError("Only one tranformation must be defined for " + componentID + ". ");
 
-            for (var i = 0; i < grandgrandChildren.length; i++){
+            for (var j = 0; j < grandgrandChildren.length; j++){
                 if (tranformationType == "reference"){
-                    if (grandgrandChildren[i].nodeName != "transformationref"){
+                    if (grandgrandChildren[j].nodeName != "transformationref"){
                         break;
                     }
-                    var transformationId = this.reader.getString(grandgrandChildren[i], 'id');
+                    var transformationId = this.reader.getString(grandgrandChildren[j], 'id');
                     transformation = this.transformations[transformationId];
                 }
                 if (tranformationType == "newTransformation"){
-                    if (grandgrandChildren[i].nodeName != "translate" && grandgrandChildren[i].nodeName != "rotate" && grandgrandChildren[i].nodeName != "scale"){
+                    if (grandgrandChildren[j].nodeName != "translate" && grandgrandChildren[j].nodeName != "rotate" && grandgrandChildren[j].nodeName != "scale"){
                         break;
                     }
                     
-                    switch (grandgrandChildren[i].nodeName) {
+                    switch (grandgrandChildren[j].nodeName) {
                         case 'translate':
-                            var coordinates = this.parseCoordinates3D(grandgrandChildren[i], "translate transformation for ID " + transformationId);
+                            var coordinates = this.parseCoordinates3D(grandgrandChildren[j], "translate transformation for ID " + transformationId);
                             if (!Array.isArray(coordinates))
                                 return coordinates;
     
@@ -1011,7 +1011,7 @@ class MySceneGraph {
                             break;
 
                         case 'scale':    
-                            var coordinates = this.parseCoordinates3D(grandgrandChildren[i], "scale transformation for ID " + transformationId);
+                            var coordinates = this.parseCoordinates3D(grandgrandChildren[j], "scale transformation for ID " + transformationId);
                             if (!Array.isArray(coordinates))
                                 return coordinates;
     
@@ -1019,8 +1019,8 @@ class MySceneGraph {
                             break;
 
                         case 'rotate':    
-                            var axis = this.reader.getString(grandgrandChildren[i], 'axis');
-                            var angle = this.reader.getFloat(grandgrandChildren[i], 'angle');
+                            var axis = this.reader.getString(grandgrandChildren[j], 'axis');
+                            var angle = this.reader.getFloat(grandgrandChildren[j], 'angle');
     
                             if (axis == null)
                                 return "no axis defined for transformation " + transformationId;
@@ -1050,8 +1050,8 @@ class MySceneGraph {
             if (grandgrandChildren.length == 0 || grandgrandChildren == null)
                 this.onXMLMinorError("At least one material must be defined for " + componentID + ". ");
 
-            for (var i = 0; i < grandgrandChildren.length; i++){
-                var material = this.reader.getString(grandgrandChildren[i], 'id');
+            for (var k = 0; k < grandgrandChildren.length; k++){
+                var material = this.reader.getString(grandgrandChildren[k], 'id');
                 this.materials.push(material);  
             }
 
@@ -1069,12 +1069,12 @@ class MySceneGraph {
             if (grandgrandChildren.length == 0 || grandgrandChildren == null)
                 this.onXMLMinorError("At least one component or primitive must be defined for " + componentID + ". ");
 
-            for (var i = 0; i < grandgrandChildren.length; i++){
-                if (grandgrandChildren[i].nodeName != 'componentref' && grandgrandChildren[i].nodeName != 'primitiveref'){
-                    this.onXMLMinorError("unknown tag <" + grandgrandChildren[i].nodeName + ">");
+            for (var l = 0; l < grandgrandChildren.length; l++){
+                if (grandgrandChildren[l].nodeName != 'componentref' && grandgrandChildren[l].nodeName != 'primitiveref'){
+                    this.onXMLMinorError("unknown tag <" + grandgrandChildren[l].nodeName + ">");
                     continue;
                 }
-                var ID = this.reader.getString(grandgrandChildren[i], 'id')
+                var ID = this.reader.getString(grandgrandChildren[l], 'id')
                 heirs.push(ID);
 
                 /*if (grandgrandChildren[i].nodeName == 'componentref')
@@ -1207,11 +1207,11 @@ class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
         this.processNode("demoRoot");
         //To test the parsing/creation of the primitives, call the display function directly
-        /*this.primitives['demoRectangle'].display();
+        this.primitives['demoRectangle'].display();
         this.primitives['demoTriangle'].display();
         this.primitives['demoCylinder'].display();
-        this.primitives['demoSphere'].display();*/
-        
+        this.primitives['demoSphere'].display();
+        this.primitives['demoTorus'].display();
     }
 
     processNode(id, parentTransformationMatrix, parentMaterial, parentTexture, parentLength_s, parentLength_t){
@@ -1224,6 +1224,11 @@ class MySceneGraph {
         }
         else {
             var component = this.components[id];
+
+            console.warn("To do: Tratamento de erros");
+            if (component == null){
+               ;
+            }
 
             var transformation = mat4.create();
             var material;
@@ -1252,7 +1257,7 @@ class MySceneGraph {
                 texture = component.texture;
             }
             else {
-                
+
             }
 
             // Updates texture coordinates

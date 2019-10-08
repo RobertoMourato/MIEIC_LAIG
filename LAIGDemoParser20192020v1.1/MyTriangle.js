@@ -5,7 +5,6 @@
 class MyTriangle extends CGFobject {
 	constructor(scene, id, x1, y1, z1, x2, y2, z2, x3, y3, z3) {
 		super(scene);
-
 		this.x1 = x1;
 		this.y1 = y1;
 		this.z1 = z1;
@@ -15,10 +14,9 @@ class MyTriangle extends CGFobject {
 		this.x3 = x3;
 		this.y3 = y3;
 		this.z3 = z3;
-		
 		this.initBuffers();
 	}
-	
+
 	initBuffers() {
 		this.vertices = [
 			this.x1, this.y1, this.z1,	//0
@@ -34,10 +32,10 @@ class MyTriangle extends CGFobject {
 		//vector1=(x2-x1,y2-y1,z2-z1)
 		//vector2=(x3-x1,y3-y1,z3-z1)
 		//cross product:
-		this.normal=[
-			(this.y2-this.y1)*(this.z3-this.z1)-(this.y3-this.y1)*(this.z2-this.z1),
-			-((this.x2-this.x1)*(this.z3-this.z1)-(this.x3-this.x1)*(this.z2-this.z1)),
-			(this.x2-this.x1)*(this.y3-this.y1)-(this.x3-this.x1)*(this.y2-this.y1)
+		this.normal = [
+			(this.y2 - this.y1) * (this.z3 - this.z1) - (this.y3 - this.y1) * (this.z2 - this.z1),
+			-((this.x2 - this.x1) * (this.z3 - this.z1) - (this.x3 - this.x1) * (this.z2 - this.z1)),
+			(this.x2 - this.x1) * (this.y3 - this.y1) - (this.x3 - this.x1) * (this.y2 - this.y1)
 		];
 
 		//Facing Z positive
@@ -46,7 +44,7 @@ class MyTriangle extends CGFobject {
 			...this.normal,
 			...this.normal
 		];
-		
+
 		/*
 		Texture coords (s,t)
 		+----------> s
