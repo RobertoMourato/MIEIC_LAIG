@@ -3,7 +3,7 @@
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="50" angle="45">
-            <from x="7" y="4" z="7" />
+            <from x="10" y="6" z="10" />
             <to x="0" y="-2" z="0" />
         </perspective>
     </views>
@@ -40,6 +40,7 @@
             <scale x="5" y="1" z="5" />
             <rotate axis="x" angle="-45" />
             <rotate axis="z" angle="-45" />
+            <translate x="10" y="0" z="0" />
         </transformation>
     </transformations>
 
@@ -83,6 +84,7 @@
         <component id="Rectangle">
             <transformation>
             <translate x="0" y="0" z="5" />
+            <translate x="10" y="0" z="0" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />

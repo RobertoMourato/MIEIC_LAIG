@@ -708,12 +708,12 @@ class MySceneGraph {
 
                         switch (axis) {
                             case 'x':
-                                transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, vec3.fromValues(1, 0, 0));
+                                transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle * DEGREE_TO_RAD, vec3.fromValues(1, 0, 0));
                                 break;
                             case 'y':
-                                transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, vec3.fromValues(0, 1, 0));
+                                transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle * DEGREE_TO_RAD, vec3.fromValues(0, 1, 0));
                             case 'z':
-                                transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, vec3.fromValues(0, 0, 1));
+                                transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle * DEGREE_TO_RAD, vec3.fromValues(0, 0, 1));
                             default:
                                 break;
                         }
@@ -1029,13 +1029,13 @@ class MySceneGraph {
     
                             switch (axis) {
                                 case 'x':
-                                    transformation = mat4.rotate(transformation, transformation, angle, vec3.fromValues(1, 0, 0));
+                                    transformation = mat4.rotate(transformation, transformation, angle * DEGREE_TO_RAD, vec3.fromValues(1, 0, 0));
                                     break;
                                 case 'y':
-                                    transformation = mat4.rotate(transformation, transformation, angle, vec3.fromValues(0, 1, 0));
+                                    transformation = mat4.rotate(transformation, transformation, angle * DEGREE_TO_RAD, vec3.fromValues(0, 1, 0));
                                     break;
                                 case 'z':
-                                    transformation = mat4.rotate(transformation, transformation, angle, vec3.fromValues(0, 0, 1));
+                                    transformation = mat4.rotate(transformation, transformation, angle * DEGREE_TO_RAD, vec3.fromValues(0, 0, 1));
                                 default:
                                     break;
                             }
@@ -1051,8 +1051,9 @@ class MySceneGraph {
                 this.onXMLMinorError("At least one material must be defined for " + componentID + ". ");
 
             for (var k = 0; k < grandgrandChildren.length; k++){
-                var material = this.reader.getString(grandgrandChildren[k], 'id');
-                this.materials.push(material);  
+                var materialId = this.reader.getString(grandgrandChildren[k], 'id');
+                var material = materials[materialId];
+                this.materials.push(material);
             }
 
             // Texture 
@@ -1062,7 +1063,7 @@ class MySceneGraph {
             
             console.warn("To do: tratamento de erros");
 
-            texture.push({textureId: textureId, length_s: length_s, length_t: length_t});
+            texture = this.textures[textureId];
             
             // Children
             grandgrandChildren = grandChildren[childrenIndex].children;
@@ -1205,22 +1206,22 @@ class MySceneGraph {
      */
     displayScene() {
         //To do: Create display loop for transversing the scene graph
-        this.processNode("demoRoot");
+        //this.processNode("demoRoot", mat4.create(), this.scene);
         //To test the parsing/creation of the primitives, call the display function directly
         /*this.primitives['demoRectangle'].display();
-        this.primitives['demoTriangle'].display();
+        this.primitives['demoTriangle'].display();*/
         this.primitives['demoCylinder'].display();
-        this.primitives['demoSphere'].display();
-        this.primitives['demoTorus'].display();*/
+        //this.primitives['demoSphere'].display();
+        //this.primitives['demoTorus'].display();
     }
 
     processNode(id, parentTransformationMatrix, parentMaterial, parentTexture, parentLength_s, parentLength_t){
         if (this.primitives[id] != null){
             this.scene.multMatrix(parentTransformationMatrix);
-            this.scene.pushMatrix();
+            //this.scene.pushMatrix();
             //this.materials[parentMaterial].apply();        
             this.primitives[id].display();
-            this.scene.popMatrix();
+            //this.scene.popMatrix();
         }
         else {
             var component = this.components[id];
@@ -1230,19 +1231,15 @@ class MySceneGraph {
                ;
             }
 
-            var transformation = mat4.create();
+            var transformation;
             var material;
             var texture;
             var ls;
             var lt;
 
             // Updates transformation matrix
-            if (parentTransformationMatrix == null){
-                transformation = component.transformation;
-            }
-            else {
-                mat4.multiply(transformation, parentTransformationMatrix, component.transformation);                
-            }
+            mat4.multiply(transformation, parentTransformationMatrix, component.transformation);          
+            
 
             // Updates material
             if (parentMaterial == null){
@@ -1265,7 +1262,7 @@ class MySceneGraph {
             
             var children = component.children;
             for (var i = 0; i < children.length; i++){
-                // save 
+                // save
                 this.scene.pushMatrix();
                 this.processNode(children[i], transformation, material, texture, 1, 1);
                 this.scene.popMatrix();
