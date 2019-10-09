@@ -1207,11 +1207,11 @@ class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
         this.processNode("demoRoot");
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoRectangle'].display();
+        /*this.primitives['demoRectangle'].display();
         this.primitives['demoTriangle'].display();
         this.primitives['demoCylinder'].display();
         this.primitives['demoSphere'].display();
-        this.primitives['demoTorus'].display();
+        this.primitives['demoTorus'].display();*/
     }
 
     processNode(id, parentTransformationMatrix, parentMaterial, parentTexture, parentLength_s, parentLength_t){
