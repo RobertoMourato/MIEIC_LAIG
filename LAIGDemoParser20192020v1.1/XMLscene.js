@@ -93,43 +93,6 @@ class XMLscene extends CGFscene {
         }
     }
 
-    /*
-    initMaterials(){
-        this.materials = [];
-
-        for (var i = 0; i < this.graph.materials.length; i++){
-            var mat = this.graph.materials[i];
-            var key = mat.materialId;
-            
-            this.materials[key] = new CGFappearance(this);
-
-            var aux = mat.emission;
-            this.materials[key].setEmission(aux[0], aux[1], aux[2], aux[3]);
-
-            aux = mat.ambient;
-            this.materials[key].setAmbient(aux[0], aux[1], aux[2], aux[3]);
-
-            aux = mat.diffuse;
-            this.materials[key].setDiffuse(aux[0], aux[1], aux[2], aux[3]);
-
-            aux = mat.specular;
-            this.materials[key].setSpecular(aux[0], aux[1], aux[2], aux[3]);
-
-            this.materials[key].setShininess(mat.shininess);
-        }
-
-    }
-    
-    initTextures(){
-        this.textures = [];
-
-        for (var i = 0; i < this.graph.textures.length; i++){
-            var tex = this.graph.textures[i];
-            this.textures[tex.texId] = new CGFtexture(this, tex.url);
-        }
-    }
-    */
-
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
@@ -158,7 +121,7 @@ class XMLscene extends CGFscene {
      */
     display() {
         // ---- BEGIN Background, camera and axis setup
-
+        if (this.sceneInited){
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -178,6 +141,8 @@ class XMLscene extends CGFscene {
             this.lights[i].enable();
         }
 
+
+
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
@@ -188,5 +153,6 @@ class XMLscene extends CGFscene {
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
+    }
     }
 }
