@@ -15,16 +15,22 @@ class MyInterface extends CGFinterface {
      */
     init(application) {
         super.init(application);
+        
+        this.initKeys();
+
+        return true;
+    }
+
+    initGUI() {
         // init GUI. For more information on the methods, check:
         //  http://workshop.chromeexperiments.com/examples/gui
 
         this.gui = new dat.GUI();
 
         // add a group of controls (and open/expand by defult)
-
-        this.initKeys();
-
-        return true;
+        //this.gui.add(text, 'Active View', ['view1', 'view2', 'view3', 'view4']);
+        //this.gui.add(this.scene, 'selectedMaterial', this.scene.materialIDs).name('Selected Material');
+        this.gui.add(this.scene, 'activeView', this.scene.viewIds).name('Active View');
     }
 
     /**

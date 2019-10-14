@@ -34,6 +34,11 @@ class XMLscene extends CGFscene {
 
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(100);
+
+        this.activeView = "";
+        this.viewIds = [];
+    
+        this.keyMpressed = false;
     }
 
     initBackupCamera(){
@@ -49,8 +54,11 @@ class XMLscene extends CGFscene {
         for (var i = 0; i < this.graph.views.length; i++){
             var cam = this.graph.views[i];
             this.cameras[i] = new CGFcamera(cam.angle, cam.near, cam.far, vec3.fromValues(cam.from[0], cam.from[1], cam.from[2]), vec3.fromValues(cam.to[0], cam.to[1], cam.to[2]));
-            if (cam.enableView)
+            this.viewIds.push(cam.id);
+            if (cam.enableView) {
                 this.camera = this.cameras[i];
+                this.activeView = cam.id;
+            }
         }
         this.interface.setActiveCamera(this.camera);
     }
@@ -113,7 +121,18 @@ class XMLscene extends CGFscene {
 
         this.initLights();
 
+        this.interface.initGUI();
+
         this.sceneInited = true;
+    }
+
+    update(t) {
+        if (this.gui.isKeyPressed("KeyM") && this.keyMpressed == false) {
+            this.keyMpressed = true;
+        } else if (this.gui.isKeyPressed("KeyM") == false && this.keyMpressed == true){
+            this.keyMpressed = false;
+            this.graph.updateMaterials();
+        }
     }
 
     /**

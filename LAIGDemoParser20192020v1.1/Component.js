@@ -28,5 +28,12 @@ class Component {
         return this.materialIds[this.activeMaterialIndex];
     }
 
+    updateMaterial(){
+        this.activeMaterialIndex++;
+
+        if (this.activeMaterialIndex >= this.materialIds.length)
+            this.activeMaterialIndex = 0;
+    }
+
 
 }

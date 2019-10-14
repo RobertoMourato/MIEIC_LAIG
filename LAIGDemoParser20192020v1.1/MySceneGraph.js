@@ -269,9 +269,6 @@ class MySceneGraph {
             if (defaultView == this.reader.getString(children[i], 'id'))
                 enableView = true;
 
-            //global.push({ enableView: enableView, type: children[i].nodeName });
-            //global.push(children[i].nodeName);
-
             grandChildren = children[i].children;
 
             nodeNames = [];
@@ -308,7 +305,7 @@ class MySceneGraph {
                 if (!(angle != null && !isNaN(angle)))
                     return "unable to parse angle of the view for ID = " + viewId;
 
-                this.views.push({ enableView: enableView, type: children[i].nodeName, near: near, far: far, angle: angle, from: from, to: to });
+                this.views.push({ id: viewId, enableView: enableView, type: children[i].nodeName, near: near, far: far, angle: angle, from: from, to: to });
             }
             // If nodeName == "ortho"
             else {
@@ -343,7 +340,7 @@ class MySceneGraph {
                     upPosition = [0, 1, 0];
                 }
 
-                this.views.push({ enableView: enableView, type: children[i].nodeName, near: near, far: far, left: left, right: right, top: top, bottom: bottom, from: from, to: to, up: upPosition });
+                this.views.push({ id: viewId, enableView: enableView, type: children[i].nodeName, near: near, far: far, left: left, right: right, top: top, bottom: bottom, from: from, to: to, up: upPosition });
             }
 
             numViews++;
@@ -631,7 +628,7 @@ class MySceneGraph {
             }
 
             //this.materials.push({ matId: materialID, shininess: materialShininess, emission: emission, ambient: ambient, diffuse: diffuse, specular: specular });
-            this.materials[materialID] = new CGFappearance(this);
+            this.materials[materialID] = new CGFappearance(this.scene);
 
             this.materials[materialID].setEmission(emission[0], emission[1], emission[2], emission[3]);
             this.materials[materialID].setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
@@ -1058,7 +1055,7 @@ class MySceneGraph {
 
                 if (materialId != "inherit") {
                     var material = this.materials[materialId];
-                    materials.push(material);
+                    materials[materialId] = material;
                 }
             }
 
@@ -1218,6 +1215,13 @@ class MySceneGraph {
         console.log("   " + message);
     }
 
+    updateMaterials() {
+        for (var key in this.components){
+            var component = this.components[key];
+            component.updateMaterial();
+        }
+    }
+
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
@@ -1281,7 +1285,7 @@ class MySceneGraph {
 
             children = component.componentChildren;
             for (var i = 0; i < children.length; i++) {
-                // save
+                // save 
                 this.scene.pushMatrix();
                 this.processNode(children[i], transformation, material, texture, 1, 1);
                 this.scene.popMatrix();
@@ -1290,8 +1294,8 @@ class MySceneGraph {
 
     processPrimitiveNode(primitive, parentTransformationMatrix, parentMaterial, parentTexture, parentLength_s, parentLength_t){
         if (primitive != null) {
+            parentMaterial.apply();
             this.scene.multMatrix(parentTransformationMatrix);
-            //this.materials[parentMaterial].apply();        
             primitive.display();
         }
     }
