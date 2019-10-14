@@ -33,6 +33,30 @@
             <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
             <specular r="0.6" g="0.0" b="0.0" a="1.0" />
         </material>
+        <material id="Roxo" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="0.0" b="1.0" a="1.0" />
+            <diffuse r="0.6" g="0.0" b="0.6" a="1.0" />
+            <specular r="0.6" g="0.0" b="0.6" a="1.0" />
+        </material>
+        <material id="Azul" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="1.0" a="1.0" />
+            <diffuse r="0.0" g="0.0" b="0.6" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.6" a="1.0" />
+        </material>
+        <material id="Verde" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="1.0" b="0.0" a="1.0" />
+            <diffuse r="0.0" g="0.6" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.6" b="0.0" a="1.0" />
+        </material>
+        <material id="Cinza" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0.25" g="0.25" b="0.25" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
@@ -101,6 +125,8 @@
             </transformation>
             <materials>
                 <material id="demoMaterial" />
+                <material id="Cinza" />
+                <material id="Azul" />
             </materials>
             <texture id="demoTexture"/>
             <children>
@@ -114,6 +140,8 @@
             </transformation>
             <materials>
                 <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
             </materials>
             <texture id="demoTexture"/>
             <children>
@@ -127,6 +155,8 @@
             </transformation>
             <materials>
                 <material id="demoMaterial" />
+                <material id="Roxo" />
+                <material id="Azul" />
             </materials>
             <texture id="demoTexture"/>
             <children>
@@ -153,6 +183,9 @@
             </transformation>
             <materials>
                 <material id="demoMaterial" />
+                <material id="Azul" />
+                <material id="Roxo" />
+                <material id="Cinza" />
             </materials>
             <texture id="demoTexture"/>
             <children>
