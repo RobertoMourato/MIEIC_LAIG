@@ -1228,7 +1228,7 @@ class MySceneGraph {
     displayScene() {
         //To do: Create display loop for transversing the scene graph
         var identity = mat4.create();
-        this.processNode(this.components["demoRoot"], identity, this.materials["defaultMaterial"]);
+        this.processNode(this.components[this.idRoot], identity, this.materials["defaultMaterial"]);
         //To test the parsing/creation of the primitives, call the display function directly
         /*this.primitives['demoRectangle'].display();
         this.primitives['demoTriangle'].display();*/
@@ -1240,7 +1240,8 @@ class MySceneGraph {
     processNode(component, parentTransformationMatrix, parentMaterial, parentTexture, parentLength_s, parentLength_t) {
             //console.warn("To do: Tratamento de erros");
             if (component == null) {
-                ;
+                console.warn("Null component");
+                return;
             }
 
             var transformation = mat4.create();

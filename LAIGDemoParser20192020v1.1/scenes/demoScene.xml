@@ -3,8 +3,8 @@
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="50" angle="45">
-            <from x="10" y="6" z="10" />
-            <to x="0" y="-2" z="0" />
+            <from x="20" y="12" z="20" />
+            <to x="0" y="0" z="0" />
         </perspective>
 
         <perspective id="viewFromBehind" near="0.1" far="50" angle="45">
@@ -77,20 +77,29 @@
     </transformations>
 
     <primitives>
-        <primitive id="demoRectangle">
+        <primitive id="door">
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>
         <primitive id="demoTriangle">
             <triangle x1="-0.5" y1="0" z1="0" x2="0.5" y2="0" z2="0" x3="0" y3="0" z3="-1" />
         </primitive>
         <primitive id="demoCylinder">
-            <cylinder base="4" top="2" height="3" slices="20" stacks="10"/>
+            <cylinder base="4" top="2" height="10" slices="30" stacks="15"/>
+        </primitive>
+        <primitive id="stand">
+            <cylinder base="0.05" top="0.05" height="1" slices="30" stacks="15"/>
+        </primitive>
+        <primitive id="beam">
+            <cylinder base="0.1" top="0.1" height="1" slices="30" stacks="15"/>
         </primitive>
         <primitive id="demoSphere">
             <sphere radius="2" slices="100" stacks="100"/>
         </primitive>
-        <primitive id="demoTorus">
-            <torus inner = "0.1" outer = "0.5" slices="100" loops="100" />
+        <primitive id="handrail">
+            <torus inner = "0.05" outer = "4.5" slices="100" loops="100" />
+        </primitive>
+        <primitive id="platform">
+            <torus inner = "1.0" outer = "3.5" slices="100" loops="100" />
         </primitive>
     </primitives>
 
@@ -137,12 +146,15 @@
             <texture id="demoTexture"/>
             <children>
                 <componentref id="Walls" />
+                <componentref id="Door" />
+                <componentref id="Handrail_W/Stands" />
+                <componentref id="Platform" />
             </children>
         </component>
 
         <component id="Walls">
             <transformation>
-                <translate x="0" y="0" z="0" /> 
+                <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -155,6 +167,388 @@
             </children>
         </component>
 
+        <component id="Door">
+            <transformation>
+                <translate x="0" y="4" z="3.2" />
+                <rotate axis="x" angle="-10" />
+            </transformation>
+            <materials>
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="door" />
+            </children>
+        </component>
+
+        <component id="Handrail_W/Stands">
+            <transformation>
+                <scale x="1" y="1" z="1" />
+                <!--<rotate axis="x" angle="-90" /> -->
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="Handrail" />
+                <componentref id="Stands" />                
+            </children>
+        </component>
+
+        <component id="Handrail">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="0" y="0" z="4" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="handrail" />
+                
+            </children>
+        </component>
+
+        <component id="Stands">
+            <transformation>
+                <translate x="0" y="3" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="Stand X" />
+                <componentref id="Stand X -Z" />
+                <componentref id="Stand -Z" />
+                <componentref id="Stand -X -Z" />
+                <componentref id="Stand -X" />
+                <componentref id="Stand -X Z" />
+                <componentref id="Stand Z" />
+                <componentref id="Stand X Z" />
+            </children>
+        </component>
+
+        <component id="Stand X">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="4.5" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Stand X -Z">
+            <transformation>
+                <translate x="3.18" y="0" z="-3.18" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Stand -Z">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="0" y="-4.5" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Stand -X -Z">
+            <transformation>
+                <translate x="-3.18" y="0" z="-3.18" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Stand -X">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="-4.5" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Stand -X Z">
+            <transformation>
+                <translate x="-3.18" y="0" z="3.18" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Stand Z">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="0" y="4.5" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Stand X Z">
+            <transformation>
+                <translate x="3.18" y="0" z="3.18" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Platform_W/Beams">
+            <transformation>
+                <translate x="0" y="3" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="Platform" />
+                <componentref id="Beams" />
+            </children>
+        </component>
+
+        <component id="Platform">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="0" y="0" z="3" />
+                <scale x="1" y="1" z="0.01" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="platform" />
+            </children>
+        </component>
+
+        <component id="Beams">
+            <transformation>
+                <translate x="0" y="3" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="Beam X" />
+                <componentref id="Beam X -Z" />
+                <componentref id="Beam -Z" />
+                <componentref id="Beam -X -Z" />
+                <componentref id="Beam -X" />
+                <componentref id="Beam -X Z" />
+                <componentref id="Beam Z" />
+                <componentref id="Beam X Z" />
+            </children>
+        </component>
+
+        <component id="Beam X">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="4.5" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Beam X -Z">
+            <transformation>
+                <translate x="3.18" y="0" z="-3.18" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Beam -Z">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="0" y="-4.5" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Beam -X -Z">
+            <transformation>
+                <translate x="-3.18" y="0" z="-3.18" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Beam -X">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="-4.5" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Beam -X Z">
+            <transformation>
+                <translate x="-3.18" y="0" z="3.18" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Beam Z">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+                <translate x="0" y="4.5" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
+
+        <component id="Beam X Z">
+            <transformation>
+                <translate x="3.18" y="0" z="3.18" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="stand" />
+            </children>
+        </component>
         <!-- <component id="Sphere">
             <transformation>
             <translate x="0" y="0" z="-1" />
