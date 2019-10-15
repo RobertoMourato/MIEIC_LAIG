@@ -1279,17 +1279,36 @@ class MySceneGraph {
             var children = component.primitiveChildren;
             for (var i = 0; i < children.length; i++) {
                 // save
+                this.scene.pushTexture({ texture: texture, ls: ls, lt: lt });
+                this.scene.pushMaterial(material);
                 this.scene.pushMatrix();
+                
                 this.processPrimitiveNode(children[i], transformation, material, texture, 1, 1);
+                
                 this.scene.popMatrix();
+                material = this.scene.popMaterial(material);
+                
+                var tex = this.scene.popTexture();
+                texture = tex.texture;
+                ls = tex.ls;
+                lt = tex.lt;
             }
 
             children = component.componentChildren;
             for (var i = 0; i < children.length; i++) {
                 // save 
+                this.scene.pushTexture({ texture: texture, ls: ls, lt: lt });
+                this.scene.pushMaterial(material);
                 this.scene.pushMatrix();
                 this.processNode(children[i], transformation, material, texture, 1, 1);
+                
                 this.scene.popMatrix();
+                material = this.scene.popMaterial(material);
+                
+                var tex = this.scene.popTexture();
+                texture = tex.texture;
+                ls = tex.ls;
+                lt = tex.lt;
             }
     }
 
