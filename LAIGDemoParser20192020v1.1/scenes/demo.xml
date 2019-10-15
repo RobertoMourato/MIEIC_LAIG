@@ -190,6 +190,20 @@
             <texture id="demoTexture"/>
             <children>
                 <primitiveref id="demoTorus" />
+                <componentref id="heritageTest" />
+            </children>
+        </component>
+
+        <component id="heritageTest">
+            <transformation>
+                <translate x="0" y="0" z="-2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="demoTexture" />
+            <children>
+                <primitiveref id="demoSphere" />
             </children>
         </component>
     </components>
