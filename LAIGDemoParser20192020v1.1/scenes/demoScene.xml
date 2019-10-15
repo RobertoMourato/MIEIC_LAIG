@@ -4,7 +4,7 @@
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="50" angle="45">
             <from x="20" y="12" z="20" />
-            <to x="0" y="0" z="0" />
+            <to x="0" y="5" z="0" />
         </perspective>
 
         <perspective id="viewFromBehind" near="0.1" far="50" angle="45">
@@ -77,29 +77,52 @@
     </transformations>
 
     <primitives>
+        <primitive id="soil">
+            <rectangle x1="-1" y1="-1" x2="1" y2="1" />
+        </primitive>
+
+        <primitive id="walls">
+            <cylinder base="4" top="2" height="11" slices="30" stacks="15"/>
+        </primitive>
+
+        <primitive id="roof">
+            <cylinder base="2.5" top="0" height="2" slices="30" stacks="15"/>
+        </primitive>
+
         <primitive id="door">
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>
-        <primitive id="demoTriangle">
-            <triangle x1="-0.5" y1="0" z1="0" x2="0.5" y2="0" z2="0" x3="0" y3="0" z3="-1" />
+
+        <primitive id="window">
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
-        <primitive id="demoCylinder">
-            <cylinder base="4" top="2" height="10" slices="30" stacks="15"/>
-        </primitive>
+        
         <primitive id="stand">
             <cylinder base="0.05" top="0.05" height="1" slices="30" stacks="15"/>
         </primitive>
+
         <primitive id="beam">
-            <cylinder base="0.1" top="0.1" height="1" slices="30" stacks="15"/>
+            <cylinder base="0.1" top="0.1" height="1.4" slices="30" stacks="15"/>
         </primitive>
-        <primitive id="demoSphere">
-            <sphere radius="2" slices="100" stacks="100"/>
+
+        <primitive id="joint">
+            <sphere radius="0.2" slices="50" stacks="50"/>
         </primitive>
+
         <primitive id="handrail">
             <torus inner = "0.05" outer = "4.5" slices="100" loops="100" />
         </primitive>
+
         <primitive id="platform">
             <torus inner = "1.0" outer = "3.5" slices="100" loops="100" />
+        </primitive>
+
+        <primitive id="wing_stick">
+            <rectangle x1="-0.05" y1="-5.5" x2="0.05" y2="0" />
+        </primitive>
+
+        <primitive id="wing_cloth">
+            <triangle x1="0" y1="0" z1="0" x2="-3" y2="-5.5" z2="0" x3="0" y3="-5.5" z3="0.5" />
         </primitive>
     </primitives>
 
@@ -114,10 +137,25 @@
             <texture id="none"/>
             <children>
                 <componentref id="Windmill" />
+                <componentref id="Soil" />
               <!--  <componentref id="Triangle" />
                 <componentref id="Cylinder" />
                 <componentref id="Sphere" />
                 <componentref id="TransfTorus" /> -->
+            </children>
+        </component>
+
+        <component id="Soil">
+            <transformation>
+                <scale x="100" y="1" z="100" /> 
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="soil" />
             </children>
         </component>
 
@@ -131,6 +169,9 @@
             <texture id="demoTexture"/>
             <children>
                 <componentref id="Building" />
+                <componentref id="Handrail_W/Stands" />
+                <componentref id="Platform_W/Beams" />
+                <componentref id="Wings" />
             </children>
         </component>
 
@@ -146,9 +187,9 @@
             <texture id="demoTexture"/>
             <children>
                 <componentref id="Walls" />
+                <componentref id="Roof" />
                 <componentref id="Door" />
-                <componentref id="Handrail_W/Stands" />
-                <componentref id="Platform" />
+                <componentref id="Windows" />
             </children>
         </component>
 
@@ -163,13 +204,13 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="demoCylinder" />
+                <primitiveref id="walls" />
             </children>
         </component>
 
         <component id="Door">
             <transformation>
-                <translate x="0" y="4" z="3.2" />
+                <translate x="0" y="4" z="3.28" />
                 <rotate axis="x" angle="-10" />
             </transformation>
             <materials>
@@ -179,6 +220,82 @@
             <texture id="demoTexture"/>
             <children>
                 <primitiveref id="door" />
+            </children>
+        </component>
+
+        <component id="Windows">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="WindowLeft" />
+                <componentref id="WindowRight" />
+                <componentref id="WindowUp" />
+            </children>
+        </component>
+
+        <component id="WindowLeft">
+            <transformation>
+                <rotate axis="y" angle="-40" />
+                <translate x="0" y="4.5" z="3.2" />
+                <rotate axis="x" angle="-10" />
+            </transformation>
+            <materials>
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="window" />
+            </children>
+
+        </component><component id="WindowRight">
+            <transformation>
+                <rotate axis="y" angle="40" />
+                <translate x="0" y="4.5" z="3.2" />
+                <rotate axis="x" angle="-10" />
+            </transformation>
+            <materials>
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="window" />
+            </children>
+
+        </component><component id="WindowUp">
+            <transformation>
+                <translate x="0" y="7" z="2.75" />
+                <rotate axis="x" angle="-10" />
+            </transformation>
+            <materials>
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="window" />
+            </children>
+        </component>
+
+        <component id="Roof">
+            <transformation>
+                <translate x="0" y="11" z="0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="roof" />
             </children>
         </component>
 
@@ -369,7 +486,7 @@
 
         <component id="Platform_W/Beams">
             <transformation>
-                <translate x="0" y="3" z="0" />
+                <!--<translate x="0" y="0" z="3" /> -->
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -386,8 +503,8 @@
         <component id="Platform">
             <transformation>
                 <rotate axis="x" angle="-90" />
-                <translate x="0" y="0" z="3" />
-                <scale x="1" y="1" z="0.01" />
+                <translate x="0" y="0" z="3" /> 
+                <scale x="1" y="1" z="0.1" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -402,7 +519,7 @@
 
         <component id="Beams">
             <transformation>
-                <translate x="0" y="3" z="0" />
+                <translate x="0" y="2" z="0" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -424,8 +541,10 @@
 
         <component id="Beam X">
             <transformation>
+
+                <translate x="3.5" y="0" z="0" />
+                <rotate axis="z" angle="-45" />
                 <rotate axis="x" angle="-90" />
-                <translate x="4.5" y="0" z="0" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -434,14 +553,15 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="stand" />
+                <primitiveref id="beam" />
             </children>
         </component>
 
         <component id="Beam X -Z">
             <transformation>
-                <translate x="3.18" y="0" z="-3.18" />
-                <rotate axis="x" angle="-90" />
+                <rotate axis="y" angle="135" />
+                <translate x="0" y="0" z="3.5" />
+                <rotate axis="x" angle="-45" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -450,14 +570,14 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="stand" />
+                <primitiveref id="beam" />
             </children>
         </component>
 
         <component id="Beam -Z">
             <transformation>
-                <rotate axis="x" angle="-90" />
-                <translate x="0" y="-4.5" z="0" />
+                <translate x="0" y="0" z="-3.5" />
+                <rotate axis="x" angle="-135" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -466,14 +586,15 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="stand" />
+                <primitiveref id="beam" />
             </children>
         </component>
 
         <component id="Beam -X -Z">
             <transformation>
-                <translate x="-3.18" y="0" z="-3.18" />
-                <rotate axis="x" angle="-90" />
+                <rotate axis="y" angle="-135" />
+                <translate x="0" y="0" z="3.5" />
+                <rotate axis="x" angle="-45" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -482,14 +603,15 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="stand" />
+                <primitiveref id="beam" />
             </children>
         </component>
 
         <component id="Beam -X">
             <transformation>
+                <translate x="-3.5" y="0" z="0" />
+                <rotate axis="z" angle="45" />
                 <rotate axis="x" angle="-90" />
-                <translate x="-4.5" y="0" z="0" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -498,14 +620,15 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="stand" />
+                <primitiveref id="beam" />
             </children>
         </component>
 
         <component id="Beam -X Z">
             <transformation>
-                <translate x="-3.18" y="0" z="3.18" />
-                <rotate axis="x" angle="-90" />
+                <rotate axis="y" angle="-45" />
+                <translate x="0" y="0" z="3.5" />
+                <rotate axis="x" angle="-45" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -514,14 +637,14 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="stand" />
+                <primitiveref id="beam" />
             </children>
         </component>
 
         <component id="Beam Z">
             <transformation>
-                <rotate axis="x" angle="-90" />
-                <translate x="0" y="4.5" z="0" />
+                <translate x="0" y="0" z="3.5" />
+                <rotate axis="x" angle="-45" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -530,14 +653,15 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="stand" />
+                <primitiveref id="beam" />
             </children>
         </component>
 
         <component id="Beam X Z">
             <transformation>
-                <translate x="3.18" y="0" z="3.18" />
-                <rotate axis="x" angle="-90" />
+                <rotate axis="y" angle="45" />
+                <translate x="0" y="0" z="3.5" />
+                <rotate axis="x" angle="-45" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -546,9 +670,143 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="stand" />
+                <primitiveref id="beam" />
             </children>
         </component>
+
+        <component id="Wings" >
+            <transformation>
+                <translate x="0" y="10.5" z="0" />
+            </transformation>
+            <materials>  
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="Support" />
+                <componentref id="Joint" />
+                <componentref id="WingLD" /> <!--Left Down Wing-->
+                <componentref id="WingRD" /> <!--Right Down Wing-->
+                <componentref id="WingLU" /> <!--Left Up Wing-->
+                <componentref id="WingRU" /> <!--Right Up Wing-->
+            </children>
+        </component>
+
+        <component id="Support" >
+            <transformation>
+                <translate x="0" y="0" z="2" />
+            </transformation>
+            <materials>  
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="beam" />
+            </children>
+        </component>
+
+        <component id="Joint" >
+            <transformation>
+                <translate x="0" y="0" z="3.4" />
+            </transformation>
+            <materials>  
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="joint" />
+            </children>
+        </component>
+
+        <component id="WingLD" >
+            <transformation>
+                <translate x="0" y="0" z="3.4" />
+                <rotate axis="z" angle="-45" />
+            </transformation>
+            <materials>  
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="WingStick" />
+                <componentref id="WingCloth" /> 
+            </children>
+        </component>
+
+        <component id="WingRD" >
+            <transformation>
+                <translate x="0" y="0" z="3.4" />
+                <rotate axis="z" angle="45" />
+            </transformation>
+            <materials>  
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="WingStick" />
+                <componentref id="WingCloth" /> 
+            </children>
+        </component>
+
+        <component id="WingLU" >
+            <transformation>
+                <translate x="0" y="0" z="3.4" />
+                <rotate axis="z" angle="-135" />
+            </transformation>
+            <materials>  
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="WingStick" />
+                <componentref id="WingCloth" /> 
+            </children>
+        </component>
+
+        <component id="WingRU" >
+            <transformation>
+                <translate x="0" y="0" z="3.4" />
+                <rotate axis="z" angle="135" />
+            </transformation>
+            <materials>  
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="WingStick" />
+                <componentref id="WingCloth" /> 
+            </children>
+        </component>
+
+        <component id="WingStick" >
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>  
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="wing_stick" />
+            </children>
+        </component>
+
+        <component id="WingCloth" >
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>  
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="wing_cloth" />
+            </children>
+        </component>
+
+
+
+
         <!-- <component id="Sphere">
             <transformation>
             <translate x="0" y="0" z="-1" />
