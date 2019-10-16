@@ -798,7 +798,7 @@
             <materials>  
                 <material id="Cinza" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="demoTexture" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="wing_cloth" />
             </children>
