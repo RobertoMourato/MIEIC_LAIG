@@ -41,12 +41,21 @@ class XMLscene extends CGFscene {
         this.activeView = "";
         this.viewIds = [];
 
-        this.lightActive = false;
-    
+        this.activeLight0;
+        this.activeLight1;
+        this.activeLight2;
+        this.activeLight3;
+        this.activeLight4;
+        this.activeLight5;
+        this.activeLight6;
+        this.activeLight7;
+
+        this.lightIds = [];
+
         this.keyMpressed = false;
     }
 
-    initBackupCamera(){
+    initBackupCamera() {
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
     }
 
@@ -56,7 +65,7 @@ class XMLscene extends CGFscene {
     initCameras() {
         this.cameras = [];
 
-        for (var i = 0; i < this.graph.views.length; i++){
+        for (var i = 0; i < this.graph.views.length; i++) {
             var cam = this.graph.views[i];
             this.cameras[cam.id] = new CGFcamera(cam.angle, cam.near, cam.far, vec3.fromValues(cam.from[0], cam.from[1], cam.from[2]), vec3.fromValues(cam.to[0], cam.to[1], cam.to[2]));
             this.viewIds.push(cam.id);
@@ -100,16 +109,112 @@ class XMLscene extends CGFscene {
                 }
 
                 this.lights[i].setVisible(true);
-                if (light[0])
+
+                var active;
+                if (light[0]) {
                     this.lights[i].enable();
-                else
+                    this.lightIds.push(key);
+                    active = true;
+                } else {
                     this.lights[i].disable();
+                    this.lightIds.push(key);
+                    active = false;
+                }
+
+                switch (i) {
+                    case 0:
+                        this.activeLight0 = active;
+                        break;
+                    case 1:
+                        this.activeLight1 = active;
+                        break;
+                    case 2:
+                        this.activeLight2 = active;
+                        break;
+                    case 3:
+                        this.activeLight3 = active;
+                        break;
+                    case 4:
+                        this.activeLight4 = active;
+                        break;
+                    case 5:
+                        this.activeLight5 = active;
+                        break;
+                    case 6:
+                        this.activeLight6 = active;
+                        break;
+                    case 7:
+                        this.activeLight7 = active;
+                        break;
+                    default:
+                        break;
+                }
 
                 this.lights[i].update();
 
                 i++;
             }
         }
+    }
+
+    onLightChecklistChange(v) {
+        /* Light 0 */
+        if (this.activeLight0)
+            this.lights[0].enable();
+        else this.lights[0].disable();
+        
+        this.lights[0].update(); 
+        
+        /* Light 1 */
+        if (this.activeLight1)
+            this.lights[1].enable();
+        else this.lights[1].disable();
+        
+        this.lights[1].update(); 
+        
+        /* Light 2 */
+        if (this.activeLight2)
+            this.lights[2].enable();
+        else 
+            this.lights[2].disable();
+        
+        this.lights[2].update(); 
+        
+        /* Light 3 */
+        if (this.activeLight3)
+            this.lights[3].enable();
+        else this.lights[3].disable();
+            
+        this.lights[3].update(); 
+        
+        /* Light 4 */
+        if (this.activeLight4)
+            this.lights[4].enable();
+        else this.lights[4].disable();
+            
+        this.lights[4].update(); 
+        
+        /* Light 5 */
+        if (this.activeLight5)
+            this.lights[5].enable();
+        else this.lights[5].disable();
+            
+        this.lights[5].update(); 
+        
+        /* Light 6 */
+        if (this.activeLight6)
+            this.lights[6].enable();
+        else this.lights[6].disable();
+            
+        this.lights[6].update(); 
+        
+        /* Light 7 */
+        if (this.activeLight7)
+            this.lights[7].enable();
+        else this.lights[7].disable();
+            
+        this.lights[7].update(); 
+        
     }
 
     setDefaultAppearance() {
@@ -140,7 +245,7 @@ class XMLscene extends CGFscene {
     update(t) {
         if (this.gui.isKeyPressed("KeyM") && this.keyMpressed == false) {
             this.keyMpressed = true;
-        } else if (this.gui.isKeyPressed("KeyM") == false && this.keyMpressed == true){
+        } else if (this.gui.isKeyPressed("KeyM") == false && this.keyMpressed == true) {
             this.keyMpressed = false;
             this.graph.updateMaterials();
         }
@@ -151,38 +256,38 @@ class XMLscene extends CGFscene {
      */
     display() {
         // ---- BEGIN Background, camera and axis setup
-        if (this.sceneInited){
-        // Clear image and depth buffer everytime we update the scene
-        this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-
-        // Initialize Model-View matrix as identity (no transformation)
-        this.updateProjectionMatrix();
-        this.loadIdentity();
-
-        // Apply transformations corresponding to the camera position relative to the origin
-        this.applyViewMatrix();
-
-        this.pushMatrix();
-        this.axis.display();
-
-        for (var i = 0; i < this.lights.length; i++) {
-            this.lights[i].setVisible(true);
-            this.lights[i].enable();
-        }
-
-
-
         if (this.sceneInited) {
-            // Draw axis
-            this.setDefaultAppearance();
+            // Clear image and depth buffer everytime we update the scene
+            this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+            this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-            // Displays the scene (MySceneGraph function).
-            this.graph.displayScene();
-        }
+            // Initialize Model-View matrix as identity (no transformation)
+            this.updateProjectionMatrix();
+            this.loadIdentity();
 
-        this.popMatrix();
-        // ---- END Background, camera and axis setup
+            // Apply transformations corresponding to the camera position relative to the origin
+            this.applyViewMatrix();
+
+            this.pushMatrix();
+            this.axis.display();
+
+            for (var i = 0; i < this.lights.length; i++) {
+                this.lights[i].setVisible(true);
+                this.lights[i].enable();
+            }
+
+
+
+            if (this.sceneInited) {
+                // Draw axis
+                this.setDefaultAppearance();
+
+                // Displays the scene (MySceneGraph function).
+                this.graph.displayScene();
+            }
+
+            this.popMatrix();
+            // ---- END Background, camera and axis setup
         }
     }
 
