@@ -71,6 +71,9 @@
             <rotate axis="z" angle="-45" />
             <translate x="10" y="0" z="0" />
         </transformation>
+        <transformation id="neutralTransformation">
+            <translate x="0" y="0" z="0" />
+        </transformation>
     </transformations>
 
     <primitives>
@@ -103,17 +106,18 @@
             <texture id="demoTexture"/>
             <children>
                 <componentref id="Rectangle" />
-                <componentref id="Triangle" />
+                <!-- <componentref id="Triangle" />
                 <componentref id="Cylinder" />
                 <componentref id="Sphere" />
-                <componentref id="TransfTorus" />
+                <componentref id="TransfTorus" /> -->
             </children>
         </component>
 
         <component id="Rectangle">
             <transformation>
+                <transformationref id="neutralTransformation" />
             <translate x="0" y="0" z="5" />
-            <translate x="10" y="0" z="0" />
+            <translate x="1" y="0" z="0" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -124,7 +128,7 @@
             </children>
         </component>
 
-        <component id="Triangle">
+        <!--<component id="Triangle">
             <transformation>
             <translate x="5" y="0" z="0" />
             </transformation>
@@ -210,6 +214,6 @@
             <children>
                 <primitiveref id="demoSphere" />
             </children>
-        </component>
+        </component> -->
     </components>
 </lxs>

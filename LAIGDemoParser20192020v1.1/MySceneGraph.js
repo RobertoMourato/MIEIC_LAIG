@@ -542,7 +542,7 @@ class MySceneGraph {
             if (URL == null)
                 return "no URL defined for texture";
 
-            this.textures[textureId] = new CGFtexture(this, URL);
+            this.textures[textureId] = new CGFtexture(this.scene, URL);
 
             numTextures++;
         }
@@ -1286,8 +1286,7 @@ class MySceneGraph {
                 this.processPrimitiveNode(children[i], transformation, material, texture, 1, 1);
                 
                 this.scene.popMatrix();
-                material = this.scene.popMaterial(material);
-                
+                material = this.scene.popMaterial(material);                
                 var tex = this.scene.popTexture();
                 texture = tex.texture;
                 ls = tex.ls;
@@ -1300,11 +1299,11 @@ class MySceneGraph {
                 this.scene.pushTexture({ texture: texture, ls: ls, lt: lt });
                 this.scene.pushMaterial(material);
                 this.scene.pushMatrix();
+
                 this.processNode(children[i], transformation, material, texture, 1, 1);
                 
                 this.scene.popMatrix();
-                material = this.scene.popMaterial(material);
-                
+                material = this.scene.popMaterial(material);                
                 var tex = this.scene.popTexture();
                 texture = tex.texture;
                 ls = tex.ls;
@@ -1314,7 +1313,13 @@ class MySceneGraph {
 
     processPrimitiveNode(primitive, parentTransformationMatrix, parentMaterial, parentTexture, parentLength_s, parentLength_t){
         if (primitive != null) {
+            
             parentMaterial.apply();
+            if (parentTexture != null){
+                // update primitive tex_coords
+                primitive.updateCoords
+                parentTexture.bind();
+            }
             this.scene.multMatrix(parentTransformationMatrix);
             primitive.display();
         }

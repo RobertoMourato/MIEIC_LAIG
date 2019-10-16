@@ -30,7 +30,11 @@ class MyInterface extends CGFinterface {
         // add a group of controls (and open/expand by defult)
         //this.gui.add(text, 'Active View', ['view1', 'view2', 'view3', 'view4']);
         //this.gui.add(this.scene, 'selectedMaterial', this.scene.materialIDs).name('Selected Material');
-        this.gui.add(this.scene, 'activeView', this.scene.viewIds).name('Active View');
+        this.gui.add(this.scene, 'activeView', this.scene.viewIds).name('Active View').onChange(this.scene.onCameraChange.bind(this.scene));
+
+        for (var i = 0; i < this.scene.lights.length; i++) {
+            this.gui.add(this.scene, 'lightActive').name('Light ' + i);
+        }
     }
 
     /**

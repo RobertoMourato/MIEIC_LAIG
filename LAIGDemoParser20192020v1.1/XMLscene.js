@@ -40,6 +40,8 @@ class XMLscene extends CGFscene {
 
         this.activeView = "";
         this.viewIds = [];
+
+        this.lightActive = false;
     
         this.keyMpressed = false;
     }
@@ -56,15 +58,21 @@ class XMLscene extends CGFscene {
 
         for (var i = 0; i < this.graph.views.length; i++){
             var cam = this.graph.views[i];
-            this.cameras[i] = new CGFcamera(cam.angle, cam.near, cam.far, vec3.fromValues(cam.from[0], cam.from[1], cam.from[2]), vec3.fromValues(cam.to[0], cam.to[1], cam.to[2]));
+            this.cameras[cam.id] = new CGFcamera(cam.angle, cam.near, cam.far, vec3.fromValues(cam.from[0], cam.from[1], cam.from[2]), vec3.fromValues(cam.to[0], cam.to[1], cam.to[2]));
             this.viewIds.push(cam.id);
             if (cam.enableView) {
-                this.camera = this.cameras[i];
+                this.camera = this.cameras[cam.id];
                 this.activeView = cam.id;
             }
         }
         this.interface.setActiveCamera(this.camera);
     }
+
+    onCameraChange(v) {
+        this.camera = this.cameras[this.activeView];
+        this.interface.setActiveCamera(this.camera);
+    }
+
     /**
      * Initializes the scene lights with the values read from the XML file.
      */

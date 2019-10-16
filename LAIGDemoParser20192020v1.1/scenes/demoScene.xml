@@ -8,7 +8,7 @@
         </perspective>
 
         <perspective id="viewFromBehind" near="0.1" far="50" angle="45">
-            <from x="-10" y="6" z="-10" />
+            <from x="-20" y="12" z="-20" />
             <to x="0" y="-2" z="0" />
         </perspective>
     </views>
@@ -180,9 +180,9 @@
             <translate x="0" y="0" z="0" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
                 <material id="Cinza" />
                 <material id="Azul" />
+                <material id="inherit" />
             </materials>
             <texture id="demoTexture"/>
             <children>
@@ -198,9 +198,9 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
                 <material id="Verde" />    
                 <material id="Cinza" />
+                <material id="inherit" />
             </materials>
             <texture id="demoTexture"/>
             <children>
