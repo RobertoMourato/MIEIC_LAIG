@@ -1088,15 +1088,15 @@ class MySceneGraph {
             var component = new Component(componentID, transformation, materialIds, materials, textureId, texture, length_s, length_t, componentIds, primitiveIds);
             this.components[componentID] = component;
         }
-        
-        for (var key in this.components){
+
+        for (var key in this.components) {
             var component = this.components[key];
-            for (var i = 0; i < component.componentIds.length; i++){
+            for (var i = 0; i < component.componentIds.length; i++) {
                 var id = component.componentIds[i];
                 component.componentChildren.push(this.components[id]);
             }
 
-            for (var i = 0; i < component.primitiveIds.length; i++){
+            for (var i = 0; i < component.primitiveIds.length; i++) {
                 var id = component.primitiveIds[i];
                 component.primitiveChildren.push(this.primitives[id]);
             }
@@ -1216,7 +1216,7 @@ class MySceneGraph {
     }
 
     updateMaterials() {
-        for (var key in this.components){
+        for (var key in this.components) {
             var component = this.components[key];
             component.updateMaterial();
         }
@@ -1238,42 +1238,42 @@ class MySceneGraph {
     }
 
     processNode(component, parentTransformationMatrix, parentMaterial, parentTexture, parentLength_s, parentLength_t) {
-            //console.warn("To do: Tratamento de erros");
-            if (component == null) {
-                console.warn("Null component");
-                return;
-            }
+        //console.warn("To do: Tratamento de erros");
+        if (component == null) {
+            console.warn("Null component");
+            return;
+        }
 
-            var transformation = mat4.create();
-            var material;
-            var texture;
-            var ls;
-            var lt;
+        var transformation = mat4.create();
+        var material;
+        var texture;
+        var ls;
+        var lt;
 
-            // Updates transformation matrix
-            mat4.multiply(transformation, parentTransformationMatrix, component.transformation);
+        // Updates transformation matrix
+        mat4.multiply(transformation, parentTransformationMatrix, component.transformation);
 
 
-            // Updates material
-            var activeMaterial = component.getActiveMaterialId();
+        // Updates material
+        var activeMaterial = component.getActiveMaterialId();
 
-            if (activeMaterial != "inherit")
-                material = component.materials[activeMaterial];
-            else material = parentMaterial;
+        if (activeMaterial != "inherit")
+            material = component.materials[activeMaterial];
+        else material = parentMaterial;
 
-            // Updates texture and texture coordinates
-            if (component.textureId == "inherit") {
-                texture = parentTexture;
-                ls = parentLength_s;
-                lt = parentLength_t;
-            }
-            else if (texture == "none")
-                texture = null;
-            else {
-                texture = component.texture;
-                ls = component.length_s;
-                lt = component.length_t                
-            }
+        // Updates texture and texture coordinates
+        if (component.textureId == "inherit") {
+            texture = parentTexture;
+            ls = parentLength_s;
+            lt = parentLength_t;
+        }
+        else if (texture == "none")
+            texture = null;
+        else {
+            texture = component.texture;
+            ls = component.length_s;
+            lt = component.length_t
+        }
 
 
             var children = component.primitiveChildren;
@@ -1311,7 +1311,7 @@ class MySceneGraph {
             }
     }
 
-    processPrimitiveNode(primitive, parentTransformationMatrix, parentMaterial, parentTexture, parentLength_s, parentLength_t){
+    processPrimitiveNode(primitive, parentTransformationMatrix, parentMaterial, parentTexture, parentLength_s, parentLength_t) {
         if (primitive != null) {
             
             
