@@ -58,6 +58,19 @@ class MyRectangle extends CGFobject {
 		this.initGLBuffers();
 	}
 
+	scaleFactors(length_s, length_t) {
+		var s = (-this.x1 + this.x2) / length_s;
+		var t = (-this.y1 + this.y2) / length_t;
+
+		this.texCoords = [
+			0, t,
+			s, t,
+			0, 0,
+			s, 0
+		];
+		this.updateTexCoordsGLBuffers();
+	}
+
 	/**
 	 * @method updateTexCoords
 	 * Updates the list of texture coordinates of the rectangle

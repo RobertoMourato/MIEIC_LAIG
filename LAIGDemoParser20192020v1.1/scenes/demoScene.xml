@@ -731,7 +731,7 @@
             <materials>  
                 <material id="Cinza" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="demoTexture" length_s="0.5" length_t="0.5" />
             <children>
                 <componentref id="WingStick" />
                 <componentref id="WingCloth" /> 
@@ -803,7 +803,7 @@
             <materials>  
                 <material id="Cinza" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="demoTexture" length_s="6" length_t="3"/>
             <children>
                 <primitiveref id="wing_cloth" />
             </children>

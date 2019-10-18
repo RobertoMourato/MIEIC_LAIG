@@ -1283,7 +1283,7 @@ class MySceneGraph {
                 this.scene.pushMaterial(material);
                 this.scene.pushMatrix();
                 
-                this.processPrimitiveNode(children[i], transformation, material, texture, 1, 1);
+                this.processPrimitiveNode(children[i], transformation, material, texture, ls, lt);
                 
                 this.scene.popMatrix();
                 material = this.scene.popMaterial(material);                
@@ -1300,7 +1300,7 @@ class MySceneGraph {
                 this.scene.pushMaterial(material);
                 this.scene.pushMatrix();
 
-                this.processNode(children[i], transformation, material, texture, 1, 1);
+                this.processNode(children[i], transformation, material, texture, ls, lt);
                 
                 this.scene.popMatrix();
                 material = this.scene.popMaterial(material);                
@@ -1314,14 +1314,20 @@ class MySceneGraph {
     processPrimitiveNode(primitive, parentTransformationMatrix, parentMaterial, parentTexture, parentLength_s, parentLength_t){
         if (primitive != null) {
             
-            parentMaterial.apply();
+            
             if (parentTexture != null){
                 // update primitive tex_coords
-                primitive.updateCoords
-                parentTexture.bind();
+                if (parentLength_s != null && parentLength_t != null)
+                    primitive.scaleFactors(parentLength_s, parentLength_t);
+
+                parentMaterial.setTexture(parentTexture);
+                parentMaterial.setTextureWrap('REPEAT', 'REPEAT');
             }
+            parentMaterial.apply();
             this.scene.multMatrix(parentTransformationMatrix);
             primitive.display();
+
+            parentMaterial.setTexture(null);
         }
     }
 }

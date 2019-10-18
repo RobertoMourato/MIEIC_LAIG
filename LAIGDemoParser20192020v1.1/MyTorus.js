@@ -29,14 +29,12 @@ class MyTorus extends CGFobject {
                     Math.cos(innerAngle) * Math.sin(outerAngle),
                     Math.sin(innerAngle));
 
-                this.texCoords.push(i / this.slices, 1 - j / this.loops);            
-            }
-        }
+                if (i != this.slices && j != this.stacks){
+                    this.indices.push(i * (this.loops + 1) + j + 1, i * (this.loops + 1) + j, (i + 1) * (this.loops + 1) + j);
+                    this.indices.push((i + 1) * (this.loops + 1) + j + 1, i * (this.loops + 1) + j + 1, (i + 1) * (this.loops + 1) + j);
+                }
 
-        for (let i = 0; i < this.loops; i++) {
-            for (let j = 0; j < this.slices; j++) {
-                this.indices.push(i * (this.loops + 1) + j + 1, i * (this.loops + 1) + j, (i + 1) * (this.loops + 1) + j);
-                this.indices.push((i + 1) * (this.loops + 1) + j + 1, i * (this.loops + 1) + j + 1, (i + 1) * (this.loops + 1) + j);
+                this.texCoords.push(i / this.slices, j / this.loops);
             }
         }
 

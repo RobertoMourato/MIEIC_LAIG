@@ -65,6 +65,22 @@ class MyTriangle extends CGFobject {
 		this.initGLBuffers();
 	}
 
+	scaleFactors(length_s, length_t) {
+		var a = Math.sqrt( Math.pow(this.x2 - this.x1, 2) + Math.pow(this.y2 - this.y1, 2) + Math.pow(this.z2 - this.z1, 2));
+		var b = Math.sqrt( Math.pow(this.x3 - this.x2, 2) + Math.pow(this.y3 - this.y3, 2) + Math.pow(this.z3 - this.z2, 2));
+		var c = Math.sqrt( Math.pow(this.x1 - this.x3, 2) + Math.pow(this.y1 - this.y3, 2) + Math.pow(this.z1 - this.z3, 2));
+
+		var cosAlpha = (a * a - b * b + c * c) / (2* a* c);
+		var sinAlpha = Math.sqrt(1-cosAlpha*cosAlpha);
+
+		this.texCoords = [
+			0, 0,
+			a / length_s, 0,
+			c*cosAlpha/length_s, c*sinAlpha / length_t
+		];
+		this.updateTexCoordsGLBuffers();
+	}
+
 	/**
 	 * @method updateTexCoords
 	 * Updates the list of texture coordinates of the rectangle
