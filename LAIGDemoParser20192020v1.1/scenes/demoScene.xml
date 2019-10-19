@@ -139,7 +139,7 @@
             <cylinder base="0.4" top="0.05" height="20" slices="30" stacks="15" />
         </primitive>
 
-        <primitive id="bodyWing">
+        <primitive id="bodyFan">
             <cylinder base="0.4" top="0.2" height="20" slices="30" stacks="15" />
         </primitive>
     </primitives>
@@ -162,7 +162,7 @@
             </children>
         </component>
 
-        <component id="body" >
+        <component id="fanBody" >
             <transformation>
                 <rotate axis="x" angle="-90" />
             </transformation>
@@ -171,30 +171,51 @@
             </materials>
             <texture id="none"/>
             <children>
-                <primitiveref id="bodyWing" />
+                <primitiveref id="bodyFan" />
             </children>
         </component>
 
         <component id="rightWing" >
             <transformation>
-                <translate x="0" y="20" z="0" />
-                <rotate axis="z" angle="-120" />
-                <scale x="0.6" y="0.4" z="0.6" />
-                <rotate axis="x" angle="-90" />
+                <rotate axis="z" angle="-140" />
             </transformation>
             <materials>  
                 <material id="demoMaterial" />
             </materials>
             <texture id="none"/>
             <children>
-                <primitiveref id="auxCone" />
+                <componentref id="fanWing" />
             </children>
         </component>
 
         <component id="leftWing" >
             <transformation>
-                <translate x="0" y="20" z="0" />
-                <rotate axis="z" angle="120" />
+                <rotate axis="z" angle="100" />
+            </transformation>
+            <materials>  
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="fanWing" />
+            </children>
+        </component>
+
+        <component id="upWing" >
+            <transformation>
+                <rotate axis="z" angle="-20" />
+            </transformation>
+            <materials>  
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="fanWing" />
+            </children>
+        </component>
+
+        <component id="fanWing" >
+            <transformation>
                 <scale x="0.6" y="0.4" z="0.6" />
                 <rotate axis="x" angle="-90" />
             </transformation>
@@ -207,18 +228,21 @@
             </children>
         </component>
 
-        <component id="upWing" >
+        <component id="fanWings" >
             <transformation>
                 <translate x="0" y="20" z="0" />
-                <scale x="0.6" y="0.4" z="0.6" />
-                <rotate axis="x" angle="-90" />
+                <rotate axis="y" angle="-45" />
             </transformation>
             <materials>  
                 <material id="demoMaterial" />
             </materials>
             <texture id="none"/>
             <children>
-                <primitiveref id="auxCone" />
+                <componentref id="upWing" />
+                <componentref id="leftWing" />
+                <componentref id="rightWing" />
+                <componentref id="backMotor" />
+                <componentref id="frontMotor" />
             </children>
         </component>
 
@@ -231,12 +255,8 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="upWing" />
-                <componentref id="leftWing" />
-                <componentref id="rightWing" />
-                <componentref id="backMotor" />
-                <componentref id="frontMotor" />
-                <componentref id="body" />
+                <componentref id="fanWings" />
+                <componentref id="fanBody" />
             </children>
         </component>
 
