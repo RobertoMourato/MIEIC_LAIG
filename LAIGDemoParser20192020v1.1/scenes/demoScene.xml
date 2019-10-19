@@ -1,9 +1,9 @@
 <lxs>
-    <scene root="root" axis_length="5"/>
+    <scene root="root" axis_length="100"/>
 
     <views default="defaultCamera">
-        <perspective id="defaultCamera" near="0.1" far="50" angle="45">
-            <from x="20" y="12" z="20" />
+        <perspective id="defaultCamera" near="0.1" far="200" angle="45">
+            <from x="20" y="50" z="40" />
             <to x="0" y="5" z="0" />
         </perspective>
 
@@ -130,6 +130,18 @@
         <primitive id="wing_cloth">
             <triangle x1="0" y1="0" z1="0" x2="-3" y2="-5.5" z2="0" x3="0" y3="-5.5" z3="0.5" />
         </primitive>
+
+        <primitive id="auxSphere">
+            <sphere radius="10" slices="50" stacks="50" />
+        </primitive>
+
+        <primitive id="auxCone">
+            <cylinder base="0.4" top="0.05" height="20" slices="30" stacks="15" />
+        </primitive>
+
+        <primitive id="bodyWing">
+            <cylinder base="0.4" top="0.2" height="20" slices="30" stacks="15" />
+        </primitive>
     </primitives>
 
     <components>
@@ -142,18 +154,186 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="Windmill" />
                 <componentref id="Soil" />
-              <!--  <componentref id="Triangle" />
-                <componentref id="Cylinder" />
-                <componentref id="Sphere" />
-                <componentref id="TransfTorus" /> -->
+                <componentref id="windFan" />
+                <componentref id="Windmill" />
+                <componentref id="Sun" />
+                <componentref id="Hills" />
+            </children>
+        </component>
+
+        <component id="body" >
+            <transformation>
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>  
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="bodyWing" />
+            </children>
+        </component>
+
+        <component id="rightWing" >
+            <transformation>
+                <translate x="0" y="20" z="0" />
+                <rotate axis="z" angle="-120" />
+                <scale x="0.6" y="0.4" z="0.6" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>  
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="auxCone" />
+            </children>
+        </component>
+
+        <component id="leftWing" >
+            <transformation>
+                <translate x="0" y="20" z="0" />
+                <rotate axis="z" angle="120" />
+                <scale x="0.6" y="0.4" z="0.6" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>  
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="auxCone" />
+            </children>
+        </component>
+
+        <component id="upWing" >
+            <transformation>
+                <translate x="0" y="20" z="0" />
+                <scale x="0.6" y="0.4" z="0.6" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>  
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="auxCone" />
+            </children>
+        </component>
+
+        <component id="windFan" >
+            <transformation>
+                <translate x="20" y="10" z="15" />
+            </transformation>
+            <materials>  
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="upWing" />
+                <componentref id="leftWing" />
+                <componentref id="rightWing" />
+                <componentref id="backMotor" />
+                <componentref id="frontMotor" />
+                <componentref id="body" />
+            </children>
+        </component>
+
+        <component id="Hills" >
+            <transformation>
+            </transformation>
+            <materials>  
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="Hill1" />
+                <componentref id="Hill2" />
+                <componentref id="Hill3" />
+                <componentref id="Hill4" />
+            </children>
+        </component>
+
+        <component id="Hill4" >
+            <transformation>
+                <translate x="20" y="0" z="15" />
+                <scale x="1.1" y="1.5" z="1.1" />
+                <scale x="1.5" y="0.7" z="1.8" />
+            </transformation>
+            <materials>  
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="auxSphere" />
+            </children>
+        </component>
+
+        <component id="Hill3" >
+            <transformation>
+                <translate x="0" y="0" z="-20" />
+                <rotate axis="y" angle="20" />
+                <translate x="-30" y="0" z="-20" />
+                <scale x="0.5" y="0.5" z="0.5" />
+                <scale x="1.5" y="0.7" z="1.8" />
+            </transformation>
+            <materials>  
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="auxSphere" />
+            </children>
+        </component>
+
+        <component id="Hill2" >
+            <transformation>
+                <translate x="0" y="0" z="-20" />
+                <scale x="0.5" y="0.5" z="0.5" />
+                <scale x="1.5" y="0.7" z="1.8" />
+            </transformation>
+            <materials>  
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="auxSphere" />
+            </children>
+        </component>
+
+        <component id="Hill1" >
+            <transformation>
+                <translate x="0" y="0" z="-20" />
+                <rotate axis="y" angle="20" />
+                <translate x="-15" y="0" z="-5" />
+                <scale x="1.5" y="0.7" z="1.8" />
+            </transformation>
+            <materials>  
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="auxSphere" />
+            </children>
+        </component>
+
+        <component id="Sun" >
+            <transformation>
+                <translate x="20" y="45" z="-45" />
+            </transformation>
+            <materials>  
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="auxSphere" />
             </children>
         </component>
 
         <component id="Soil">
             <transformation>
-                <scale x="100" y="1" z="100" /> 
+                <scale x="300" y="1" z="300" /> 
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
@@ -167,7 +347,10 @@
 
         <component id="Windmill">
             <transformation>
-                <translate x="0" y="0" z="0" /> 
+                <translate x="0" y="0" z="-20" />
+                <rotate axis="y" angle="20" />
+                <translate x="-15" y="6" z="0" /> 
+                <scale x="0.7" y="0.7" z="0.7" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -307,7 +490,6 @@
         <component id="Handrail_W/Stands">
             <transformation>
                 <scale x="1" y="1" z="1" />
-                <!--<rotate axis="x" angle="-90" /> -->
                 <translate x="0" y="0" z="0" />
             </transformation>
             <materials>
@@ -491,7 +673,6 @@
 
         <component id="Platform_W/Beams">
             <transformation>
-                <!--<translate x="0" y="0" z="3" /> -->
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -690,10 +871,10 @@
             <children>
                 <componentref id="Support" />
                 <componentref id="Joint" />
-                <componentref id="WingLD" /> <!--Left Down Wing-->
-                <componentref id="WingRD" /> <!--Right Down Wing-->
-                <componentref id="WingLU" /> <!--Left Up Wing-->
-                <componentref id="WingRU" /> <!--Right Up Wing-->
+                <componentref id="WingLD" />
+                <componentref id="WingRD" />
+                <componentref id="WingLU" />
+                <componentref id="WingRU" />
             </children>
         </component>
 
@@ -807,67 +988,6 @@
             <children>
                 <primitiveref id="wing_cloth" />
             </children>
-        </component>
-
-
-
-
-        <!-- <component id="Sphere">
-            <transformation>
-            <translate x="0" y="0" z="-1" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-                <material id="Roxo" />
-                <material id="Azul" />
-            </materials>
-            <texture id="demoTexture"/>
-            <children>
-                <primitiveref id="demoSphere" />
-            </children>
-        </component>
-
-        <component id="TransfTorus">
-            <transformation>
-            <translate x="5" y="5" z="5" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-            </materials>
-            <texture id="demoTexture"/>
-            <children>
-                <componentref id="Torus" />
-            </children>
-        </component>
-
-        <component id="Torus">
-            <transformation>
-            <translate x="-5" y="0" z="-10" />
-            </transformation>
-            <materials>
-                <material id="demoMaterial" />
-                <material id="Azul" />
-                <material id="Roxo" />
-                <material id="Cinza" />
-            </materials>
-            <texture id="demoTexture"/>
-            <children>
-                <primitiveref id="demoTorus" />
-                <componentref id="heritageTest" />
-            </children>
-        </component>
-
-        <component id="heritageTest">
-            <transformation>
-                <translate x="0" y="0" z="-2" />
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="demoTexture" />
-            <children>
-                <primitiveref id="demoSphere" />
-            </children>
-        </component> -->
+        </component>-->
     </components>
 </lxs>
