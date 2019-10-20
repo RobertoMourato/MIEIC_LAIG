@@ -39,6 +39,7 @@
         <texture id="hillsText" file="scenes\images/forest.jpg" />
         <texture id="water" file="scenes\images/water.jpg" />
         <texture id="metal" file="scenes\images/metal.jpg" />
+        <texture id="arcoiris" file="scenes\images/arcoiris.jpg" />
     </textures>
 
     <materials>
@@ -174,6 +175,10 @@
         <primitive id="coneRiver">
             <cylinder base="2" top="2" height="20" slices="30" stacks="15" />
         </primitive>
+
+        <primitive id="arco">
+            <torus inner = "2" outer = "13" slices="100" loops="100" />
+        </primitive>
     </primitives>
 
     <components>
@@ -187,6 +192,7 @@
             <texture id="none"/>
             <children>
                 <componentref id="Soil" />
+                <componentref id="ArcoIris" />
                 <componentref id="River" />
                 <componentref id="Lake" />
                 <componentref id="Motor" />
@@ -194,6 +200,21 @@
                 <componentref id="Windmill" />
                 <componentref id="Sun" />
                 <componentref id="Hills" />-->
+            </children>
+        </component>
+
+        <component id="ArcoIris" >
+            <transformation>
+                <translate x="3" y="0" z="0" />
+                <rotate axis="y" angle="-45" />
+                <scale x="1" y="1" z="0.1" />
+            </transformation>
+            <materials>  
+                <material id="Metal" />
+            </materials>
+            <texture id="arcoiris"/>
+            <children>
+                <primitiveref id="arco" />
             </children>
         </component>
 
