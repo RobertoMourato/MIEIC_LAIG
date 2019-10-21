@@ -41,4 +41,10 @@ class MyTorus extends CGFobject {
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
+
+    
+    scaleFactors(length_s, length_t) {
+	    return;
+    }
 }
+

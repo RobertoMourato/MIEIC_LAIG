@@ -101,12 +101,7 @@ class MyTriangle extends CGFobject {
 	 * @method updateTexCoords
 	 * Updates the list of texture coordinates of the triangle
 	 */
-	updateTexCoords(lengthS, lengthT) {
-		this.texCoords = [
-			0, 0,
-			this.a/lengthS, 0,
-			this.c*this.cos/lengthS, this.c*this.sin/lengthT
-		];
+	updateTexCoords() {		
 		this.updateTexCoordsGLBuffers();
 	}
 }

@@ -99,6 +99,11 @@ class MySphere extends CGFobject {
         this.initGLBuffers();
 
     }
+
+    scaleFactors(length_s, length_t) {
+	    return;
+    }
+    
     updateTexCoord(coords) {
         this.texCoords = [...coords];
         this.updateTexCoordsGLBuffers();

@@ -876,24 +876,41 @@ class MySceneGraph {
                 var radius, slices_s, stacks_s;
 
                 radius = this.reader.getFloat(grandChildren[0], 'radius');
+                if (!(radius != null && !isNaN(radius)))
+                    return "unable to parse radius of the primitive coordinates with ID = " + primitiveId;
+
                 slices_s = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices_s != null && !isNaN(slices_s)))
+                    return "unable to parse slices of the primitive coordinates with ID = " + primitiveId;
+
                 stacks_s = this.reader.getFloat(grandChildren[0], 'stacks');
+                if (!(stacks_s != null && !isNaN(stacks_s)))
+                    return "unable to parse stacks of the primitive coordinates with ID = " + primitiveId;
 
                 console.warn("To Do: 'unable to parse' conditions");
 
                 var sphere = new MySphere(this.scene, radius, slices_s, stacks_s);
                 this.primitives[primitiveId] = sphere;
 
-                console.warn("To do: Texture coordinates")
-
             }
             else if (primitiveType == 'torus') {
                 var inner, outer, slices_t, loops_t;
 
                 inner = this.reader.getFloat(grandChildren[0], 'inner');
+                if (!(inner != null && !isNaN(inner)))
+                    return "unable to parse inner radius of the primitive coordinates with ID = " + primitiveId;
+
                 outer = this.reader.getFloat(grandChildren[0], 'outer');
+                if (!(outer != null && !isNaN(outer)))
+                    return "unable to parse outter radius of the primitive coordinates with ID = " + primitiveId;
+
                 slices_t = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices_t != null && !isNaN(slices_t)))
+                    return "unable to parse slices of the primitive coordinates with ID = " + primitiveId;
+
                 loops_t = this.reader.getFloat(grandChildren[0], 'loops');
+                if (!(loops_t != null && !isNaN(loops_t)))
+                    return "unable to parse loops of the primitive coordinates with ID = " + primitiveId;
 
                 var torus = new MyTorus(this.scene, inner, outer, slices_t, loops_t);
                 this.primitives[primitiveId] = torus;
@@ -969,16 +986,12 @@ class MySceneGraph {
             var componentIds = [];
             var primitiveIds = [];
 
-            this.onXMLMinorError("To do: Parse components.");
-
             // Transformations
             transformation = mat4.create();
 
             var tranformationType;
             grandgrandChildren = grandChildren[transformationIndex].children;
-            if (grandgrandChildren.length == 0 || grandgrandChildren == null)
-                this.onXMLMinorError("One tranformation must be defined for " + componentID + ". ");
-            else {
+            if (grandgrandChildren.length != 0 && grandgrandChildren != null){
                 if (grandgrandChildren[0].nodeName == "transformationref")
                     tranformationType = "reference";
                 else tranformationType = "newTransformation";
@@ -1061,17 +1074,28 @@ class MySceneGraph {
 
             // Texture 
             var textureId = this.reader.getString(grandChildren[textureIndex], 'id');
-            var length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s');
-            var length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t');
 
-            console.warn("To do: tratamento de erros");
+            if (textureId == null){
+                this.onXMLMinorError("No texture ID defined for component " + componentID);
+            }
+
+            var length_s;
+            var length_t;
+
+            if (textureId != "inherit" && textureId != "none") {
+                length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s');
+                length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t');
+            } else {
+                if (this.reader.getFloat(grandChildren[textureIndex], 'length_s') != null || this.reader.getFloat(grandChildren[textureIndex], 'length_t') != null)
+                    this.onXMLMinorError("Scale factors must be null for component " + componentID);
+            }
 
             texture = this.textures[textureId];
 
             // Children
             grandgrandChildren = grandChildren[childrenIndex].children;
             if (grandgrandChildren.length == 0 || grandgrandChildren == null)
-                this.onXMLMinorError("At least one component or primitive must be defined for " + componentID + ". ");
+                this.onXMLMinorError("At least one component or primitive must be defined for component " + componentID + ". ");
 
             for (var l = 0; l < grandgrandChildren.length; l++) {
                 if (grandgrandChildren[l].nodeName != 'componentref' && grandgrandChildren[l].nodeName != 'primitiveref') {

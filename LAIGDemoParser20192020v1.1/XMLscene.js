@@ -67,7 +67,10 @@ class XMLscene extends CGFscene {
 
         for (var i = 0; i < this.graph.views.length; i++) {
             var cam = this.graph.views[i];
-            this.cameras[cam.id] = new CGFcamera(cam.angle, cam.near, cam.far, vec3.fromValues(cam.from[0], cam.from[1], cam.from[2]), vec3.fromValues(cam.to[0], cam.to[1], cam.to[2]));
+            if (cam.type == "perspective")
+                this.cameras[cam.id] = new CGFcamera(cam.angle, cam.near, cam.far, vec3.fromValues(cam.from[0], cam.from[1], cam.from[2]), vec3.fromValues(cam.to[0], cam.to[1], cam.to[2]));
+            else this.cameras[cam.id] = new CGFcameraOrtho(cam.left, cam.right, cam.bottom, cam.top, cam.near, cam.far, vec3.fromValues(cam.from[0], cam.from[1], cam.from[2]), vec3.fromValues(cam.to[0], cam.to[1], cam.to[2]), vec3.fromValues(cam.up[0], cam.up[1], cam.up[2]));
+
             this.viewIds.push(cam.id);
             if (cam.enableView) {
                 this.camera = this.cameras[cam.id];

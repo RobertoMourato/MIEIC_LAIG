@@ -95,6 +95,10 @@ class MyCylinder extends CGFobject {
         this.initGLBuffers();
     }
 
+    scaleFactors(length_s, length_t) {
+	    return;
+    }
+
     updateBuffers(complexity) {
         this.slices = 3 + Math.round(9 * complexity); //complexity varies 0-1, so slices varies 3-12
 

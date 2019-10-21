@@ -3,12 +3,12 @@
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="200" angle="45">
-            <from x="20" y="50" z="40" />
+            <from x="-25" y="5" z="50" />
             <to x="0" y="5" z="0" />
         </perspective>
 
-        <perspective id="viewFromBehind" near="0.1" far="50" angle="45">
-            <from x="-20" y="12" z="-20" />
+        <perspective id="viewFromBehind" near="0.1" far="200" angle="45">
+            <from x="-35" y="25" z="-48" />
             <to x="0" y="-2" z="0" />
         </perspective>
     </views>
@@ -25,12 +25,15 @@
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </omni>
-        <omni id="lightwo" enabled="1">
-            <location x="9.8" y="11.9" z="10" w="1.0" />
-            <ambient r="0.6" g="0.6" b="0.6" a="1.0" />
+    
+        <spot id="spotSun" enabled="0" angle="30" exponent="2">     
+            <location x="20" y="45" z="-45" w="0.0" />
+            <target x="-15" y="6" z="-5" />
+            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-        </omni>
+            <attenuation constant="1.0" linear="0.0" quadratic="0.00" />
+        </spot>
     </lights>
 
     <textures>
@@ -40,26 +43,37 @@
         <texture id="water" file="scenes\images/water.jpg" />
         <texture id="metal" file="scenes\images/metal.jpg" />
         <texture id="arcoiris" file="scenes\images/arcoiris.jpg" />
+        <texture id="brick_wall" file="scenes/images/brick-wall.jpg" />
+        <texture id="cloth" file="scenes/images/cloth.jpg" />
+        <texture id="white_wood" file="scenes/images/white-wooden-surface.jpg" />
+        <texture id="wooden_door" file="scenes/images/door.jpg" /> 
+        <texture id="dark_wood" file="scenes/images/dark-wood.jpg" />
     </textures>
 
     <materials>
-        <material id="demoMaterial" shininess="10">
+        <material id="nullMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
-            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
-        <material id="Roxo" shininess="10">
+        <material id="Wood" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="0.0" b="1.0" a="1.0" />
-            <diffuse r="0.6" g="0.0" b="0.6" a="1.0" />
-            <specular r="0.6" g="0.0" b="0.6" a="1.0" />
+            <ambient r="0.4" g="0.2" b="0.0" a="1.0" />
+            <diffuse r="0.6" g="0.3" b="0.0" a="1.0" />
+            <specular r="0.1" g="0.0" b="0.0" a="1.0" />
         </material>
-        <material id="Azul" shininess="10">
+        <material id="WhiteWood" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.0" g="0.0" b="1.0" a="1.0" />
-            <diffuse r="0.0" g="0.0" b="0.6" a="1.0" />
-            <specular r="0.0" g="0.0" b="0.6" a="1.0" />
+            <ambient r="0.2" g="0.2" b="0.0" a="1.0" />
+            <diffuse r="0.7" g="0.6" b="0.6" a="1.0" />
+            <specular r="0.1" g="0.1" b="0.1" a="1.0" />
+        </material>
+        <material id="Brick" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.3" g="0.1" b="0.0" a="1.0" />
+            <diffuse r="0.6" g="0.22" b="0.1" a="1.0" />
+            <specular r="0.2" g="0.07" b="0.03" a="1.0" />
         </material>
         <material id="Verde" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
@@ -67,11 +81,11 @@
             <diffuse r="0.0" g="0.6" b="0.0" a="1.0" />
             <specular r="0.0" g="0.6" b="0.0" a="1.0" />
         </material>
-        <material id="Cinza" shininess="10">
+        <material id="Cloth" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
+            <ambient r="0.15" g="0.15" b="0.15" a="1.0" />
             <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
-            <specular r="0.25" g="0.25" b="0.25" a="1.0" />
+            <specular r="0.1" g="0.1" b="0.1" a="1.0" />
         </material>
         <material id="Amarelo" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
@@ -79,13 +93,13 @@
             <diffuse r="1.0" g="0.8" b="0.0" a="1.0" />
             <specular r="1.0" g="0.8" b="0.8" a="1.0" />
         </material>
-        <material id="VerdeD" shininess="10">
+        <material id="Soil" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.02" g="0.29" b="0.09" a="1.0" />
-            <diffuse r="0.02" g="0.29" b="0.09" a="1.0" />
+            <diffuse r="0.07" g="0.7" b="0.20" a="1.0" />
             <specular r="0.02" g="0.29" b="0.09" a="1.0" />
         </material>
-        <material id="AzulW" shininess="10">
+        <material id="Water" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.06" g="0.62" b="0.74" a="1.0" />
             <diffuse r="0.06" g="0.62" b="0.74" a="1.0" />
@@ -93,9 +107,15 @@
         </material>
         <material id="Metal" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.7" g="0.7" b="0.7" a="1.0" />
+            <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1.0" />
             <specular r="0.7" g="0.7" b="0.7" a="1.0" />
+        </material>
+        <material id="Rainbow" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="1.0" />
+            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
         </material>
     </materials>
 
@@ -187,7 +207,7 @@
                 <translate x="0" y="0" z="0" /> 
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="nullMaterial" />
             </materials>
             <texture id="none"/>
             <children>
@@ -210,9 +230,9 @@
                 <scale x="1" y="1" z="0.1" />
             </transformation>
             <materials>  
-                <material id="Metal" />
+                <material id="Rainbow" />
             </materials>
-            <texture id="arcoiris"/>
+            <texture id="arcoiris" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="arco" />
             </children>
@@ -225,9 +245,9 @@
                 <scale x="1" y="0.03" z="0.7" /> 
             </transformation>
             <materials>  
-                <material id="AzulW" />
+                <material id="Water" />
             </materials>
-            <texture id="water"/>
+            <texture id="water" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="auxSphere" />
             </children>
@@ -240,9 +260,9 @@
                 <scale x="1" y="0.1" z="1" /> 
             </transformation>
             <materials>  
-                <material id="AzulW" />
+                <material id="Water" />
             </materials>
-            <texture id="water"/>
+            <texture id="water" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="coneRiver" />
             </children>
@@ -255,9 +275,9 @@
                 <scale x="1" y="1" z="0.05" />
             </transformation>
             <materials>  
-                <material id="Cinza" />
+                <material id="Metal" />
             </materials>
-            <texture id="metal"/>
+            <texture id="metal" length_s="1" length_t="1"/>
             <children>
                 <componentref id="backMotor" />
                 <componentref id="frontMotor" />
@@ -379,7 +399,7 @@
             <materials>  
                 <material id="Metal" />
             </materials>
-            <texture id="metal"/>
+            <texture id="metal" length_s="1" length_t="1"/>
             <children>
                 <componentref id="fanWings" />
                 <componentref id="fanBody" />
@@ -390,9 +410,9 @@
             <transformation>
             </transformation>
             <materials>  
-                <material id="VerdeD" />
+                <material id="Soil" />
             </materials>
-            <texture id="hillsText"/>
+            <texture id="hillsText" length_s="1" length_t="1"/>
             <children>
                 <componentref id="Hill1" />
                 <componentref id="Hill2" />
@@ -488,7 +508,7 @@
             <materials>
                 <material id="Amarelo" />
             </materials>
-            <texture id="sunText"/>
+            <texture id="sunText" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="auxSphere" />
             </children>
@@ -500,7 +520,7 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>  
-                <material id="VerdeD" />
+                <material id="Soil" />
             </materials>
             <texture id="hillsText" length_s="0.1" length_t="0.1"/>
             <children>
@@ -516,9 +536,9 @@
                 <!--<scale x="0.8" y="0.8" z="0.8" />-->
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="nullMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <children>
                 <componentref id="Building" />
                 <componentref id="Handrail_W/Stands" />
@@ -529,11 +549,10 @@
 
         <component id="Building">
             <transformation>
-            <translate x="0" y="0" z="0" />
+                <translate x="0" y="0" z="0" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Azul" />
+                <material id="Brick" />
             </materials>
             <texture id="none"/>
             <children>
@@ -549,11 +568,9 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="Verde" />    
-                <material id="Cinza" />
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="brick_wall" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="walls" />
             </children>
@@ -565,10 +582,9 @@
                 <rotate axis="x" angle="-10" />
             </transformation>
             <materials>
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="Wood" />
             </materials>
-            <texture id="none"/>
+            <texture id="wooden_door" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="door" />
             </children>
@@ -579,10 +595,9 @@
                 <translate x="0" y="0" z="0" />
             </transformation>
             <materials>
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="WhiteWood" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="white_wood" length_s="1" length_t="1"/>
             <children>
                 <componentref id="WindowLeft" />
                 <componentref id="WindowRight" />
@@ -597,10 +612,9 @@
                 <rotate axis="x" angle="-10" />
             </transformation>
             <materials>
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="window" />
             </children>
@@ -612,10 +626,9 @@
                 <rotate axis="x" angle="-10" />
             </transformation>
             <materials>
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="window" />
             </children>
@@ -626,10 +639,9 @@
                 <rotate axis="x" angle="-10" />
             </transformation>
             <materials>
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />                
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="window" />
             </children>
@@ -641,10 +653,9 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="Metal" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="metal" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="roof" />
             </children>
@@ -656,11 +667,9 @@
                 <translate x="0" y="0" z="0" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="Wood" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="dark_wood" length_s="1" length_t="1"/>
             <children>
                 <componentref id="Handrail" />
                 <componentref id="Stands" />                
@@ -673,11 +682,9 @@
                 <translate x="0" y="0" z="4" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="handrail" />
                 
@@ -689,11 +696,9 @@
                 <translate x="0" y="3" z="0" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="Stand X" />
                 <componentref id="Stand X -Z" />
@@ -712,11 +717,9 @@
                 <translate x="4.5" y="0" z="0" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="stand" />
             </children>
@@ -728,11 +731,9 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="stand" />
             </children>
@@ -744,11 +745,9 @@
                 <translate x="0" y="-4.5" z="0" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="stand" />
             </children>
@@ -760,11 +759,9 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="stand" />
             </children>
@@ -776,11 +773,9 @@
                 <translate x="-4.5" y="0" z="0" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="stand" />
             </children>
@@ -792,11 +787,9 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="stand" />
             </children>
@@ -808,11 +801,9 @@
                 <translate x="0" y="4.5" z="0" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="stand" />
             </children>
@@ -824,11 +815,9 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="stand" />
             </children>
@@ -838,11 +827,9 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="Wood" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="dark_wood" length_s="1" length_t="1"/>
             <children>
                 <componentref id="Platform" />
                 <componentref id="Beams" />
@@ -856,11 +843,9 @@
                 <scale x="1" y="1" z="0.1" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="platform" />
             </children>
@@ -871,11 +856,9 @@
                 <translate x="0" y="2" z="0" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="Beam X" />
                 <componentref id="Beam X -Z" />
@@ -896,11 +879,9 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="beam" />
             </children>
@@ -913,11 +894,9 @@
                 <rotate axis="x" angle="-45" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="beam" />
             </children>
@@ -929,11 +908,9 @@
                 <rotate axis="x" angle="-135" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="beam" />
             </children>
@@ -946,11 +923,9 @@
                 <rotate axis="x" angle="-45" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="beam" />
             </children>
@@ -963,11 +938,9 @@
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="beam" />
             </children>
@@ -980,11 +953,9 @@
                 <rotate axis="x" angle="-45" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="beam" />
             </children>
@@ -996,11 +967,9 @@
                 <rotate axis="x" angle="-45" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+               <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="beam" />
             </children>
@@ -1013,11 +982,9 @@
                 <rotate axis="x" angle="-45" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
-                <material id="Verde" />    
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="beam" />
             </children>
@@ -1028,9 +995,9 @@
                 <translate x="0" y="10.5" z="0" />
             </transformation>
             <materials>  
-                <material id="Cinza" />
+                <material id="Cloth" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="demoTexture" length_s="0.5" length_t="0.5" />
             <children>
                 <componentref id="Support" />
                 <componentref id="Joint" />
@@ -1046,9 +1013,9 @@
                 <translate x="0" y="0" z="2" />
             </transformation>
             <materials>  
-                <material id="Cinza" />
+                <material id="Wood" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="dark_wood" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="beam" />
             </children>
@@ -1059,9 +1026,9 @@
                 <translate x="0" y="0" z="3.4" />
             </transformation>
             <materials>  
-                <material id="Cinza" />
+                <material id="Wood" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="dark_wood" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="joint" />
             </children>
@@ -1073,9 +1040,9 @@
                 <rotate axis="z" angle="-45" />
             </transformation>
             <materials>  
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture" length_s="0.5" length_t="0.5" />
+            <texture id="inherit" />
             <children>
                 <componentref id="WingStick" />
                 <componentref id="WingCloth" /> 
@@ -1088,9 +1055,9 @@
                 <rotate axis="z" angle="45" />
             </transformation>
             <materials>  
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="WingStick" />
                 <componentref id="WingCloth" /> 
@@ -1103,9 +1070,9 @@
                 <rotate axis="z" angle="-135" />
             </transformation>
             <materials>  
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="WingStick" />
                 <componentref id="WingCloth" /> 
@@ -1118,9 +1085,9 @@
                 <rotate axis="z" angle="135" />
             </transformation>
             <materials>  
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="WingStick" />
                 <componentref id="WingCloth" /> 
@@ -1132,9 +1099,9 @@
                 <translate x="0" y="0" z="0" />
             </transformation>
             <materials>  
-                <material id="Cinza" />
+                <material id="Wood" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="dark_wood" length_s="0.5" length_t="0.8" />
             <children>
                 <primitiveref id="wing_stick" />
             </children>
@@ -1145,9 +1112,9 @@
                 <translate x="0" y="0" z="0" />
             </transformation>
             <materials>  
-                <material id="Cinza" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture" length_s="6" length_t="3"/>
+            <texture id="cloth" length_s="6" length_t="3"/>
             <children>
                 <primitiveref id="wing_cloth" />
             </children>
