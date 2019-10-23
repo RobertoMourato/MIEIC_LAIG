@@ -1,0 +1,219 @@
+<lxs>
+    <scene root="demoRoot" axis_length="5"/>
+
+    <views default="defaultCamera">
+        <perspective id="ddefaultCamera" near="0.1" far="50" angle="45">
+            <from x="10" y="6" z="10" />
+            <to x="0" y="-2" z="0" />
+        </perspective>
+
+        <perspective id="defaultCamera" near="0.1" far="50" angle="45">
+            <from x="-10" y="6" z="-10" />
+            <to x="0" y="-2" z="0" />
+        </perspective>
+    </views>
+
+    <globals>
+        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <background r="0.0" g="0.0" b="0.0" a="1.0" />
+    </globals>
+
+    <lights>
+        <omni id="demoLight" enabled="1">
+            <location x="9.8" y="11.9" z="10" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </omni>
+    </lights>
+
+    <textures>
+        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+    </textures>
+
+    <materials>
+        <material id="demoMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+        </material>
+        <material id="Roxo" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="0.0" b="1.0" a="1.0" />
+            <diffuse r="0.6" g="0.0" b="0.6" a="1.0" />
+            <specular r="0.6" g="0.0" b="0.6" a="1.0" />
+        </material>
+        <material id="Azul" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="1.0" a="1.0" />
+            <diffuse r="0.0" g="0.0" b="0.6" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.6" a="1.0" />
+        </material>
+        <material id="Verde" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="1.0" b="0.0" a="1.0" />
+            <diffuse r="0.0" g="0.6" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.6" b="0.0" a="1.0" />
+        </material>
+        <material id="Cinza" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0.25" g="0.25" b="0.25" a="1.0" />
+        </material>
+    </materials>
+
+    <transformations>
+        <transformation id="demoTransform">
+            <scale x="5" y="1" z="5" />
+            <rotate axis="x" angle="-45" />
+            <rotate axis="z" angle="-45" />
+            <translate x="10" y="0" z="0" />
+        </transformation>
+        <transformation id="neutralTransformation">
+            <translate x="0" y="0" z="0" />
+        </transformation>
+    </transformations>
+
+    <primitives>
+        <primitive id="demoRectangle">
+            <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
+        </primitive>
+        <primitive id="demoTriangle">
+            <triangle x1="-0.5" y1="0" z1="0" x2="0.5" y2="0" z2="0" x3="0" y3="0" z3="-1" />
+        </primitive>
+        <primitive id="demoCylinder">
+            <cylinder base="2" top="2" height="2" slices="22" stacks="1"/>
+        </primitive>
+        <primitive id="demoSphere">
+            <sphere radius="2" slices="100" stacks="100"/>
+        </primitive>
+        <primitive id="demoTorus">
+            <torus inner = "0.1" outer = "0.5" slices="100" loops="100" />
+        </primitive>
+    </primitives>
+
+    <components>
+        <component id="demoRoot">
+            <transformation>
+                <translate x="0" y="0" z="1" />                
+                <scale x="2" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="Rectangle" />
+                <!-- <componentref id="Triangle" />
+                <componentref id="Cylinder" />
+                <componentref id="Sphere" />
+                <componentref id="TransfTorus" /> -->
+            </children>
+        </component>
+
+        <component id="Rectangle">
+            <transformation>
+                <transformationref id="neutralTransformation" />
+            <translate x="0" y="0" z="5" />
+            <translate x="1" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoRectangle" />
+            </children>
+        </component>
+
+        <!--<component id="Triangle">
+            <transformation>
+            <translate x="5" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Cinza" />
+                <material id="Azul" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoTriangle" />
+            </children>
+        </component>
+
+        <component id="Cylinder">
+            <transformation>
+            <translate x="0" y="5" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Verde" />    
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="Sphere">
+            <transformation>
+            <translate x="0" y="0" z="-1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Roxo" />
+                <material id="Azul" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="TransfTorus">
+            <transformation>
+            <translate x="5" y="5" z="5" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="Torus" />
+            </children>
+        </component>
+
+        <component id="Torus">
+            <transformation>
+            <translate x="-5" y="0" z="-10" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="Azul" />
+                <material id="Roxo" />
+                <material id="Cinza" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoTorus" />
+                <componentref id="heritageTest" />
+            </children>
+        </component>
+
+        <component id="heritageTest">
+            <transformation>
+                <translate x="0" y="0" z="-2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="demoTexture" />
+            <children>
+                <primitiveref id="demoSphere" />
+            </children>
+        </component> -->
+    </components>
+</lxs>
