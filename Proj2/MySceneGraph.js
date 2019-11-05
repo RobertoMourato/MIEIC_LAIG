@@ -742,6 +742,96 @@ class MySceneGraph {
      * @param {animations block element} animationsNode 
     */
     parseAnimations(animationsNode) {
+        let children = animationsNode.children;
+
+        this.animations = [];
+
+        for (let i = 0; i < children.length; i++){
+            let keyframes = [];
+
+            if (children[i].nodeName != "animation") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName +">");
+                continue;
+            }
+
+            let animationId = this.reader.getString(children[i], 'id');
+            if (animationId == null)
+                return "no ID defined for animation";
+
+            // Checks for repeated IDs.
+            if (this.animations[animationId] != null)
+                return "ID must be unique for each animation (conflict: ID = " + animationId + ")";
+
+            let grandChildren = children[i].children;
+
+            if (grandChildren.length == 0) 
+                return "no keyframe defined for animation with ID = " + animationId;
+
+            for (let j = 0; j < grandChildren.length; j++){
+                let grandgrandChildren = grandChildren[j].children;
+
+                if (grandgrandChildren.length != 3) {
+                    this.onXMLMinorError("Rotate/Scale/Translate not defined for key frame no." + j + " of animation with ID = " + animationId);
+                }
+
+                let instant = this.reader.getFloat(grandChildren[j], 'instant');
+                let transformation = mat4.create();
+
+                for (let k = 0; k < grandgrandChildren.length; k++) {
+                    switch (grandgrandChildren[k].nodeName) {
+                        case 'translate':
+                            if (k != 0){
+                                return "keyframe transformations out of order for animation with ID = " + animationId;
+                            }
+                                
+                            var coordinates = this.parseCoordinates3D(grandgrandChildren[k], "translate transformation for ID " + animationId);
+                            if (!Array.isArray(coordinates))
+                                return coordinates;
+    
+                            transformation = mat4.translate(transformation, transformation, coordinates);
+                            break;
+                        case 'scale':
+                            //this.onXMLMinorError("To do: Parse scale transformations.");
+                            if (k != 2){
+                                return "keyframe transformations out of order for animation with ID = " + animationId;
+                            }
+    
+                            var coordinates = this.parseCoordinates3D(grandgrandChildren[k], "scale transformation for ID " + animationId);
+                            if (!Array.isArray(coordinates))
+                                return coordinates;
+    
+                            transformation = mat4.scale(transformation, transformation, coordinates);
+                            break;
+                        case 'rotate':
+                            //this.onXMLMinorError("To do: Parse rotate transformations.");
+                            if (k != 1){
+                                return "keyframe transformations out of order for animation with ID = " + animationId;
+                            }
+
+                            let angle_x = this.reader.getFloat(grandgrandChildren[k], 'angle_x');
+                            let angle_y = this.reader.getFloat(grandgrandChildren[k], 'angle_y');
+                            let angle_z = this.reader.getFloat(grandgrandChildren[k], 'angle_z');
+
+                            if ((angle_x == null || isNaN(angle_x)) || (angle_y == null || isNaN(angle_y)) || (angle_z == null || isNaN(angle_z)))
+                                return "unable to parse rotate angles for animation with ID = " + animationId;
+
+                            transformation = mat4.rotate(transformation, transformation, angle_x, vec3.fromValues(1, 0, 0));
+                            transformation = mat4.rotate(transformation, transformation, angle_y, vec3.fromValues(0, 1, 0));
+                            transformation = mat4.rotate(transformation, transformation, angle_z, vec3.fromValues(0, 0, 1));
+                            break;
+                    }
+                }
+
+                var keyframe = new Keyframe(instant, transformation);
+                keyframes.push(keyframe);
+            }
+
+            var animation = new KeyframeAnimation(keyframes);
+            this.animations[animationId] = animation;
+        }
+
+        console.log("BreakPoint");
+
         return null;
     }
 
