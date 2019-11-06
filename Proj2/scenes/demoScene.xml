@@ -135,7 +135,7 @@
         <animation id="experiment">
             <keyframe instant="10">
                 <translate x="10" y="0" z="0" />
-                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="90" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
         </animation>

@@ -776,7 +776,7 @@ class MySceneGraph {
 
                 let instant = this.reader.getFloat(grandChildren[j], 'instant');
                 let translateValues;
-                let rotateValues;
+                let rotateValues = [];
                 let scaleValues;
 
                 for (let k = 0; k < grandgrandChildren.length; k++) {
@@ -797,7 +797,7 @@ class MySceneGraph {
                                 return "keyframe transformations out of order for animation with ID = " + animationId;
                             }
 
-                            var scaleValues = this.parseCoordinates3D(grandgrandChildren[k], "scale transformation for ID " + animationId);
+                            scaleValues = this.parseCoordinates3D(grandgrandChildren[k], "scale transformation for ID " + animationId);
                             if (!Array.isArray(scaleValues))
                                 return scaleValues;
 
@@ -814,7 +814,7 @@ class MySceneGraph {
 
                             if ((angle_x == null || isNaN(angle_x)) || (angle_y == null || isNaN(angle_y)) || (angle_z == null || isNaN(angle_z)))
                                 return "unable to parse rotate angles for animation with ID = " + animationId;
-                            
+
                             rotateValues.push(angle_x, angle_y, angle_z);
                             break;
                     }
@@ -1407,7 +1407,11 @@ class MySceneGraph {
 
         // Updates transformation matrix
         mat4.multiply(transformation, parentTransformationMatrix, component.transformation);
-
+        
+        if(component.animation != undefined){
+            var animation = component.animation.apply();
+            mat4.multiply(transformation, transformation, animation);
+        }
 
         // Updates material
         var activeMaterial = component.getActiveMaterialId();

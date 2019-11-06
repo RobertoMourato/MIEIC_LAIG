@@ -165,59 +165,59 @@ class XMLscene extends CGFscene {
         if (this.activeLight0)
             this.lights[0].enable();
         else this.lights[0].disable();
-        
-        this.lights[0].update(); 
-        
+
+        this.lights[0].update();
+
         /* Light 1 */
         if (this.activeLight1)
             this.lights[1].enable();
         else this.lights[1].disable();
-        
-        this.lights[1].update(); 
-        
+
+        this.lights[1].update();
+
         /* Light 2 */
         if (this.activeLight2)
             this.lights[2].enable();
-        else 
+        else
             this.lights[2].disable();
-        
-        this.lights[2].update(); 
-        
+
+        this.lights[2].update();
+
         /* Light 3 */
         if (this.activeLight3)
             this.lights[3].enable();
         else this.lights[3].disable();
-            
-        this.lights[3].update(); 
-        
+
+        this.lights[3].update();
+
         /* Light 4 */
         if (this.activeLight4)
             this.lights[4].enable();
         else this.lights[4].disable();
-            
-        this.lights[4].update(); 
-        
+
+        this.lights[4].update();
+
         /* Light 5 */
         if (this.activeLight5)
             this.lights[5].enable();
         else this.lights[5].disable();
-            
-        this.lights[5].update(); 
-        
+
+        this.lights[5].update();
+
         /* Light 6 */
         if (this.activeLight6)
             this.lights[6].enable();
         else this.lights[6].disable();
-            
-        this.lights[6].update(); 
-        
+
+        this.lights[6].update();
+
         /* Light 7 */
         if (this.activeLight7)
             this.lights[7].enable();
         else this.lights[7].disable();
-            
-        this.lights[7].update(); 
-        
+
+        this.lights[7].update();
+
     }
 
     setDefaultAppearance() {
@@ -253,7 +253,13 @@ class XMLscene extends CGFscene {
             this.graph.updateMaterials();
         }
 
-        
+        this.previousTime = this.previousTime || 0.0;
+        this.deltaTime = (t - this.previousTime) / 1000 || 0.0;
+        this.animations = this.graph.animations;
+        for (var i in this.animations) {
+            this.animations[i].update(this.deltaTime);
+        }
+        this.previousTime = t;
     }
 
     /**
