@@ -22,12 +22,14 @@ class KeyframeAnimation extends Animation {
         this.frameNumber = 0;
     }
 
-    update(t) {
-        this.time += t;
+    update(deltaT) {
+        this.time += deltaT;
+
+        //console.log(deltaT);
 
         if (this.frameNumber < this.keyframes.length) {
-            var endTime = this.keyframes[this.frameNumber].instant;
-            let deltaTime;
+          
+            let segmentTime;
             let transx;
             let transy;
             let transz;
@@ -37,43 +39,54 @@ class KeyframeAnimation extends Animation {
             let scalex;
             let scaley;
             let scalez;
+            let progressRatio;
+            let last;
+            let current;
+
+            current = this.keyframes[this.frameNumber];
+            var endTime = current.instant;
 
             if (this.frameNumber == 0) {
-                let translate = this.keyframes[this.frameNumber].getTranslate();
-                let x = translate.x;
-                deltaTime = endTime;
-                transx = this.keyframes[this.frameNumber].translate[0];
-                transy = this.keyframes[this.frameNumber].translate[1];
-                transz = this.keyframes[this.frameNumber].translate[2];
-                rotx = this.keyframes[this.frameNumber].rotate[0];
-                roty = this.keyframes[this.frameNumber].rotate[1];
-                rotz = this.keyframes[this.frameNumber].rotate[2];
-                scalex = this.keyframes[this.frameNumber].scale[0];
-                scaley = this.keyframes[this.frameNumber].scale[1];
-                scalez = this.keyframes[this.frameNumber].scale[2];
-            } else {
-                deltaTime = endTime - this.keyframes[this.frameNumber - 1].instant;
-                transx = this.keyframes[this.frameNumber].translate[0] - this.keyframes[this.frameNumber - 1].translate[0];
-                transy = this.keyframes[this.frameNumber].translate[1] - this.keyframes[this.frameNumber - 1].translate[1];
-                transz = this.keyframes[this.frameNumber].translate[2] - this.keyframes[this.frameNumber - 1].translate[2];
-                rotx = this.keyframes[this.frameNumber].rotate[0] - this.keyframes[this.frameNumber - 1].rotate[0];
-                roty = this.keyframes[this.frameNumber].rotate[1] - this.keyframes[this.frameNumber - 1].rotate[1];
-                rotz = this.keyframes[this.frameNumber].rotate[2] - this.keyframes[this.frameNumber - 1].rotate[2];
-                scalex = this.keyframes[this.frameNumber].scale[0] - this.keyframes[this.frameNumber - 1].scale[0];
-                scaley = this.keyframes[this.frameNumber].scale[1] - this.keyframes[this.frameNumber - 1].scale[1];
-                scalez = this.keyframes[this.frameNumber].scale[2] - this.keyframes[this.frameNumber - 1].scale[2];
-            }
+                segmentTime = endTime;
+                progressRatio = this.time / segmentTime;
+                transx = current.translate[0];
+                transy = current.translate[1];
+                transz = current.translate[2];
+                rotx = current.rotate[0];
+                roty = current.rotate[1];
+                rotz = current.rotate[2];
+                scalex = current.scale[0];
+                scaley = current.scale[1];
+                scalez = current.scale[2];
+                //console.log(progressRatio + "1 (" + transx + " " + transy + " " + transz + "), (" + rotx + " " + roty + " " + rotz + "),(" + scalex + " " + scaley + " " + scalez + ")" );
 
+            } else {
+                last = this.keyframes[this.frameNumber - 1];
+                segmentTime = endTime - last.instant;
+                progressRatio = (this.time - last.instant) / segmentTime; 
+                transx = current.translate[0] - last.translate[0];
+                transy = current.translate[1] - last.translate[1];
+                transz = current.translate[2] - last.translate[2];
+                rotx = current.rotate[0] - last.rotate[0];
+                roty = current.rotate[1] - last.rotate[1];
+                rotz = current.rotate[2] - last.rotate[2];
+                scalex = current.scale[0] - last.scale[0];
+                scaley = current.scale[1] - last.scale[1];
+                scalez = current.scale[2] - last.scale[2];
+                //console.log(progressRatio + "n (" + transx + " " + transy + " " + transz + "), (" + rotx + " " + roty + " " + rotz + "),(" + scalex + " " + scaley + " " + scalez + ")" );
+            }
+          
+            
             if (this.time <= endTime) {
-                this.translate[0] += (transx / deltaTime) * t;
-                this.translate[1] += (transy / deltaTime) * t;
-                this.translate[2] += (transz / deltaTime) * t;
-                this.rotate[0] += (rotx / deltaTime) * t;
-                this.rotate[1] += (roty / deltaTime) * t;
-                this.rotate[2] += (rotz / deltaTime) * t;
-                this.scale[0] += (scalex / deltaTime) * t;
-                this.scale[1] += (scaley / deltaTime) * t;
-                this.scale[2] += (scalez / deltaTime) * t;
+                this.translate[0] = last.translate[0] + transx * progressRatio;
+                this.translate[1] = last.translate[1] + transy * progressRatio;
+                this.translate[2] = last.translate[2] + transz * progressRatio;
+                this.rotate[0] = last.rotate[0] + rotx * progressRatio;
+                this.rotate[1] = last.rotate[1] + roty * progressRatio;
+                this.rotate[2] = last.rotate[2] + rotz * progressRatio;
+                this.scale[0] = last.scale[0] + scalex * progressRatio;
+                this.scale[1] = last.scale[1] + scaley * progressRatio;
+                this.scale[2] = last.scale[2] + scalez * progressRatio;
             }
 
             if (this.time >= endTime) {

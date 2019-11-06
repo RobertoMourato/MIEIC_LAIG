@@ -133,13 +133,13 @@
 
     <animations>
         <animation id="experiment">
-            <keyframe instant="5">
-                <translate x="20" y="0" z="0" />
-                <rotate angle_x="0" angle_y="0" angle_z="0" />
+            <keyframe instant="6">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="10000" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
             <keyframe instant="10">
-                <translate x="-20" y="0" z="0" />
+                <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>

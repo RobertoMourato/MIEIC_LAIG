@@ -1410,7 +1410,7 @@ class MySceneGraph {
         
         if(component.animation != undefined){
             var animation = component.animation.apply();
-            mat4.multiply(transformation, transformation, animation);
+            mat4.multiply(transformation, animation, transformation);
         }
 
         // Updates material
