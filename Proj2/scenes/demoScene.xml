@@ -133,11 +133,17 @@
 
     <animations>
         <animation id="experiment">
-            <keyframe instant="10">
-                <translate x="10" y="0" z="0" />
-                <rotate angle_x="0" angle_y="0" angle_z="90" />
+            <keyframe instant="5">
+                <translate x="20" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
+            <keyframe instant="10">
+                <translate x="-20" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+
         </animation>
     </animations>
 
@@ -221,9 +227,9 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="Soil" />
+                <!--<componentref id="Soil" /> -->
                 <componentref id="ArcoIris" />
-                <componentref id="River" />
+                <!--<componentref id="River" />
                 <componentref id="Lake" />
                 <componentref id="Motor" />
                 <componentref id="windFan" />
@@ -235,9 +241,9 @@
 
         <component id="ArcoIris" >
             <transformation>
-                <translate x="3" y="0" z="0" />
+                <!--<translate x="3" y="0" z="0" />
                 <rotate axis="y" angle="-45" />
-                <scale x="1" y="1" z="0.1" />
+                <scale x="1" y="1" z="0.1" />-->
             </transformation>
             <animationref id='experiment' />
             <materials>  
@@ -248,7 +254,7 @@
                 <primitiveref id="arco" />
             </children>
         </component>
-
+        
         <component id="Lake" >
             <transformation>
                 <translate x="-7" y="0" z="8" />
@@ -1129,6 +1135,6 @@
             <children>
                 <primitiveref id="wing_cloth" />
             </children>
-        </component>-->
+        </component>
     </components>
 </lxs>

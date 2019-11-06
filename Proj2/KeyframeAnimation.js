@@ -7,7 +7,7 @@ class KeyframeAnimation extends Animation {
         this.activeKeyframeIndex = 0;
         this.keyframes = [];
 
-        let initKeyframe = new Keyframe(0, { x: 0.0, y: 0.0, z: 0.0 }, { x: 0.0, y: 0.0, z: 0.0 }, { x: 1.0, y: 1.0, z: 1.0 });
+        let initKeyframe = new Keyframe(0, [0,0,0], [0,0,0], [1,1,1]);/*{ x: 0.0, y: 0.0, z: 0.0 }, { x: 0.0, y: 0.0, z: 0.0 }, { x: 1.0, y: 1.0, z: 1.0 });*/
         this.keyframes.push(initKeyframe);
 
         for (let i = 0; i < keyframes.length; i++) {
@@ -39,6 +39,8 @@ class KeyframeAnimation extends Animation {
             let scalez;
 
             if (this.frameNumber == 0) {
+                let translate = this.keyframes[this.frameNumber].getTranslate();
+                let x = translate.x;
                 deltaTime = endTime;
                 transx = this.keyframes[this.frameNumber].translate[0];
                 transy = this.keyframes[this.frameNumber].translate[1];
@@ -97,5 +99,17 @@ class Keyframe {
         this.translate = translateValues;
         this.rotate = rotateValues;
         this.scale = scaleValues;
+    }
+
+    getTranslate() {
+        return this.translate;
+    }
+
+    getRotate() {
+        return this.rotate;
+    }
+
+    getScale() {
+        return this.scale;
     }
 }

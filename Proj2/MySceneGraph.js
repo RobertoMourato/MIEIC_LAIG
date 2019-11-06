@@ -1076,7 +1076,7 @@ class MySceneGraph {
             if (transformationIndex == null)
                 this.onXMLMinorError("No transformation defined for " + componentID + ". ");
 
-            var animationIndex = nodeNames.indexOf("animation");
+            var animationIndex = nodeNames.indexOf("animationref");
 
             var materialsIndex = nodeNames.indexOf("materials");
             if (materialsIndex == null)
