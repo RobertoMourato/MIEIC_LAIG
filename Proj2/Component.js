@@ -3,10 +3,12 @@
  * @constructor
  */
 class Component {
-    constructor(id, transformation, materialIds, materials, textureId, texture, length_s, length_t, componentIds, primitiveIds) {
+    constructor(id, transformation, animation, materialIds, materials, textureId, texture, length_s, length_t, componentIds, primitiveIds) {
         this.id = id;
 
         this.transformation = transformation;
+
+        this.animation = animation;
         
         this.activeMaterialIndex = 0;
         this.materialIds = materialIds;

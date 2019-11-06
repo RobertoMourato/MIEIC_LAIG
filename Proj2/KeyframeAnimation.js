@@ -2,11 +2,19 @@ class KeyframeAnimation extends Animation {
     constructor(keyframes) {
         super();
 
-        this.activeKeyframe;
-        
-        this.keyframes = keyframes;
-        if (keyframes == null)
-            this.keyframes = [];
+        this.activeKeyframeIndex = 0;
+        this.keyframes = [];
+
+        let initKeyframe = new Keyframe(0, {x: 0, y: 0, z: 0}, {x: 0, y: 0, z: 0}, {x: 1, y: 1, z: 1});
+        this.keyframes.push(initKeyframe);
+
+        for (let i = 0; i < keyframes.length; i++){
+            this.keyframes.push(keyframes[i]);
+        }
+
+        this.translate = initKeyframe.translate;
+        this.rotate = initKeyframe.rotate;
+        this.scale = initKeyframe.scale;
 
     }
 
@@ -24,8 +32,10 @@ class KeyframeAnimation extends Animation {
 }
 
 class Keyframe {
-    constructor(instant, transformation) {
+    constructor(instant, translateValues, rotateValues, scaleValues) {
         this.instant = instant;
-        this.transformation = transformation;
+        this.translate = translateValues;
+        this.rotate = rotateValues;
+        this.scale = scaleValues;
     }
 }

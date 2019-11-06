@@ -252,6 +252,8 @@ class XMLscene extends CGFscene {
             this.keyMpressed = false;
             this.graph.updateMaterials();
         }
+
+        
     }
 
     /**

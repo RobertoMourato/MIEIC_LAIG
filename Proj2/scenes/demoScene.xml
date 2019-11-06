@@ -239,6 +239,7 @@
                 <rotate axis="y" angle="-45" />
                 <scale x="1" y="1" z="0.1" />
             </transformation>
+            <animationref id='experiment' />
             <materials>  
                 <material id="Rainbow" />
             </materials>

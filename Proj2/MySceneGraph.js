@@ -746,11 +746,11 @@ class MySceneGraph {
 
         this.animations = [];
 
-        for (let i = 0; i < children.length; i++){
+        for (let i = 0; i < children.length; i++) {
             let keyframes = [];
 
             if (children[i].nodeName != "animation") {
-                this.onXMLMinorError("unknown tag <" + children[i].nodeName +">");
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
 
@@ -764,10 +764,10 @@ class MySceneGraph {
 
             let grandChildren = children[i].children;
 
-            if (grandChildren.length == 0) 
+            if (grandChildren.length == 0)
                 return "no keyframe defined for animation with ID = " + animationId;
 
-            for (let j = 0; j < grandChildren.length; j++){
+            for (let j = 0; j < grandChildren.length; j++) {
                 let grandgrandChildren = grandChildren[j].children;
 
                 if (grandgrandChildren.length != 3) {
@@ -775,36 +775,36 @@ class MySceneGraph {
                 }
 
                 let instant = this.reader.getFloat(grandChildren[j], 'instant');
-                let transformation = mat4.create();
+                let translateValues;
+                let rotateValues;
+                let scaleValues;
 
                 for (let k = 0; k < grandgrandChildren.length; k++) {
                     switch (grandgrandChildren[k].nodeName) {
                         case 'translate':
-                            if (k != 0){
+                            if (k != 0) {
                                 return "keyframe transformations out of order for animation with ID = " + animationId;
                             }
-                                
-                            var coordinates = this.parseCoordinates3D(grandgrandChildren[k], "translate transformation for ID " + animationId);
-                            if (!Array.isArray(coordinates))
-                                return coordinates;
-    
-                            transformation = mat4.translate(transformation, transformation, coordinates);
+
+                            translateValues = this.parseCoordinates3D(grandgrandChildren[k], "translate transformation for ID " + animationId);
+                            if (!Array.isArray(translateValues))
+                                return translateValues;
+
                             break;
                         case 'scale':
                             //this.onXMLMinorError("To do: Parse scale transformations.");
-                            if (k != 2){
+                            if (k != 2) {
                                 return "keyframe transformations out of order for animation with ID = " + animationId;
                             }
-    
-                            var coordinates = this.parseCoordinates3D(grandgrandChildren[k], "scale transformation for ID " + animationId);
-                            if (!Array.isArray(coordinates))
-                                return coordinates;
-    
-                            transformation = mat4.scale(transformation, transformation, coordinates);
+
+                            var scaleValues = this.parseCoordinates3D(grandgrandChildren[k], "scale transformation for ID " + animationId);
+                            if (!Array.isArray(scaleValues))
+                                return scaleValues;
+
                             break;
                         case 'rotate':
                             //this.onXMLMinorError("To do: Parse rotate transformations.");
-                            if (k != 1){
+                            if (k != 1) {
                                 return "keyframe transformations out of order for animation with ID = " + animationId;
                             }
 
@@ -814,15 +814,13 @@ class MySceneGraph {
 
                             if ((angle_x == null || isNaN(angle_x)) || (angle_y == null || isNaN(angle_y)) || (angle_z == null || isNaN(angle_z)))
                                 return "unable to parse rotate angles for animation with ID = " + animationId;
-
-                            transformation = mat4.rotate(transformation, transformation, angle_x, vec3.fromValues(1, 0, 0));
-                            transformation = mat4.rotate(transformation, transformation, angle_y, vec3.fromValues(0, 1, 0));
-                            transformation = mat4.rotate(transformation, transformation, angle_z, vec3.fromValues(0, 0, 1));
+                            
+                            rotateValues.push(angle_x, angle_y, angle_z);
                             break;
                     }
                 }
 
-                var keyframe = new Keyframe(instant, transformation);
+                var keyframe = new Keyframe(instant, translateValues, rotateValues, scaleValues);
                 keyframes.push(keyframe);
             }
 
@@ -1078,6 +1076,8 @@ class MySceneGraph {
             if (transformationIndex == null)
                 this.onXMLMinorError("No transformation defined for " + componentID + ". ");
 
+            var animationIndex = nodeNames.indexOf("animation");
+
             var materialsIndex = nodeNames.indexOf("materials");
             if (materialsIndex == null)
                 this.onXMLMinorError("No materials defined for " + componentID + ". ");
@@ -1091,6 +1091,7 @@ class MySceneGraph {
                 this.onXMLMinorError("No children defined for " + componentID + ". ");
 
             var transformation;
+            var animation;
             var materialIds = [];
             var materials = [];
             var texture = [];
@@ -1102,7 +1103,7 @@ class MySceneGraph {
 
             var tranformationType;
             grandgrandChildren = grandChildren[transformationIndex].children;
-            if (grandgrandChildren.length != 0 && grandgrandChildren != null){
+            if (grandgrandChildren.length != 0 && grandgrandChildren != null) {
                 if (grandgrandChildren[0].nodeName == "transformationref")
                     tranformationType = "reference";
                 else tranformationType = "newTransformation";
@@ -1168,6 +1169,21 @@ class MySceneGraph {
                 }
             }
 
+            // Animation
+            if (animationIndex != null) {
+                let animationId = this.reader.getString(grandChildren[animationIndex], 'id');
+
+                if (textureId == null) {
+                    this.onXMLMinorError("No animation ID defined for component " + componentID);
+                }
+
+                animation = this.animations[animationId];
+
+                if (animation == null) {
+                    this.onXMLMinorError("No animation defined with ID = " + animationId + " (component ID = " + componentID);
+                }
+            }
+
             // Materials    
             grandgrandChildren = grandChildren[materialsIndex].children;
             if (grandgrandChildren.length == 0 || grandgrandChildren == null)
@@ -1186,7 +1202,7 @@ class MySceneGraph {
             // Texture 
             var textureId = this.reader.getString(grandChildren[textureIndex], 'id');
 
-            if (textureId == null){
+            if (textureId == null) {
                 this.onXMLMinorError("No texture ID defined for component " + componentID);
             }
 
@@ -1220,10 +1236,14 @@ class MySceneGraph {
                     primitiveIds.push(this.reader.getString(grandgrandChildren[l], 'id'));
 
             }
-            var component = new Component(componentID, transformation, materialIds, materials, textureId, texture, length_s, length_t, componentIds, primitiveIds);
+            var component = new Component(componentID, transformation, animation, materialIds, materials, textureId, texture, length_s, length_t, componentIds, primitiveIds);
             this.components[componentID] = component;
         }
 
+        /**
+         * In order to prevent error on referencing a still undeclared component, 
+         * each component saves its children Ids first and only saves the Component object in this loop
+         */
         for (var key in this.components) {
             var component = this.components[key];
             for (var i = 0; i < component.componentIds.length; i++) {
@@ -1411,46 +1431,46 @@ class MySceneGraph {
         }
 
 
-            var children = component.primitiveChildren;
-            for (var i = 0; i < children.length; i++) {
-                // save
-                this.scene.pushTexture({ texture: texture, ls: ls, lt: lt });
-                this.scene.pushMaterial(material);
-                this.scene.pushMatrix();
-                
-                this.processPrimitiveNode(children[i], transformation, material, texture, ls, lt);
-                
-                this.scene.popMatrix();
-                material = this.scene.popMaterial(material);                
-                var tex = this.scene.popTexture();
-                texture = tex.texture;
-                ls = tex.ls;
-                lt = tex.lt;
-            }
+        var children = component.primitiveChildren;
+        for (var i = 0; i < children.length; i++) {
+            // save
+            this.scene.pushTexture({ texture: texture, ls: ls, lt: lt });
+            this.scene.pushMaterial(material);
+            this.scene.pushMatrix();
 
-            children = component.componentChildren;
-            for (var i = 0; i < children.length; i++) {
-                // save 
-                this.scene.pushTexture({ texture: texture, ls: ls, lt: lt });
-                this.scene.pushMaterial(material);
-                this.scene.pushMatrix();
+            this.processPrimitiveNode(children[i], transformation, material, texture, ls, lt);
 
-                this.processNode(children[i], transformation, material, texture, ls, lt);
-                
-                this.scene.popMatrix();
-                material = this.scene.popMaterial(material);                
-                var tex = this.scene.popTexture();
-                texture = tex.texture;
-                ls = tex.ls;
-                lt = tex.lt;
-            }
+            this.scene.popMatrix();
+            material = this.scene.popMaterial(material);
+            var tex = this.scene.popTexture();
+            texture = tex.texture;
+            ls = tex.ls;
+            lt = tex.lt;
+        }
+
+        children = component.componentChildren;
+        for (var i = 0; i < children.length; i++) {
+            // save 
+            this.scene.pushTexture({ texture: texture, ls: ls, lt: lt });
+            this.scene.pushMaterial(material);
+            this.scene.pushMatrix();
+
+            this.processNode(children[i], transformation, material, texture, ls, lt);
+
+            this.scene.popMatrix();
+            material = this.scene.popMaterial(material);
+            var tex = this.scene.popTexture();
+            texture = tex.texture;
+            ls = tex.ls;
+            lt = tex.lt;
+        }
     }
 
     processPrimitiveNode(primitive, parentTransformationMatrix, parentMaterial, parentTexture, parentLength_s, parentLength_t) {
         if (primitive != null) {
-            
-            
-            if (parentTexture != null){
+
+
+            if (parentTexture != null) {
                 // update primitive tex_coords
                 if (parentLength_s != null && parentLength_t != null)
                     primitive.scaleFactors(parentLength_s, parentLength_t);
