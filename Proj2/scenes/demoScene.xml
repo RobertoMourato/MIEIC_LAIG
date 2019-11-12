@@ -215,6 +215,10 @@
         <primitive id="arco">
             <torus inner = "2" outer = "13" slices="100" loops="100" />
         </primitive>
+
+        <primitive id="plano">
+            <plane npartsU = "5" npartsV = "8" />
+        </primitive>
     </primitives>
 
     <components>
@@ -227,6 +231,7 @@
             </materials>
             <texture id="none"/>
             <children>
+                <componentref id="Plane" />
                 <!--<componentref id="Soil" /> -->
                 <componentref id="ArcoIris" />
                 <!--<componentref id="River" />
@@ -236,6 +241,18 @@
                 <componentref id="Windmill" />
                 <componentref id="Sun" />
                 <componentref id="Hills" />-->
+            </children>
+        </component>
+
+        <component id="Plane" >
+            <transformation>
+            </transformation>
+            <materials>  
+                <material id="nullMaterial" />
+            </materials>
+            <texture id="demoTexture" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="plano" />
             </children>
         </component>
 
