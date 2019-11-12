@@ -996,7 +996,7 @@ class MySceneGraph {
                 if (!(stacks_s != null && !isNaN(stacks_s)))
                     return "unable to parse stacks of the primitive coordinates with ID = " + primitiveId;
 
-                console.warn("To Do: 'unable to parse' conditions");
+                //console.warn("To Do: 'unable to parse' conditions");
 
                 var sphere = new MySphere(this.scene, radius, slices_s, stacks_s);
                 this.primitives[primitiveId] = sphere;

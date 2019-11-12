@@ -16,9 +16,9 @@ class Plane extends CGFobject {
                 [0.5, 0, 0.5, 1],
                 [0.5, 0, -0.5, 1]
             ]
-        ]
-        this.nurbsSurface = new CFGnurbsSurface(1, 1, this.controlVertexes);
-        this.nurbsObject = new CFGnurbsObject(this.scene, this.npartsU, this.npartsV, this.nurbsSurface);
+        ];
+        this.nurbsSurface = new CGFnurbsSurface(1, 1, this.controlVertexes);
+        this.nurbsObject = new CGFnurbsObject(this.scene, this.npartsU, this.npartsV, this.nurbsSurface);
     }
 
     display() {
