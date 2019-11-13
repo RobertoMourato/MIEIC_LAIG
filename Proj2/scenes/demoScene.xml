@@ -233,7 +233,7 @@
             <children>
                 <componentref id="Plane" />
                 <!--<componentref id="Soil" /> -->
-                <componentref id="ArcoIris" />
+                <!--<componentref id="ArcoIris" />-->
                 <!--<componentref id="River" />
                 <componentref id="Lake" />
                 <componentref id="Motor" />
@@ -246,11 +246,12 @@
 
         <component id="Plane" >
             <transformation>
+            <scale x="10" y="10" z="10" />
             </transformation>
             <materials>  
-                <material id="nullMaterial" />
+                <material id="Brick" />
             </materials>
-            <texture id="demoTexture" length_s="1" length_t="1" />
+            <texture id="demoTexture" />
             <children>
                 <primitiveref id="plano" />
             </children>
