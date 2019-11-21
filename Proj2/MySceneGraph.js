@@ -1406,13 +1406,15 @@ class MySceneGraph {
         var lt;
 
         // Updates transformation matrix
-        mat4.multiply(transformation, parentTransformationMatrix, component.transformation);
+        let Mn = mat4.create();
+        mat4.multiply(Mn, parentTransformationMatrix, component.transformation);
         
         if(component.animation != undefined){
-            var animation = component.animation.apply();
-            mat4.multiply(transformation, animation, transformation);
+            var Manimation = component.animation.apply();
+            mat4.multiply(transformation, Mn, Manimation);
         }
-
+        else transformation = Mn;
+        
         // Updates material
         var activeMaterial = component.getActiveMaterialId();
 

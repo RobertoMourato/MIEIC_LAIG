@@ -39,6 +39,7 @@ class XMLscene extends CGFscene {
         this.setUpdatePeriod(100);
 
         this.activeView = "";
+        this.activeCameraView = "";
         this.viewIds = [];
 
         this.activeLight0;
@@ -53,6 +54,9 @@ class XMLscene extends CGFscene {
         this.lightIds = [];
 
         this.keyMpressed = false;
+
+        this.renderToTexture = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
+        this.securityCamers = new MySecurityCamera(this);
     }
 
     initBackupCamera() {
@@ -73,16 +77,21 @@ class XMLscene extends CGFscene {
 
             this.viewIds.push(cam.id);
             if (cam.enableView) {
-                this.camera = this.cameras[cam.id];
+                this.viewCamera = this.cameras[cam.id];
+                this.videoCamera = this.cameras[cam.id];
                 this.activeView = cam.id;
+                this.activeCameraView = cam.id;
             }
         }
-        this.interface.setActiveCamera(this.camera);
+        //this.interface.setActiveCamera(this.camera);
     }
 
     onCameraChange(v) {
-        this.camera = this.cameras[this.activeView];
-        this.interface.setActiveCamera(this.camera);
+        this.viewCamera = this.cameras[this.activeView];
+    }
+
+    onVideoCameraChange(v) {
+        this.videoCamera = this.cameras[this.activeCameraView];
     }
 
     /**
@@ -265,9 +274,12 @@ class XMLscene extends CGFscene {
     /**
      * Displays the scene.
      */
-    display() {
+    render(cam) {
         // ---- BEGIN Background, camera and axis setup
         if (this.sceneInited) {
+            this.camera = cam;
+            this.interface.setActiveCamera(this.camera);
+            
             // Clear image and depth buffer everytime we update the scene
             this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
             this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -287,19 +299,28 @@ class XMLscene extends CGFscene {
                 this.lights[i].enable();
             }
 
-
-
             if (this.sceneInited) {
                 // Draw axis
                 this.setDefaultAppearance();
 
                 // Displays the scene (MySceneGraph function).
                 this.graph.displayScene();
+                this.securityCamers.display();
+
             }
 
             this.popMatrix();
             // ---- END Background, camera and axis setup
         }
+    }
+
+    display() {
+        this.render(this.videoCamera);
+        /*
+        Attatch to RTT
+        this.render(this.videoCamera);
+        Detatch from RTT
+        */
     }
 
     pushMaterial(material) {

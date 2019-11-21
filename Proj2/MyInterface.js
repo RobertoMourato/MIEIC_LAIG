@@ -30,6 +30,8 @@ class MyInterface extends CGFinterface {
         // add a group of controls (and open/expand by defult)
         this.gui.add(this.scene, 'activeView', this.scene.viewIds).name('Active View').onChange(this.scene.onCameraChange.bind(this.scene));
 
+        this.gui.add(this.scene, 'activeCameraView', this.scene.viewIds).name('VideoCamera View').onChange(this.scene.onVideoCameraChange.bind(this.scene));
+
 
         //this.gui.add(this.scene, 'activeLight').name('Light').onChange(this.scene.onLightChecklistChange.bind(this.scene));
         if (this.scene.activeLight0 != null)

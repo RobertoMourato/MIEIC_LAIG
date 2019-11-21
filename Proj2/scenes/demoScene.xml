@@ -133,9 +133,19 @@
 
     <animations>
         <animation id="experiment">
-            <keyframe instant="6">
+            <keyframe instant="2">
                 <translate x="0" y="0" z="0" />
-                <rotate angle_x="10000" angle_y="0" angle_z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="5">
+                <translate x="0" y="0" z="40" />
+                <rotate angle_x="900" angle_y="0" angle_z="0" />
+                <scale x="2" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="8">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
             <keyframe instant="10">
@@ -143,7 +153,24 @@
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
+        </animation>
 
+        <animation id="windmill">
+            <keyframe instant="2">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="7">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="360" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="30">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="4000" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
         </animation>
     </animations>
 
@@ -227,15 +254,15 @@
             </materials>
             <texture id="none"/>
             <children>
-                <!--<componentref id="Soil" /> -->
+                <componentref id="Soil" />
                 <componentref id="ArcoIris" />
-                <!--<componentref id="River" />
+                <componentref id="River" />
                 <componentref id="Lake" />
                 <componentref id="Motor" />
                 <componentref id="windFan" />
                 <componentref id="Windmill" />
                 <componentref id="Sun" />
-                <componentref id="Hills" />-->
+                <componentref id="Hills" />
             </children>
         </component>
 
@@ -245,7 +272,7 @@
                 <rotate axis="y" angle="-45" />
                 <scale x="1" y="1" z="0.1" />-->
             </transformation>
-            <animationref id='experiment' />
+            <!--<animationref id='experiment' />-->
             <materials>  
                 <material id="Rainbow" />
             </materials>
@@ -1011,6 +1038,7 @@
             <transformation>
                 <translate x="0" y="10.5" z="0" />
             </transformation>
+            <animationref id="windmill"/>
             <materials>  
                 <material id="Cloth" />
             </materials>
