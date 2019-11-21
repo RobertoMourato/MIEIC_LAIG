@@ -56,6 +56,7 @@ class XMLscene extends CGFscene {
         this.keyMpressed = false;
 
         this.renderToTexture = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
+        //this.shader = new CGFshader(this.gl, "shaders/camera.vert", "shaders/camera.frag");
         this.securityCamers = new MySecurityCamera(this);
     }
 
@@ -305,8 +306,6 @@ class XMLscene extends CGFscene {
 
                 // Displays the scene (MySceneGraph function).
                 this.graph.displayScene();
-                this.securityCamers.display();
-
             }
 
             this.popMatrix();
@@ -320,7 +319,10 @@ class XMLscene extends CGFscene {
         Attatch to RTT
         this.render(this.videoCamera);
         Detatch from RTT
-        */
+        */  
+       this.gl.disable(this.gl.DEPTH_TEST);   
+       this.securityCamers.display();
+       this.gl.enable(this.gl.DEPTH_TEST);
     }
 
     pushMaterial(material) {
