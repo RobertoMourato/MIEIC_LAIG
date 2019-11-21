@@ -867,8 +867,8 @@ class MySceneGraph {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus')) {
-                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)"
+                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'plane' && grandChildren[0].nodeName != 'patch')) {
+                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane or patch)";
             }
 
             // Specifications for the current primitive.
@@ -996,7 +996,7 @@ class MySceneGraph {
                 if (!(stacks_s != null && !isNaN(stacks_s)))
                     return "unable to parse stacks of the primitive coordinates with ID = " + primitiveId;
 
-                console.warn("To Do: 'unable to parse' conditions");
+                //console.warn("To Do: 'unable to parse' conditions");
 
                 var sphere = new MySphere(this.scene, radius, slices_s, stacks_s);
                 this.primitives[primitiveId] = sphere;
@@ -1023,6 +1023,59 @@ class MySceneGraph {
 
                 var torus = new MyTorus(this.scene, inner, outer, slices_t, loops_t);
                 this.primitives[primitiveId] = torus;
+
+            }
+            else if (primitiveType == 'plane') {
+                var npartsU, npartsV;
+
+                npartsU = this.reader.getFloat(grandChildren[0], 'npartsU');
+                if (!(npartsU != null && !isNaN(npartsU)))
+                    return "unable to parse divisions on direction U of the primitive coordinates with ID = " + primitiveId;
+
+                npartsV = this.reader.getFloat(grandChildren[0], 'npartsV');
+                if (!(npartsV != null && !isNaN(npartsV)))
+                    return "unable to parse divisions on direction V of the primitive coordinates with ID = " + primitiveId;
+
+                var plane = new Plane(this.scene, npartsU, npartsV);
+                this.primitives[primitiveId] = plane;
+
+            }
+            else if (primitiveType == 'patch') {
+                console.log("TAS TOLO");
+                let greatGrandChildren = grandChildren[0].children;
+                var npointsU, npointsV, npartsU, npartsV;
+                var controlPoints = [];
+
+                if (greatGrandChildren.length == 0 || greatGrandChildren == null) {
+                    return "unabled to parse controlpoints of the primitive coordinates with ID = " + primitiveId;
+                }
+
+                for (var j = 0; j < greatGrandChildren.length; j++) {
+                    let x = this.reader.getFloat(greatGrandChildren[j], 'xx');
+                    let y = this.reader.getFloat(greatGrandChildren[j], 'yy');
+                    let z = this.reader.getFloat(greatGrandChildren[j], 'zz');
+                    let aux = [x, y, z];
+                    controlPoints.push(aux);
+                }
+
+                npointsU = this.reader.getFloat(grandChildren[0], 'npointsU');
+                if (!(npointsU != null && !isNaN(npointsU)))
+                    return "unable to parse number of control points on direction U of the primitive coordinates with ID = " + primitiveId;
+
+                npointsV = this.reader.getFloat(grandChildren[0], 'npointsV');
+                if (!(npointsV != null && !isNaN(npointsV)))
+                    return "unable to parse number of control points on direction V of the primitive coordinates with ID = " + primitiveId;
+
+                npartsU = this.reader.getFloat(grandChildren[0], 'npartsU');
+                if (!(npartsU != null && !isNaN(npartsU)))
+                    return "unable to parse divisions on direction U of the primitive coordinates with ID = " + primitiveId;
+
+                npartsV = this.reader.getFloat(grandChildren[0], 'npartsV');
+                if (!(npartsV != null && !isNaN(npartsV)))
+                    return "unable to parse divisions on direction V of the primitive coordinates with ID = " + primitiveId;
+
+                var patch = new Patch(this.scene, npointsU, npointsV, npartsU, npartsV, controlPoints);
+                this.primitives[primitiveId] = patch;
 
             }
             else {

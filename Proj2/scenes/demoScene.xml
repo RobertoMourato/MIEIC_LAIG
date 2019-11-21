@@ -242,6 +242,23 @@
         <primitive id="arco">
             <torus inner = "2" outer = "13" slices="100" loops="100" />
         </primitive>
+
+        <primitive id="plano">
+            <plane npartsU = "5" npartsV = "8" />
+        </primitive>
+
+        <primitive id="patch">
+            <patch npointsU="3" npointsV="2" npartsU="20" npartsV="20" >
+                <controlpoint xx="-1.5" yy="-1.5" zz="0.0" />
+                <controlpoint xx="-1.5" yy="1.5" zz="0.0" />
+
+                <controlpoint xx="0.0" yy="-1.5" zz="3.0" />
+                <controlpoint xx="0.0" yy="1.5" zz="3.0" />
+
+                <controlpoint xx="1.5" yy="-1.5" zz="0.0" />
+                <controlpoint xx="1.5" yy="1.5" zz="0.0" />
+            </patch>
+        </primitive>
     </primitives>
 
     <components>
@@ -257,12 +274,40 @@
                 <componentref id="Soil" />
                 <componentref id="ArcoIris" />
                 <componentref id="River" />
+                <!--<componentref id= "Patch" />-->
+                <!--<componentref id="Plane" />-->
                 <componentref id="Lake" />
                 <componentref id="Motor" />
                 <componentref id="windFan" />
                 <componentref id="Windmill" />
                 <componentref id="Sun" />
                 <componentref id="Hills" />
+            </children>
+        </component>
+
+        <component id="Plane" >
+            <transformation>
+            <scale x="10" y="10" z="10" />
+            </transformation>
+            <materials>  
+                <material id="Brick" />
+            </materials>
+            <texture id="demoTexture" />
+            <children>
+                <primitiveref id="plano" />
+            </children>
+        </component>
+
+        <component id="Patch" >
+            <transformation>
+            <scale x="5" y="5" z="5" />
+            </transformation>
+            <materials>  
+                <material id="Brick" />
+            </materials>
+            <texture id="demoTexture" />
+            <children>
+                <primitiveref id="patch" />
             </children>
         </component>
 
