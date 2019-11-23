@@ -57,7 +57,7 @@ class XMLscene extends CGFscene {
 
         this.renderToTexture = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
         //this.shader = new CGFshader(this.gl, "shaders/camera.vert", "shaders/camera.frag");
-        this.securityCamers = new MySecurityCamera(this);
+        this.securityCamera = new MySecurityCamera(this);
     }
 
     initBackupCamera() {
@@ -319,10 +319,10 @@ class XMLscene extends CGFscene {
         Attatch to RTT
         this.render(this.videoCamera);
         Detatch from RTT
-        */  
-       this.gl.disable(this.gl.DEPTH_TEST);   
-       this.securityCamers.display();
-       this.gl.enable(this.gl.DEPTH_TEST);
+        */
+        this.gl.disable(this.gl.DEPTH_TEST);   
+        this.securityCamera.display();
+        this.gl.enable(this.gl.DEPTH_TEST);
     }
 
     pushMaterial(material) {
