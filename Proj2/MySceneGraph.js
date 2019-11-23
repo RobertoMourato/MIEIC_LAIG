@@ -867,8 +867,8 @@ class MySceneGraph {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'plane' && grandChildren[0].nodeName != 'patch')) {
-                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane or patch)";
+                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'plane' && grandChildren[0].nodeName != 'patch' && grandChildren[0].nodeName != 'cylinder2')) {
+                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch or cylinder2)";
             }
 
             // Specifications for the current primitive.
@@ -979,7 +979,6 @@ class MySceneGraph {
 
                 var cylinder = new MyCylinder(this.scene, slices_c, stacks_c, height, base, top);
                 this.primitives[primitiveId] = cylinder;
-
             }
             else if (primitiveType == 'sphere') {
                 var radius, slices_s, stacks_s;
@@ -1000,7 +999,6 @@ class MySceneGraph {
 
                 var sphere = new MySphere(this.scene, radius, slices_s, stacks_s);
                 this.primitives[primitiveId] = sphere;
-
             }
             else if (primitiveType == 'torus') {
                 var inner, outer, slices_t, loops_t;
@@ -1023,7 +1021,6 @@ class MySceneGraph {
 
                 var torus = new MyTorus(this.scene, inner, outer, slices_t, loops_t);
                 this.primitives[primitiveId] = torus;
-
             }
             else if (primitiveType == 'plane') {
                 var npartsU, npartsV;
@@ -1038,10 +1035,9 @@ class MySceneGraph {
 
                 var plane = new Plane(this.scene, npartsU, npartsV);
                 this.primitives[primitiveId] = plane;
-
             }
             else if (primitiveType == 'patch') {
-                console.log("TAS TOLO");
+                //console.log("TAS TOLO");
                 let greatGrandChildren = grandChildren[0].children;
                 var npointsU, npointsV, npartsU, npartsV;
                 var controlPoints = [];
@@ -1076,7 +1072,37 @@ class MySceneGraph {
 
                 var patch = new Patch(this.scene, npointsU, npointsV, npartsU, npartsV, controlPoints);
                 this.primitives[primitiveId] = patch;
+            }
+            else if (primitiveType == 'cylinder2') {
+                var base, top, height, slices_c, stacks_c;
 
+                // slices
+                var slices_c = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices_c != null && !isNaN(slices_c)))
+                    return "unable to parse slices of the primitive coordinates with ID = " + primitiveId;
+
+                // stacks
+                var stacks_c = this.reader.getFloat(grandChildren[0], 'stacks');
+                if (!(stacks_c != null && !isNaN(stacks_c)))
+                    return "unable to parse stacks of the primitive coordinates with ID = " + primitiveId;
+
+                // height
+                var height = this.reader.getFloat(grandChildren[0], 'height');
+                if (!(height != null && !isNaN(height)))
+                    return "unable to parse height of the primitive coordinates with ID = " + primitiveId;
+
+                // base
+                var base = this.reader.getFloat(grandChildren[0], 'base');
+                if (!(base != null && !isNaN(base)))
+                    return "unable to parse base radius of the primitive coordinates with ID = " + primitiveId;
+
+                // top
+                var top = this.reader.getFloat(grandChildren[0], 'top');
+                if (!(top != null && !isNaN(top)))
+                    return "unable to parse top radius of the primitive coordinates with ID = " + primitiveId;
+
+                var cylinder2 = new Cylinder2(this.scene, base, top, height, slices_c, stacks_c);
+                this.primitives[primitiveId] = cylinder2;
             }
             else {
                 this.onXMLMinorError("Unexistant primitive.");
@@ -1461,13 +1487,13 @@ class MySceneGraph {
         // Updates transformation matrix
         let Mn = mat4.create();
         mat4.multiply(Mn, parentTransformationMatrix, component.transformation);
-        
-        if(component.animation != undefined){
+
+        if (component.animation != undefined) {
             var Manimation = component.animation.apply();
             mat4.multiply(transformation, Mn, Manimation);
         }
         else transformation = Mn;
-        
+
         // Updates material
         var activeMaterial = component.getActiveMaterialId();
 
