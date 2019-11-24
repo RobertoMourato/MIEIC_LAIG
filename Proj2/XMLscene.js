@@ -26,8 +26,6 @@ class XMLscene extends CGFscene {
 
         this.sceneInited = false;
 
-        //this.initBackupCamera();
-
         this.enableTextures(true);
 
         this.gl.clearDepth(100.0);
@@ -54,14 +52,6 @@ class XMLscene extends CGFscene {
         this.lightIds = [];
 
         this.keyMpressed = false;
-
-        this.renderToTexture = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
-        //this.shader = new CGFshader(this.gl, "shaders/camera.vert", "shaders/camera.frag");
-        this.securityCamera = new MySecurityCamera(this);
-    }
-
-    initBackupCamera() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
     }
 
     /**
@@ -85,6 +75,19 @@ class XMLscene extends CGFscene {
             }
         }
         //this.interface.setActiveCamera(this.camera);
+        this.initSecurityCamera();
+    }
+
+    initSecurityCamera(){
+        this.renderToTexture = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
+        this.securityCamera = new MySecurityCamera(this);
+        this.rectangle = new MyRectangle(this, '', 0,0.5,0,0.5);  
+        this.shader = new CGFshader(this.gl, 'shaders/camera.vert', 'shaders/camera.frag');
+
+        this.shader.setUniformsValues({ uSampler: 0 });
+        this.shader.setUniformsValues({ timeFactor: 0});
+
+        this.texture = new CGFtexture(this, 'scenes/images/vidral.jpg')
     }
 
     onCameraChange(v) {
@@ -256,6 +259,7 @@ class XMLscene extends CGFscene {
     }
 
     update(t) {
+
         if (this.gui.isKeyPressed("KeyM") && this.keyMpressed == false) {
             this.keyMpressed = true;
         } else if (this.gui.isKeyPressed("KeyM") == false && this.keyMpressed == true) {
@@ -263,6 +267,7 @@ class XMLscene extends CGFscene {
             this.graph.updateMaterials();
         }
 
+        // Animations time management
         this.previousTime = this.previousTime || 0.0;
         this.deltaTime = (t - this.previousTime) / 1000 || 0.0;
         this.animations = this.graph.animations;
@@ -270,6 +275,9 @@ class XMLscene extends CGFscene {
             this.animations[i].update(this.deltaTime);
         }
         this.previousTime = t;
+        
+        // Security Camera's shader time management
+        this.shader.setUniformsValues({ timeFactor: t / 1000 % 100000 });
     }
 
     /**
@@ -313,15 +321,25 @@ class XMLscene extends CGFscene {
         }
     }
 
-    display() {
+    display() {        
+        // Security Camera render
+        this.renderToTexture.attachToFrameBuffer();
         this.render(this.videoCamera);
-        /*
-        Attatch to RTT
-        this.render(this.videoCamera);
-        Detatch from RTT
-        */
-        this.gl.disable(this.gl.DEPTH_TEST);   
+        this.renderToTexture.detachFromFrameBuffer();
+        
+        // View Camera render
+        this.render(this.viewCamera);
+        
+        // Security Camera display
+        this.gl.disable(this.gl.DEPTH_TEST);
+
+        this.setActiveShader(this.shader);
+        this.renderToTexture.bind();
+
         this.securityCamera.display();
+
+        this.renderToTexture.unbind();
+        this.setActiveShader(this.defaultShader);
         this.gl.enable(this.gl.DEPTH_TEST);
     }
 
@@ -331,7 +349,6 @@ class XMLscene extends CGFscene {
 
     popMaterial() {
         var material = this.materialStack.pop();
-
         return material;
     }
 
@@ -341,7 +358,6 @@ class XMLscene extends CGFscene {
 
     popTexture() {
         var texture = this.textureStack.pop();
-
         return texture;
     }
 }
