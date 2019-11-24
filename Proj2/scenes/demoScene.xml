@@ -243,21 +243,50 @@
             <torus inner = "2" outer = "13" slices="100" loops="100" />
         </primitive>
 
-        <primitive id="plano">
-            <plane npartsU = "5" npartsV = "8" />
+        <primitive id="bigMountain">
+            <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20" >
+                <controlpoint xx="-2" yy="-2" zz="0.0" />
+                <controlpoint xx="-2" yy="-2" zz="0.0" />
+                <controlpoint xx="-2" yy="2" zz="0.0" />
+                <controlpoint xx="-2" yy="2" zz="0.0" />
+                
+                <controlpoint xx="0" yy="-2" zz="0.0" />
+                <controlpoint xx="0" yy="0" zz="10" />
+                <controlpoint xx="0" yy="0" zz="10" />
+                <controlpoint xx="0" yy="2" zz="0.0" />
+                
+                <controlpoint xx="2" yy="-2" zz="0.0" />
+                <controlpoint xx="2" yy="-2" zz="0.0" />
+                <controlpoint xx="2" yy="2" zz="0.0" />
+                <controlpoint xx="2" yy="2" zz="0.0" />
+            </patch>
         </primitive>
 
-        <primitive id="patch">
-            <patch npointsU="3" npointsV="2" npartsU="20" npartsV="20" >
-                <controlpoint xx="-1.5" yy="-1.5" zz="0.0" />
-                <controlpoint xx="-1.5" yy="1.5" zz="0.0" />
-
-                <controlpoint xx="0.0" yy="-1.5" zz="3.0" />
-                <controlpoint xx="0.0" yy="1.5" zz="3.0" />
-
-                <controlpoint xx="1.5" yy="-1.5" zz="0.0" />
-                <controlpoint xx="1.5" yy="1.5" zz="0.0" />
+        <primitive id="strangeMountain">
+            <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20" >
+                <controlpoint xx="-1.5" yy="-2" zz="0.0" />
+                <controlpoint xx="-2" yy="-2" zz="0.0" />
+                <controlpoint xx="-2" yy="2" zz="0.0" />
+                <controlpoint xx="-1.5" yy="2" zz="0.0" />
+                
+                <controlpoint xx="0" yy="-4" zz="0.0" />
+                <controlpoint xx="-4" yy="0" zz="10" />
+                <controlpoint xx="4" yy="0" zz="10" />
+                <controlpoint xx="0" yy="4" zz="0.0" />
+                
+                <controlpoint xx="1.5" yy="-2" zz="0.0" />
+                <controlpoint xx="2" yy="-2" zz="0.0" />
+                <controlpoint xx="2" yy="2" zz="0.0" />
+                <controlpoint xx="1.5" yy="2" zz="0.0" />
             </patch>
+        </primitive>
+
+        <primitive id="nurbWall">
+            <cylinder2 base="4" top="2" height="11" slices="30" stacks="15"/>
+        </primitive>
+
+        <primitive id="nurbSoil">
+            <plane npartsU = "20" npartsV = "20" />
         </primitive>
     </primitives>
 
@@ -274,8 +303,8 @@
                 <componentref id="Soil" />
                 <componentref id="ArcoIris" />
                 <componentref id="River" />
-                <!--<componentref id= "Patch" />-->
-                <!--<componentref id="Plane" />-->
+                <componentref id= "BigMountain" />
+                <componentref id= "StrangeMountain" />
                 <componentref id="Lake" />
                 <componentref id="Motor" />
                 <componentref id="windFan" />
@@ -285,39 +314,43 @@
             </children>
         </component>
 
-        <component id="Plane" >
+        <component id="StrangeMountain" >
             <transformation>
-            <scale x="10" y="10" z="10" />
+            <translate x="-30" y="0" z="0" />
+            <scale x="3" y="3" z="5" />
+            <rotate axis="y" angle="45" />
+            <rotate axis="x" angle="-90" />
             </transformation>
             <materials>  
-                <material id="Brick" />
+                <material id="Soil" />
             </materials>
-            <texture id="demoTexture" />
+            <texture id="hillsText" />
             <children>
-                <primitiveref id="plano" />
+                <primitiveref id="strangeMountain" />
             </children>
         </component>
 
-        <component id="Patch" >
+        <component id="BigMountain" >
             <transformation>
-            <scale x="5" y="5" z="5" />
+            <translate x="0" y="0" z="-30" />
+            <scale x="3" y="8" z="3" />
+            <rotate axis="x" angle="-90" />
             </transformation>
             <materials>  
-                <material id="Brick" />
+                <material id="Soil" />
             </materials>
-            <texture id="demoTexture" />
+            <texture id="hillsText" />
             <children>
-                <primitiveref id="patch" />
+                <primitiveref id="bigMountain" />
             </children>
         </component>
 
         <component id="ArcoIris" >
             <transformation>
-                <!--<translate x="3" y="0" z="0" />
+                <translate x="3" y="0" z="0" />
                 <rotate axis="y" angle="-45" />
-                <scale x="1" y="1" z="0.1" />-->
+                <scale x="1" y="1" z="0.1" />
             </transformation>
-            <!--<animationref id='experiment' />-->
             <materials>  
                 <material id="Rainbow" />
             </materials>
@@ -469,6 +502,7 @@
                 <translate x="0" y="20" z="0" />
                 <rotate axis="y" angle="-45" />
             </transformation>
+            <animationref id="windmill"/>
             <materials>  
                 <material id="inherit" />
             </materials>
@@ -594,6 +628,7 @@
                 <translate x="20" y="45" z="-45" />
                 <rotate axis="y" angle="90" />
             </transformation>
+            <animationref id="windmill"/>
             <materials>
                 <material id="Amarelo" />
             </materials>
@@ -605,15 +640,15 @@
 
         <component id="Soil">
             <transformation>
-                <scale x="300" y="1" z="300" /> 
-                <rotate axis="x" angle="-90" />
+                <scale x="100" y="1" z="100" /> 
+                <!--<rotate axis="x" angle="-90" />-->
             </transformation>
             <materials>  
                 <material id="Soil" />
             </materials>
-            <texture id="hillsText" length_s="0.1" length_t="0.1"/>
+            <texture id="hillsText"/>
             <children>
-                <primitiveref id="soil" />
+                <primitiveref id="nurbSoil" />
             </children>
         </component>
 
@@ -659,9 +694,9 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="brick_wall" length_s="1" length_t="1"/>
+            <texture id="brick_wall"/>
             <children>
-                <primitiveref id="walls" />
+                <primitiveref id="nurbWall" />
             </children>
         </component>
 

@@ -9,27 +9,27 @@ class Cylinder2 extends CGFobject {
         this.init();
     }
 
-    init() {//AINDA VOU MUDAR OS CONTROL VERTEXES, JA N ME LEMBRO MT BEM, TENHO DE REVER
+    init() {
         this.controlVertexes1 = [
-            [
-                [-0.5, 0, 0.5, 1],
-                [-0.5, 0, -0.5, 1]
-            ],
-            [
-                [0.5, 0, 0.5, 1],
-                [0.5, 0, -0.5, 1]
-            ]
+                [-this.base, 0, 0, 1],
+                [-this.base, this.base*4/3, 0, 1],
+                [this.base, this.base*4/3, 0, 1],
+                [this.base, 0, 0, 1],
+                [-this.top, 0, this.height, 1],
+                [-this.top, this.top*4/3, this.height, 1],
+                [this.top, this.top*4/3, this.height, 1],
+                [this.top, 0, this.height, 1]
         ];
 
         this.controlVertexes2 = [
-            [
-                [-0.5, 0, 0.5, 1],
-                [-0.5, 0, -0.5, 1]
-            ],
-            [
-                [0.5, 0, 0.5, 1],
-                [0.5, 0, -0.5, 1]
-            ]
+                [this.base, 0, 0, 1],
+                [this.base, -this.base*4/3, 0, 1],
+                [-this.base, -this.base*4/3, 0, 1],
+                [-this.base, 0, 0, 1],
+                [this.top, 0, this.height, 1],
+                [this.top, -this.top*4/3, this.height, 1],
+                [-this.top, -this.top*4/3, this.height, 1],
+                [-this.top, 0, this.height, 1]
         ];
 
         this.patch1 = new Patch(this.scene, 2, 4, this.slices / 2, this.stacks, this.controlVertexes1);
