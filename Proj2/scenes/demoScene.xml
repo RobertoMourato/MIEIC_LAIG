@@ -309,8 +309,21 @@
                 <componentref id="Motor" />
                 <componentref id="windFan" />
                 <componentref id="Windmill" />
-                <componentref id="Sun" />
+                <componentref id="SunWithMovement" />
                 <componentref id="Hills" />
+            </children>
+        </component>
+
+        <component id="SunWithMovement" >
+            <transformation>
+            </transformation>
+            <animationref id="windmill"/>
+            <materials>  
+                <material id="Amarelo" />
+            </materials>
+            <texture id="sunText" />
+            <children>
+                <componentref id="Sun" />
             </children>
         </component>
 
@@ -628,7 +641,6 @@
                 <translate x="20" y="45" z="-45" />
                 <rotate axis="y" angle="90" />
             </transformation>
-            <animationref id="windmill"/>
             <materials>
                 <material id="Amarelo" />
             </materials>
