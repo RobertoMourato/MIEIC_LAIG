@@ -14,9 +14,9 @@ class KeyframeAnimation extends Animation {
             this.keyframes.push(keyframes[i]);
         }
 
-        this.translate = [0,0,0];//initKeyframe.translate;
-        this.rotate = [0,0,0]; //initKeyframe.rotate;
-        this.scale = [1,1,1]; //initKeyframe.scale;
+        this.translate = [0,0,0];  //initKeyframe.translate;
+        this.rotate = [0,0,0];  //initKeyframe.rotate;
+        this.scale = [1,1,1];   //initKeyframe.scale;
 
         this.time = 0;
         this.frameNumber = 0;

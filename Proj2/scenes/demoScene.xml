@@ -19,14 +19,19 @@
     </globals>
 
     <lights>
-        <omni id="demoLight" enabled="1">
+        <omni id="omniLight" enabled="1">
             <location x="9.8" y="11.9" z="10" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </omni>
-    
-        <spot id="spotSun" enabled="0" angle="30" exponent="2">     
+        <omni id="Light" enabled="1">
+            <location x="-5" y="20" z="5" w="1.0" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </omni>
+        <spot id="spotSun" enabled="1" angle="30" exponent="2">     
             <location x="20" y="45" z="-45" w="0.0" />
             <target x="-15" y="6" z="-5" />
             <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -170,6 +175,42 @@
                 <translate x="0" y="0" z="0" />
                 <rotate angle_x="0" angle_y="0" angle_z="4000" />
                 <scale x="1" y="1" z="1" />
+            </keyframe>
+        </animation>
+        <animation id="wind_fan">
+            <keyframe instant="7">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="10">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="180" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="30">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="1350" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </animation>
+        <animation id="sun">
+            <keyframe instant="30">
+                <translate x="0" y="5" z="-45" />
+                <rotate angle_x="0" angle_y="0" angle_z="-20" />
+                <scale x="0.6" y="0.6" z="0.6" />
+            </keyframe>
+        </animation>
+        <animation id="fading_rainbow">
+            <keyframe instant="25">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="0.1" z="1" />
+            </keyframe>
+            <keyframe instant="25">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="0" y="0" z="0" />
             </keyframe>
         </animation>
     </animations>
@@ -317,7 +358,7 @@
         <component id="SunWithMovement" >
             <transformation>
             </transformation>
-            <animationref id="windmill"/>
+            <animationref id="sun"/>
             <materials>  
                 <material id="Amarelo" />
             </materials>
@@ -364,6 +405,7 @@
                 <rotate axis="y" angle="-45" />
                 <scale x="1" y="1" z="0.1" />
             </transformation>
+            <animationref id="fading_rainbow"/>
             <materials>  
                 <material id="Rainbow" />
             </materials>
@@ -515,7 +557,7 @@
                 <translate x="0" y="20" z="0" />
                 <rotate axis="y" angle="-45" />
             </transformation>
-            <animationref id="windmill"/>
+            <animationref id="wind_fan"/>
             <materials>  
                 <material id="inherit" />
             </materials>
