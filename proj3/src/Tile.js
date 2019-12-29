@@ -1,9 +1,25 @@
 class Tile {
-    constructor (Color, Piece) {
+    constructor (scene, Color) {
+        this.scene = scene;
         this.color =  Color;
-        this.piece = Piece;
+        this.piece = null;
 
-        this.rectangle = 
+        this.shape = new MyRectangle(this.scene, null, -2.5, 2.5, -2.5, 2.5);
+        this.initMaterials()
+    }   
+
+    initMaterials() {
+        this.black = new CGFappearance(this.scene);
+        this.black.setAmbient(0.05,0.05,0.05,0.05);
+        this.black.setDiffuse(0.0, 0.0, 0.0, 0.0);
+        this.black.setSpecular(0.0, 0.0, 0.0, 0.0);
+        this.black.setShininess(5.0);
+
+        this.white = new CGFappearance(this.scene);
+        this.white.setAmbient(0.2,0.2,0.2,0.2);
+        this.white.setDiffuse(0.9, 0.9, 0.9, 0.9);
+        this.white.setSpecular(0.1, 0.1, 0.1, 0.1);
+        this.white.setShininess(5.0);
     }
 
     getPiece() {
@@ -26,7 +42,21 @@ class Tile {
     }
 
     display() {
-        
+        if (this.color == "White") {
+            this.white.apply()
+            this.shape.display();
+        } else if (this.color == "Black") {
+            this.black.apply()
+            this.shape.display();
+        } else {
+            alert("Undefined Tile Type");
+        }
+
+        this.scene.setDefaultAppearance();
+
+        if (this.piece != null)
+            this.piece.display()
+
     }
 
 }

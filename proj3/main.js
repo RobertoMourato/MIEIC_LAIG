@@ -11,7 +11,7 @@ function getUrlVars() {
     return vars;
 }	 
 //Include additional files here
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.js', 'primitives/MyRectangle.js', 'primitives/MyTriangle.js', 'primitives/MyCylinder.js', 'primitives/MySphere.js', 'primitives/MyTorus.js', 'Component.js', 'Animation.js', 'KeyframeAnimation.js', 'primitives/Plane.js', 'primitives/Patch.js', 'MySecurityCamera.js', 'primitives/Cylinder2.js',
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'src/MySceneGraph.js', 'MyInterface.js', 'primitives/MyRectangle.js', 'primitives/MyTriangle.js', 'primitives/MyCylinder.js', 'primitives/MySphere.js', 'primitives/MyTorus.js', 'Component.js', 'Animation.js', 'KeyframeAnimation.js', 'primitives/Plane.js', 'primitives/Patch.js', 'MySecurityCamera.js', 'primitives/Cylinder2.js', 'src/GameBoard.js', 'src/AuxBoard.js', 'src/GameOrchestrator.js', 'src/Piece.js', 'src/Player.js', 'src/Tile.js', 
 
 main=function()
 {
@@ -30,11 +30,11 @@ main=function()
 	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
 	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
 	
-    var filename=getUrlVars()['file'] || "demoScene.xml";
+    //var filename=getUrlVars()['file'] || "chameleon_1.xml";
 
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors
-	var myGraph = new MySceneGraph(filename, myScene);
+	//var myGraph = new MySceneGraph(filename, myScene);
 	
 	// start
     app.run();

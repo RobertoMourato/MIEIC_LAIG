@@ -40,18 +40,10 @@ class XMLscene extends CGFscene {
         this.activeCameraView = "";
         this.viewIds = [];
 
-        this.activeLight0;
-        this.activeLight1;
-        this.activeLight2;
-        this.activeLight3;
-        this.activeLight4;
-        this.activeLight5;
-        this.activeLight6;
-        this.activeLight7;
-
         this.lightIds = [];
 
-        this.keyMpressed = false;
+        this.gameorchestrator = new GameOrchestrator(this);
+        this.setPickEnabled(true)
     }
 
     /**
@@ -59,6 +51,7 @@ class XMLscene extends CGFscene {
      */
     initCameras() {
         this.cameras = [];
+        console.log(this.graph.views);
 
         for (var i = 0; i < this.graph.views.length; i++) {
             var cam = this.graph.views[i];
@@ -126,111 +119,17 @@ class XMLscene extends CGFscene {
 
                 this.lights[i].setVisible(true);
 
-                var active;
                 if (light[0]) {
                     this.lights[i].enable();
                     this.lightIds.push(key);
-                    active = true;
                 } else {
                     this.lights[i].disable();
                     this.lightIds.push(key);
-                    active = false;
                 }
-
-                switch (i) {
-                    case 0:
-                        this.activeLight0 = active;
-                        break;
-                    case 1:
-                        this.activeLight1 = active;
-                        break;
-                    case 2:
-                        this.activeLight2 = active;
-                        break;
-                    case 3:
-                        this.activeLight3 = active;
-                        break;
-                    case 4:
-                        this.activeLight4 = active;
-                        break;
-                    case 5:
-                        this.activeLight5 = active;
-                        break;
-                    case 6:
-                        this.activeLight6 = active;
-                        break;
-                    case 7:
-                        this.activeLight7 = active;
-                        break;
-                    default:
-                        break;
-                }
-
                 this.lights[i].update();
-
                 i++;
             }
         }
-    }
-
-    onLightChecklistChange(v) {
-        /* Light 0 */
-        if (this.activeLight0)
-            this.lights[0].enable();
-        else this.lights[0].disable();
-
-        this.lights[0].update();
-
-        /* Light 1 */
-        if (this.activeLight1)
-            this.lights[1].enable();
-        else this.lights[1].disable();
-
-        this.lights[1].update();
-
-        /* Light 2 */
-        if (this.activeLight2)
-            this.lights[2].enable();
-        else
-            this.lights[2].disable();
-
-        this.lights[2].update();
-
-        /* Light 3 */
-        if (this.activeLight3)
-            this.lights[3].enable();
-        else this.lights[3].disable();
-
-        this.lights[3].update();
-
-        /* Light 4 */
-        if (this.activeLight4)
-            this.lights[4].enable();
-        else this.lights[4].disable();
-
-        this.lights[4].update();
-
-        /* Light 5 */
-        if (this.activeLight5)
-            this.lights[5].enable();
-        else this.lights[5].disable();
-
-        this.lights[5].update();
-
-        /* Light 6 */
-        if (this.activeLight6)
-            this.lights[6].enable();
-        else this.lights[6].disable();
-
-        this.lights[6].update();
-
-        /* Light 7 */
-        if (this.activeLight7)
-            this.lights[7].enable();
-        else this.lights[7].disable();
-
-        this.lights[7].update();
-
     }
 
     setDefaultAppearance() {
@@ -259,14 +158,6 @@ class XMLscene extends CGFscene {
     }
 
     update(t) {
-
-        if (this.gui.isKeyPressed("KeyM") && this.keyMpressed == false) {
-            this.keyMpressed = true;
-        } else if (this.gui.isKeyPressed("KeyM") == false && this.keyMpressed == true) {
-            this.keyMpressed = false;
-            this.graph.updateMaterials();
-        }
-
         // Animations time management
         this.previousTime = this.previousTime || 0.0;
         this.deltaTime = (t - this.previousTime) / 1000 || 0.0;
@@ -309,11 +200,14 @@ class XMLscene extends CGFscene {
             }
 
             if (this.sceneInited) {
+                this.gameorchestrator.managePick(this.pickMode, this.pickResults)
+                this.clearPickRegistration()
                 // Draw axis
                 this.setDefaultAppearance();
 
                 // Displays the scene (MySceneGraph function).
-                this.graph.displayScene();
+                this.gameorchestrator.display();
+
             }
 
             this.popMatrix();
@@ -336,7 +230,7 @@ class XMLscene extends CGFscene {
         this.setActiveShader(this.shader);
         this.renderToTexture.bind();
 
-        this.securityCamera.display();
+        //this.securityCamera.display();
 
         this.renderToTexture.unbind();
         this.setActiveShader(this.defaultShader);

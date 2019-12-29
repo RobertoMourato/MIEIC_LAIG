@@ -1,0 +1,183 @@
+<lxs>
+    <scene root="root" axis_length="100"/>
+
+    <views default="defaultCamera">
+        <perspective id="defaultCamera" near="0.1" far="200" angle="45">
+            <from x="10" y="20" z="20" />
+            <to x="10" y="0" z="-10" />
+        </perspective>
+
+        <perspective id="viewFromBehind" near="0.1" far="200" angle="45">
+            <from x="-35" y="25" z="-48" />
+            <to x="0" y="-2" z="0" />
+        </perspective>
+    </views>
+
+    <globals>
+        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <background r="0.0" g="0.0" b="0.0" a="1.0" />
+    </globals>
+
+    <lights>
+        <omni id="omniLight" enabled="0">
+            <location x="9.8" y="11.9" z="10" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </omni>
+        <omni id="Light" enabled="1">
+            <location x="-5" y="20" z="5" w="1.0" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </omni>
+        <spot id="spotlight" enabled="1" angle="30" exponent="2">     
+            <location x="20" y="45" z="-45" w="0.0" />
+            <target x="-15" y="6" z="-5" />
+            <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="1.0" linear="0.0" quadratic="0.00" />
+        </spot>
+    </lights>
+
+    <textures>
+        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+        <texture id="hillsText" file="scenes/images/forest.jpg" />
+    </textures>
+
+    <materials>
+        <material id="nullMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+        <material id="Wood" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.4" g="0.2" b="0.0" a="1.0" />
+            <diffuse r="0.6" g="0.3" b="0.0" a="1.0" />
+            <specular r="0.1" g="0.0" b="0.0" a="1.0" />
+        </material>
+        <material id="WhiteWood" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.2" b="0.0" a="1.0" />
+            <diffuse r="0.7" g="0.6" b="0.6" a="1.0" />
+            <specular r="0.1" g="0.1" b="0.1" a="1.0" />
+        </material>
+        <material id="Brick" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.3" g="0.1" b="0.0" a="1.0" />
+            <diffuse r="0.6" g="0.22" b="0.1" a="1.0" />
+            <specular r="0.2" g="0.07" b="0.03" a="1.0" />
+        </material>
+        <material id="Cloth" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.15" g="0.15" b="0.15" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0.1" g="0.1" b="0.1" a="1.0" />
+        </material>
+        <material id="Soil" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.02" g="0.29" b="0.09" a="1.0" />
+            <diffuse r="0.07" g="0.7" b="0.20" a="1.0" />
+            <specular r="0.02" g="0.29" b="0.09" a="1.0" />
+        </material>
+        <material id="Water" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.06" g="0.62" b="0.74" a="1.0" />
+            <diffuse r="0.06" g="0.62" b="0.74" a="1.0" />
+            <specular r="0.06" g="0.62" b="0.74" a="1.0" />
+        </material>
+        <material id="Metal" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="1.0" />
+            <specular r="0.7" g="0.7" b="0.7" a="1.0" />
+        </material>
+    </materials>
+
+    <transformations>
+        <transformation id="demoTransform">
+            <scale x="5" y="1" z="5" />
+            <rotate axis="x" angle="-45" />
+            <rotate axis="z" angle="-45" />
+            <translate x="10" y="0" z="0" />
+        </transformation>
+        <transformation id="neutralTransformation">
+            <translate x="0" y="0" z="0" />
+        </transformation>
+    </transformations>
+
+    <animations>
+        <animation id="switchPlayer">
+            <keyframe instant="4">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="10" >
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="180" angle_z="0"/>
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </animation>
+        <animation id="experiment">
+            <keyframe instant="2">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="5">
+                <translate x="0" y="0" z="40" />
+                <rotate angle_x="900" angle_y="0" angle_z="0" />
+                <scale x="2" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="8">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="10">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </animation>        
+    </animations>
+
+    <primitives>
+        <primitive id="soil">
+            <rectangle x1="-1" y1="-1" x2="1" y2="1" />
+        </primitive>
+    </primitives>
+
+    <components>
+        <component id="root">
+            <transformation>
+                <translate x="0" y="0" z="0" /> 
+            </transformation>
+            <materials>
+                <material id="nullMaterial" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="Soil" />
+            </children>
+        </component>
+
+        <component id="Soil">
+            <transformation>
+                <scale x="100" y="1" z="100" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>  
+                <material id="Soil" />
+            </materials>
+            <texture id="hillsText"/>
+            <children>
+                <primitiveref id="soil" />
+            </children>
+        </component>
+    </components>
+</lxs>
