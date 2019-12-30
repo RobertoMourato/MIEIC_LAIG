@@ -44,6 +44,10 @@ class XMLscene extends CGFscene {
 
         this.gameorchestrator = new GameOrchestrator(this);
         this.setPickEnabled(true)
+        
+        this.interface.scene = this;
+        this.interface.initGUI();
+        
     }
 
     /**
@@ -67,20 +71,6 @@ class XMLscene extends CGFscene {
                 this.activeCameraView = cam.id;
             }
         }
-        //this.interface.setActiveCamera(this.camera);
-        this.initSecurityCamera();
-    }
-
-    initSecurityCamera(){
-        this.renderToTexture = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
-        this.securityCamera = new MySecurityCamera(this);
-        this.rectangle = new MyRectangle(this, '', 0,0.5,0,0.5);  
-        this.shader = new CGFshader(this.gl, 'shaders/camera.vert', 'shaders/camera.frag');
-
-        this.shader.setUniformsValues({ uSampler: 0 });
-        this.shader.setUniformsValues({ timeFactor: 0});
-
-        this.texture = new CGFtexture(this, 'scenes/images/vidral.jpg')
     }
 
     onCameraChange(v) {
@@ -152,23 +142,37 @@ class XMLscene extends CGFscene {
 
         this.initLights();
 
-        this.interface.initGUI();
+        //this.interface.initGUI();
 
         this.sceneInited = true;
+    }
+
+    play() {
+        this.gameorchestrator.state = "Play"
+        console.log("PLAY")
+        this.interface.initGameGUI();
+        this.gameorchestrator.initSceneGraph();
+    }
+
+    exit() {
+        this.gameorchestrator.state = "Menu"
+        console.log("EXIT")
+        this.interface.initMenuGUI();
+
     }
 
     update(t) {
         // Animations time management
         this.previousTime = this.previousTime || 0.0;
         this.deltaTime = (t - this.previousTime) / 1000 || 0.0;
-        this.animations = this.graph.animations;
+        /*/this.animations = this.graph.animations;
         for (var i in this.animations) {
             this.animations[i].update(this.deltaTime);
-        }
+        }*/
         this.previousTime = t;
         
         // Security Camera's shader time management
-        this.shader.setUniformsValues({ timeFactor: t / 1000 % 100000 });
+        //this.shader.setUniformsValues({ timeFactor: t / 1000 % 100000 });
     }
 
     /**
@@ -215,26 +219,8 @@ class XMLscene extends CGFscene {
         }
     }
 
-    display() {        
-        // Security Camera render
-        this.renderToTexture.attachToFrameBuffer();
-        this.render(this.videoCamera);
-        this.renderToTexture.detachFromFrameBuffer();
-        
-        // View Camera render
+    display() {
         this.render(this.viewCamera);
-        
-        // Security Camera display
-        this.gl.disable(this.gl.DEPTH_TEST);
-
-        this.setActiveShader(this.shader);
-        this.renderToTexture.bind();
-
-        //this.securityCamera.display();
-
-        this.renderToTexture.unbind();
-        this.setActiveShader(this.defaultShader);
-        this.gl.enable(this.gl.DEPTH_TEST);
     }
 
     pushMaterial(material) {

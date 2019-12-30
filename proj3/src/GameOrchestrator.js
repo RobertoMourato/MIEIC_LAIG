@@ -1,11 +1,14 @@
 class GameOrchestrator {
-    constructor (scene) {
+    constructor (scene) {        
         this.scene = scene;
-        this.gameBoard = new GameBoard(scene);     
-        
-        
-        var filename=getUrlVars()['file'] || "chameleon_1.xml";        
-        this.sceneGraph = new MySceneGraph(filename, scene);
+        this.state = "Menu"
+        this.gameBoard = new GameBoard(scene);   
+        //this.initSceneGraph()  
+    }
+
+    initSceneGraph(filename) {
+        var filename=getUrlVars()['file'] || "chameleon_1.xml"; 
+        this.sceneGraph = new MySceneGraph(filename, this.scene);
     }
 
     managePick(mode, results) {
@@ -35,8 +38,10 @@ class GameOrchestrator {
 
     display() {
         this.scene.pushMatrix()
-        this.gameBoard.display()
-        this.sceneGraph.displayScene();
+        if (this.state != "Menu") {
+            this.gameBoard.display()
+            this.sceneGraph.displayScene();
+        } 
         this.scene.popMatrix()
     }
 }

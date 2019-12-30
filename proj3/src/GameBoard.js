@@ -8,13 +8,10 @@ class GameBoard {
         this.initTiles();
         this.initPieces();
 
-        console.log(this.tiles);
 
     }
 
     initTiles() {
-        console.log("ARRAY")
-        console.log(this.tiles);
         for (let i = 0; i < 5; i++) {
             let line = []; 
             for (let j = 0; j < 5; j++) {
@@ -29,8 +26,6 @@ class GameBoard {
             }
             this.tiles.push(line);
         }
-        console.log(this.tiles);
-
     }
 
     initPieces() {

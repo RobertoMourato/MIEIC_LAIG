@@ -35,13 +35,23 @@ class MyInterface extends CGFinterface {
 
         this.gui.add(this.scene, 'activeCameraView', this.scene.viewIds).name('VideoCamera View').onChange(this.scene.onVideoCameraChange.bind(this.scene));
 
+        this.play = this.gui.add(this.scene, 'play').name('Play')
+        this.exit = this.gui.add(this.scene, 'exit').name('Exit')
+        this.gui.remove(this.exit)
+    }
 
-        //this.gui.add(this.scene, 'activeLight').name('Light').onChange(this.scene.onLightChecklistChange.bind(this.scene));
-        /*var controller_names = [];
-        for (var i=0; i<this.scene.activeLights.length; i++) {
-            controller_names[i] = this.scene.activeLights[i];
-            this.gui.add(controller_names, i, this.scene.activeLights[i]).name('Light' + i).onChange(this.scene.onLightChecklistChange.bind(this.scene));
-        }*/
+    initMenuGUI() {
+        this.gui.remove(this.exit)
+        //this.gui = new dat.GUI({autoPlace: true});
+
+        this.play = this.gui.add(this.scene, 'play').name('Play')
+    }
+
+    initGameGUI() {
+        this.gui.remove(this.play)
+        //this.gui = new dat.GUI({autoPlace: true});
+
+        this.exit = this.gui.add(this.scene, 'exit').name('Exit')
     }
 
     /**
