@@ -5,6 +5,9 @@ class GameBoard {
         this.pieces = [];
         this.auxBoard = [];
 
+        this.players = [new Player(5), new Player(9)]
+        this.playerPlaying = this.players[0]
+
         this.initTiles();
         this.initPieces();
 
@@ -17,10 +20,10 @@ class GameBoard {
             for (let j = 0; j < 5; j++) {
                 let tile;
                 if (i % 2 == j % 2) {
-                    tile = new Tile(this.scene, 'Black', null);
+                    tile = new Tile(i*10+j, this.scene, 'Black', null);
                 } 
                 else {
-                    tile = new Tile(this.scene, 'White', null);
+                    tile = new Tile(i*10+j, this.scene, 'White', null);
                 }
                 line.push(tile);
             }
@@ -31,21 +34,27 @@ class GameBoard {
     initPieces() {
         for (let i = 0; i < 5; i++) {
             if (i % 2 == 0) {
-                let piece1 = new Piece(10 + i, this.scene, null, 'White', this.tiles[0][i]);
+                let piece1 = new Piece(50 + i, this.scene, this.players[0], 'White', this.tiles[0][i]);
                 this.tiles[0][i].setPiece(piece1);
 
-                let piece2 = new Piece(20 + i, this.scene, null, 'White', this.tiles[4][i]);
+                let piece2 = new Piece(90 + i, this.scene, this.players[1], 'White', this.tiles[4][i]);
                 this.tiles[4][i].setPiece(piece2);
                 this.pieces.push(piece1, piece2);
             }
             else {
-                let piece1 = new Piece(10 + i, this.scene, null, 'Black', this.tiles[0][i]);
+                let piece1 = new Piece(50 + i, this.scene, this.players[0], 'Black', this.tiles[0][i]);
                 this.tiles[0][i].setPiece(piece1);
                 
-                let piece2 = new Piece(20 + i, this.scene, null, 'Black', this.tiles[4][i]);
+                let piece2 = new Piece(90 + i, this.scene, this.players[1], 'Black', this.tiles[4][i]);
                 this.tiles[4][i].setPiece(piece2);
                 this.pieces.push(piece1, piece2);
             }
+        }
+    }
+
+    update(t) {
+        for (let i = 0; i < this.pieces.length; i++) {
+            this.pieces[i].update(t)
         }
     }
 

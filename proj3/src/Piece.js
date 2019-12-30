@@ -8,6 +8,8 @@ class Piece {
         this.tile = tile;
 
         this.picked = false;
+        this.delta = 0;
+        this.animationTime = 0;
 
         this.shape = new MyCylinder(scene, 20, 10, 1, 1, 1);
         
@@ -36,9 +38,22 @@ class Piece {
 
     setPicked(t) {
         this.picked = t
+        if (t)
+            this.animationTime = 0;
     }
+
     togglePicked() {
         this.picked = !this.picked
+        if (this.picked)
+            this.animationTime = 0;
+        return this.picked
+    }
+
+    update(t) {
+        if (this.picked) {
+            this.animationTime += t
+            this.delta = 1 + 0.25 * Math.sin(3*this.animationTime)
+        }
     }
 
     display() {
@@ -47,7 +62,7 @@ class Piece {
             this.scene.pushMatrix()
 
             if (this.picked == true)
-                this.scene.translate(0,0,1)
+                this.scene.translate(0,0,this.delta)
 
             this.shape.display()
             this.scene.popMatrix()
@@ -56,7 +71,7 @@ class Piece {
             this.scene.pushMatrix()
 
             if (this.picked == true)
-                this.scene.translate(0,0,1);
+                this.scene.translate(0,0,this.delta);
 
             this.shape.display()
             this.scene.popMatrix()

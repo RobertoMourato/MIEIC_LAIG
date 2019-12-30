@@ -1,6 +1,6 @@
 class Player {
-    constructor() {
-        
+    constructor(id) {
+        this.id = id
     }
 
     getType() {

@@ -35,22 +35,19 @@ class MyInterface extends CGFinterface {
 
         this.gui.add(this.scene, 'activeCameraView', this.scene.viewIds).name('VideoCamera View').onChange(this.scene.onVideoCameraChange.bind(this.scene));
 
+        this.gui.add(this.scene, 'filename', this.scene.filenames).name('Ambient')
         this.play = this.gui.add(this.scene, 'play').name('Play')
-        this.exit = this.gui.add(this.scene, 'exit').name('Exit')
-        this.gui.remove(this.exit)
+        //this.exit = this.gui.add(this.scene, 'exit').name('Exit')
+        //this.gui.remove(this.exit)
     }
 
     initMenuGUI() {
         this.gui.remove(this.exit)
-        //this.gui = new dat.GUI({autoPlace: true});
-
         this.play = this.gui.add(this.scene, 'play').name('Play')
     }
 
     initGameGUI() {
         this.gui.remove(this.play)
-        //this.gui = new dat.GUI({autoPlace: true});
-
         this.exit = this.gui.add(this.scene, 'exit').name('Exit')
     }
 

@@ -11,7 +11,7 @@ function getUrlVars() {
     return vars;
 }	 
 //Include additional files here
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'src/MySceneGraph.js', 'MyInterface.js', 'primitives/MyRectangle.js', 'primitives/MyTriangle.js', 'primitives/MyCylinder.js', 'primitives/MySphere.js', 'primitives/MyTorus.js', 'Component.js', 'Animation.js', 'KeyframeAnimation.js', 'primitives/Plane.js', 'primitives/Patch.js', 'MySecurityCamera.js', 'primitives/Cylinder2.js', 'src/GameBoard.js', 'src/AuxBoard.js', 'src/GameOrchestrator.js', 'src/Piece.js', 'src/Player.js', 'src/Tile.js', 
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'src/MySceneGraph.js', 'MyInterface.js', 'primitives/MyRectangle.js', 'primitives/MyTriangle.js', 'primitives/MyCylinder.js', 'primitives/MySphere.js', 'primitives/MyTorus.js', 'Component.js', 'Animation.js', 'KeyframeAnimation.js', 'primitives/Plane.js', 'primitives/Patch.js', 'MySecurityCamera.js', 'primitives/Cylinder2.js', 'src/GameBoard.js', 'src/AuxBoard.js', 'src/GameOrchestrator.js', 'src/Piece.js', 'src/Player.js', 'src/PrologInterface.js', 'src/Tile.js', 
 
 main=function()
 {

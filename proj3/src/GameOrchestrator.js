@@ -2,12 +2,21 @@ class GameOrchestrator {
     constructor (scene) {        
         this.scene = scene;
         this.state = "Menu"
-        this.gameBoard = new GameBoard(scene);   
-        //this.initSceneGraph()  
+        this.gameBoard = new GameBoard(scene)
+        this.prologInterface = new PrologInterface(this)
+
+        console.log("BOARD IN STRING")
+        this.prologInterface.requestValidMoves(this.gameBoard)
     }
 
-    initSceneGraph(filename) {
-        var filename=getUrlVars()['file'] || "chameleon_1.xml"; 
+    setState(state) {
+        if (state != "Menu" && state != "PickPiece" && state != "PickTile" && state != "Animating" && state != "EndGame")
+            alert("Unknown state")
+
+        this.state = state
+    }
+
+    initSceneGraph(filename) { 
         this.sceneGraph = new MySceneGraph(filename, this.scene);
     }
 
@@ -27,13 +36,28 @@ class GameOrchestrator {
 
     OnObjectSelected(obj, id) {
         if (obj instanceof Piece) {
-            for (let i = 0; i < this.gameBoard.pieces.length; i++) {
-                if (this.gameBoard.pieces[i].id != id)
+            if (obj.player == this.gameBoard.playerPlaying) {
+                for (let i = 0; i < this.gameBoard.pieces.length; i++) {
+                    if (this.gameBoard.pieces[i].id != id)
                     this.gameBoard.pieces[i].setPicked(false);
+                }
+                let pieceSelected = obj.togglePicked()
+
+                if (pieceSelected)
+                    this.state = "PickTile"
+                else this.state = "PickPiece"
             }
-            obj.togglePicked()
+        }
+        else if (obj instanceof Tile) {
+            if (this.state == "PickTile") {
+                console.log("picked tile with id=" + obj.id)
+            }
         }
 
+    }
+
+    update(t) {
+        this.gameBoard.update(t)
     }
 
     display() {

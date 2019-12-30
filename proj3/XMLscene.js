@@ -40,14 +40,16 @@ class XMLscene extends CGFscene {
         this.activeCameraView = "";
         this.viewIds = [];
 
+        this.filenames = ['chameleon_1']
+        this.filename = this.filenames[0];
+
         this.lightIds = [];
 
         this.gameorchestrator = new GameOrchestrator(this);
         this.setPickEnabled(true)
         
         this.interface.scene = this;
-        this.interface.initGUI();
-        
+        this.interface.initGUI();        
     }
 
     /**
@@ -148,31 +150,27 @@ class XMLscene extends CGFscene {
     }
 
     play() {
-        this.gameorchestrator.state = "Play"
-        console.log("PLAY")
+        this.gameorchestrator.state = "LoadScene"
         this.interface.initGameGUI();
-        this.gameorchestrator.initSceneGraph();
+        this.gameorchestrator.initSceneGraph(this.filename + '.xml');
     }
 
     exit() {
         this.gameorchestrator.state = "Menu"
-        console.log("EXIT")
         this.interface.initMenuGUI();
-
     }
 
     update(t) {
         // Animations time management
         this.previousTime = this.previousTime || 0.0;
         this.deltaTime = (t - this.previousTime) / 1000 || 0.0;
+
+        this.gameorchestrator.update(this.deltaTime)
         /*/this.animations = this.graph.animations;
         for (var i in this.animations) {
             this.animations[i].update(this.deltaTime);
         }*/
         this.previousTime = t;
-        
-        // Security Camera's shader time management
-        //this.shader.setUniformsValues({ timeFactor: t / 1000 % 100000 });
     }
 
     /**

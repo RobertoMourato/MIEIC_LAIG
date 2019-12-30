@@ -1,5 +1,6 @@
 class Tile {
-    constructor (scene, Color) {
+    constructor (id, scene, Color) {
+        this.id = id
         this.scene = scene;
         this.color =  Color;
         this.piece = null;
@@ -42,6 +43,7 @@ class Tile {
     }
 
     display() {
+        this.scene.registerForPick(this.id, this)
         if (this.color == "White") {
             this.white.apply()
             this.shape.display();
@@ -51,11 +53,13 @@ class Tile {
         } else {
             alert("Undefined Tile Type");
         }
+        this.scene.clearPickRegistration()
 
         this.scene.setDefaultAppearance();
 
         if (this.piece != null)
             this.piece.display()
+
 
     }
 
