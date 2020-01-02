@@ -1,20 +1,32 @@
 class PrologInterface {
     constructor(orchestrator) {
         this.orchestrator = orchestrator;
+        this.validMoves = []
+        this.move = null
     }
 
     requestValidMoves(gameboard) {
         let request = this.parseBoardToProlog(gameboard)
         request = "[validMoves," + request + "," + gameboard.playerPlaying.id + "]"
+        this.validMoves = [];
+        this.getPrologRequest(request, "validMoves")
+    }
 
-        this.getPrologRequest(request, this.parseMovesToJS)
+    requestMove(gameboard) {
+        let request = this.parseBoardToProlog(gameboard)
+        let level
+        if (gameboard.playerPlaying.type == "BotLevel2")
+            level = 2
+        else level = 1
+        request = "[chooseMove," + request + "," + gameboard.playerPlaying.id + "," + level +"]"
+        this.getPrologRequest(request, "move")
     }
 
     requestWinner(gameboard) {
         let request = this.parseBoardToProlog(gameboard)
         request = "[gameOver," + request + "," + gameboard.playerPlaying.id + "]"
 
-        this.getPrologRequest(request, this.parseMovesToJS)
+        this.getPrologRequest(request, "gameOver")
     }
 
     parseBoardToProlog(gameboard) {
@@ -55,24 +67,81 @@ class PrologInterface {
     }
 
     getPrologRequest(requestString, onSuccess, onError, port) {
+        let orchestrator = this;
         var requestPort = port || 8081
         var request = new XMLHttpRequest();
         request.open('GET', 'http://localhost:' + requestPort + '/' + requestString, true);
 
-        request.onload = onSuccess || function (data) { console.log("Request successful. Reply: " + data.target.response); };
+        request.onload = function (reply) {
+                                        //console.log("Request successful. Reply: " + reply.target.response);
+                                        if (onSuccess == "validMoves") orchestrator.parseMovesToJS(this)
+                                        else if (onSuccess == "move") orchestrator.parseMoveToJS(this)
+                                        else if (onSuccess == "gameOver") orchestrator.parseWinnerToJS(this)
+                                    };
         request.onerror = onError || function () { console.log("Error waiting for response"); };
 
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         request.send();
     }
 
+    letterToNumber(letter) {
+        let number
+        switch (letter) {
+            case 'a':
+                number = '0';
+                break;
+            case 'b':
+                number = '1';
+                break;
+            case 'c':
+                number = '2';
+                break;
+            case 'd':
+                number = '3';
+                break;
+            case 'e':
+                number = '4';
+                break;
+            default:
+                break;
+        }
+        return number
+    }
+
     parseMovesToJS(reply) {
-        console.log(reply.target.response)
+        let moves = reply.responseText
+        moves = moves.substring(1, moves.length - 1)
+
+        while (moves != "") {
+            let srcLine = this.letterToNumber(moves.charAt(1))
+            let source = srcLine + (moves.charAt(3) - 1)
+            
+            let destLine = this.letterToNumber(moves.charAt(5))
+            let destination = destLine + (moves.charAt(7) - 1)
+            
+            if (this.validMoves[source] == undefined)
+            this.validMoves[source] = []
+
+            this.validMoves[source].push(destination)
+
+            moves = moves.substring(10)
+        }
+        //console.log(this.validMoves)
+    }
+
+    parseMoveToJS(reply) {
+        let move = reply.responseText
+        let srcLine = parseInt(this.letterToNumber(move.charAt(1)), 10)
+        let srcColumn = parseInt(move.charAt(3) - 1, 10)
+            
+        let destLine = parseInt(this.letterToNumber(move.charAt(5)), 10)
+        let destColumn = parseInt(move.charAt(7) - 1, 10)
+
+        this.move = [{'srcLine': srcLine, 'srcColumn': srcColumn, 'destLine': destLine, 'destColumn': destColumn}]
     }
 
     parseWinnerToJS(reply) {
-        console.log(reply.target.response)
-    }   
-
-
+        console.log(reply.responseText)
+        this.winner = reply.responseText
+    }
 }

@@ -3,10 +3,15 @@ class GameBoard {
         this.scene = scene;
         this.tiles = [];
         this.pieces = [];
-        this.auxBoard = [];
+        this.auxBoard = new AuxBoard(this.scene);
 
-        this.players = [new Player(5), new Player(9)]
-        this.playerPlaying = this.players[0]
+        if (this.scene.mode == "Player vs Player")
+            this.players = [new Player(5, "Human", "Green"), new Player(9, "Human", "Blue")]
+        else if (this.scene.mode == "Player vs CPU")
+            this.players = [new Player(5, "CPU", "Green"), new Player(9, "Human", "Blue")]
+        else this.players = [new Player(5, "CPU", "Green"), new Player(9, "CPU", "Blue")]
+        
+        this.playerPlaying = this.players[1]
 
         this.initTiles();
         this.initPieces();
@@ -14,21 +19,28 @@ class GameBoard {
 
     }
 
+    switchPlayer() {
+        if (this.playerPlaying == this.players[0])
+            this.playerPlaying = this.players[1]
+        else this.playerPlaying = this.players[0]
+    }
+
     initTiles() {
         for (let i = 0; i < 5; i++) {
             let line = []; 
             for (let j = 0; j < 5; j++) {
-                let tile;
+                let tile
                 if (i % 2 == j % 2) {
-                    tile = new Tile(i*10+j, this.scene, 'Black', null);
+                    tile = new Tile(i * 10 + j, this.scene, 'Black', null);
                 } 
                 else {
-                    tile = new Tile(i*10+j, this.scene, 'White', null);
+                    tile = new Tile(i * 10 + j, this.scene, 'White', null);
                 }
                 line.push(tile);
             }
             this.tiles.push(line);
         }
+        console.log(this.tiles)
     }
 
     initPieces() {
@@ -52,6 +64,52 @@ class GameBoard {
         }
     }
 
+    addPieceToTile(piece, tile) {
+        tile.piece = piece
+        piece.tile = tile;
+    }
+
+    removePieceFromTile(tile) {
+        tile.piece.tile = null;
+        tile.piece = null;
+    }
+
+    movePiece(piece, destTile) {
+        this.removePieceFromTile(piece.tile)
+        if (destTile.piece != null)
+            this.auxBoard.addPiece(destTile.piece)
+        this.addPieceToTile(piece, destTile)
+    }
+
+    highlightTiles(moves) {
+        let tile = ""
+
+        for (let i = 0; i < this.pieces.length; i++) {
+            if (this.pieces[i].picked) {
+                tile = this.pieces[i].tile.id
+                break
+            }
+        }
+
+        if (tile === 0 || tile === 1 || tile === 2 || tile === 3 || tile === 4) {
+            tile = "0" + tile
+        }
+
+        for (let i = 0; i < 5; i++)
+            for (let j = 0; j < 5; j++)
+                this.tiles[i][j].highlighted = false;
+
+        if (tile != "") {
+            let destTiles = moves[tile];
+            for (let i = 0; i < destTiles.length; i++){
+                let id = parseInt(destTiles[i], 10)
+                let line = Math.floor(id / 10);
+                let column = id % 10
+                this.tiles[line][column].highlighted = true;
+            }
+        }
+    }
+
     update(t) {
         for (let i = 0; i < this.pieces.length; i++) {
             this.pieces[i].update(t)
@@ -65,12 +123,19 @@ class GameBoard {
         for (let i = 0; i < 5; i++){
             for (let j = 0; j < 5; j++) {
                 this.scene.pushMatrix()
-                this.scene.translate(j * 5, i * 5, 0)
+                this.scene.translate(j * 5, (4 - i) * 5, 0)
                 this.tiles[i][j].display()
-                this.scene.popMatrix() 
+                this.scene.popMatrix()
             }
         }
         this.scene.popMatrix()
+
+        this.scene.pushMatrix()
+        this.scene.rotate(-Math.PI / 2, 1,0,0)
+        this.scene.translate(-10, 0, 0.2)
+        this.auxBoard.display()
+        this.scene.popMatrix()
+
 
     }
 

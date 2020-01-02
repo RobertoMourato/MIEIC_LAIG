@@ -36,9 +36,12 @@ class XMLscene extends CGFscene {
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(100);
 
-        this.activeView = "";
-        this.activeCameraView = "";
+        this.mode = "Player vs Player";
+        this.activeMode = "Player vs Player";
+        this.modes = ["Player vs Player", "Player vs CPU", "CPU vs CPU"];
+        
         this.viewIds = [];
+        this.activeCameraView = "";
 
         this.filenames = ['chameleon_1']
         this.filename = this.filenames[0];
@@ -75,8 +78,8 @@ class XMLscene extends CGFscene {
         }
     }
 
-    onCameraChange(v) {
-        this.viewCamera = this.cameras[this.activeView];
+    onModeChange(v) {
+        this.mode = this.activeMode;
     }
 
     onVideoCameraChange(v) {
@@ -150,13 +153,14 @@ class XMLscene extends CGFscene {
     }
 
     play() {
-        this.gameorchestrator.state = "LoadScene"
         this.interface.initGameGUI();
         this.gameorchestrator.initSceneGraph(this.filename + '.xml');
+        this.gameorchestrator.initGameBoard()
+        this.gameorchestrator.setState("NextMove")
     }
 
     exit() {
-        this.gameorchestrator.state = "Menu"
+        this.gameorchestrator.setState("Menu")
         this.interface.initMenuGUI();
     }
 
@@ -202,6 +206,7 @@ class XMLscene extends CGFscene {
             }
 
             if (this.sceneInited) {
+                this.gameorchestrator.orchestrate()
                 this.gameorchestrator.managePick(this.pickMode, this.pickResults)
                 this.clearPickRegistration()
                 // Draw axis

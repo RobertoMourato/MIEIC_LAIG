@@ -31,22 +31,23 @@ class MyInterface extends CGFinterface {
         customContainer.appendChild(gui.domElement);*/
 
         // add a group of controls (and open/expand by defult)
-        this.gui.add(this.scene, 'activeView', this.scene.viewIds).name('Active View').onChange(this.scene.onCameraChange.bind(this.scene));
-
-        this.gui.add(this.scene, 'activeCameraView', this.scene.viewIds).name('VideoCamera View').onChange(this.scene.onVideoCameraChange.bind(this.scene));
-
         this.gui.add(this.scene, 'filename', this.scene.filenames).name('Ambient')
+        this.gui.add(this.scene, 'activeCameraView', this.scene.viewIds).name('VideoCamera View').onChange(this.scene.onVideoCameraChange.bind(this.scene));
+        
+        
+        this.mode = this.gui.add(this.scene, 'activeMode', this.scene.modes).name('Mode').onChange(this.scene.onModeChange.bind(this.scene));
         this.play = this.gui.add(this.scene, 'play').name('Play')
-        //this.exit = this.gui.add(this.scene, 'exit').name('Exit')
-        //this.gui.remove(this.exit)
     }
 
     initMenuGUI() {
         this.gui.remove(this.exit)
+        this.mode = this.gui.add(this.scene, 'activeMode', this.scene.modes).name('Mode').onChange(this.scene.onModeChange.bind(this.scene)); 
         this.play = this.gui.add(this.scene, 'play').name('Play')
+
     }
 
     initGameGUI() {
+        this.gui.remove(this.mode)
         this.gui.remove(this.play)
         this.exit = this.gui.add(this.scene, 'exit').name('Exit')
     }

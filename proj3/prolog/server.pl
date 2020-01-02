@@ -104,6 +104,7 @@ print_header_line(_).
 % Require your Prolog Files here
 :-consult('utils.pl').
 :-consult('valid_moves.pl').
+:-consult('bot.pl').
 :-consult('game_over.pl').
 
 
@@ -117,5 +118,9 @@ parse_input([RequestFunction, Board, Player | _], Reply):-
 	RequestFunction == gameOver,
 	!,
 	game_over(Board, Player, Reply).
+parse_input([RequestFunction, Board, Player, Level| _], Reply):-
+	RequestFunction == chooseMove,
+	!,
+	choose_move(Board, Level, Player, Reply).
 
 	

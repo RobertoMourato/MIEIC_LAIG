@@ -16,6 +16,18 @@ class Piece {
         if (this.color == this.tile.getColor())
             this.type = 'Bishop';
         else this.type = 'Horse';
+
+        this.green = new CGFappearance(this.scene)
+        this.green.setAmbient(0.2,0.2,0.2,0.2);
+        this.green.setDiffuse(0.0, 0.9, 0.5, 1);
+        this.green.setSpecular(0.1, 0.1, 0.1, 1);
+        this.green.setShininess(5.0);
+
+        this.blue = new CGFappearance(this.scene)
+        this.blue.setAmbient(0.2,0.2,0.2,0.2);
+        this.blue.setDiffuse(0.0, 0.0, 0.9, 1);
+        this.blue.setSpecular(0.1, 0.1, 0.1, 1);
+        this.blue.setShininess(5.0);
     }
 
     getType() {
@@ -57,6 +69,10 @@ class Piece {
     }
 
     display() {
+        if (this.player.color == "Blue")
+            this.blue.apply()
+        else this.green.apply()
+
         this.scene.registerForPick(this.id, this)
         if (this.type == 'Bishop') {
             this.scene.pushMatrix()
@@ -80,5 +96,7 @@ class Piece {
             alert('Undefined Piece Type');
         }
         this.scene.clearPickRegistration()
+
+        this.scene.setDefaultAppearance();
     }
 }

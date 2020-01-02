@@ -5,6 +5,8 @@ class Tile {
         this.color =  Color;
         this.piece = null;
 
+        this.highlighted = false;
+
         this.shape = new MyRectangle(this.scene, null, -2.5, 2.5, -2.5, 2.5);
         this.initMaterials()
     }   
@@ -21,6 +23,12 @@ class Tile {
         this.white.setDiffuse(0.9, 0.9, 0.9, 0.9);
         this.white.setSpecular(0.1, 0.1, 0.1, 0.1);
         this.white.setShininess(5.0);
+
+        this.red = new CGFappearance(this.scene)
+        this.red.setAmbient(0.2,0.2,0.2,0.2);
+        this.red.setDiffuse(0.9, 0.0, 0.0, 1);
+        this.red.setSpecular(0.1, 0.1, 0.1, 1);
+        this.red.setShininess(5.0);
     }
 
     getPiece() {
@@ -44,7 +52,12 @@ class Tile {
 
     display() {
         this.scene.registerForPick(this.id, this)
-        if (this.color == "White") {
+        
+        if (this.highlighted) {
+            this.red.apply()
+            this.shape.display()
+        }
+        else if (this.color == "White") {
             this.white.apply()
             this.shape.display();
         } else if (this.color == "Black") {
