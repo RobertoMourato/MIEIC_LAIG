@@ -18,9 +18,9 @@ class Piece {
         else this.type = 'Horse';
 
         this.green = new CGFappearance(this.scene)
-        this.green.setAmbient(0.2,0.2,0.2,0.2);
+        this.green.setAmbient(0.0,0.1,0.0,0.2);
         this.green.setDiffuse(0.0, 0.9, 0.5, 1);
-        this.green.setSpecular(0.1, 0.1, 0.1, 1);
+        this.green.setSpecular(0.0, 0.2, 0.1, 1);
         this.green.setShininess(5.0);
 
         this.blue = new CGFappearance(this.scene)
