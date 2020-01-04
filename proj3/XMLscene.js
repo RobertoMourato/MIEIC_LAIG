@@ -147,14 +147,12 @@ class XMLscene extends CGFscene {
 
         this.initLights();
 
-        //this.interface.initGUI();
-
         this.sceneInited = true;
     }
 
     play() {
         this.interface.initGameGUI();
-        this.gameorchestrator.initSceneGraph(this.filename + '.xml');
+        this.gameorchestrator.initSceneGraph()
         this.gameorchestrator.initGameBoard()
         this.gameorchestrator.setState("NextMove")
     }

@@ -2,25 +2,36 @@ class GameOrchestrator {
     constructor(scene) {
         this.scene = scene;
         this.state = "Menu"
+        this.gameInited = false;
 
         this.prologInterface = new PrologInterface(this)
         this.gameSequence = new GameSequence();
         this.animator;
+
+        this.staticKeyframe = new Keyframe(0, [0, 0, 0], [0, 0, 0], [1, 1, 1])
+        this.rotate = new Keyframe(0, [0, 0, 0], [0, 180, 0], [1, 1, 1])
+        this.rotateStatic = new Keyframe(0, [0, 0, 0], [0, 180, 0], [1, 1, 1])
+        this.rotateAnimation = new KeyframeAnimation([this.staticKeyframe])
+    }
+
+    initSceneGraph() {
+        let filename = this.scene.filename + ".xml"
+        this.sceneGraph = new MySceneGraph(filename, this.scene);
     }
 
     initGameBoard() {
         this.gameBoard = new GameBoard(this.scene)
-    }
-
-    initSceneGraph(filename) {
-        this.sceneGraph = new MySceneGraph(filename, this.scene);
+        this.gameInited = true;
     }
 
     setState(state) {
-        if (state != "Menu" && state != "NextMove" && state != "PickPiece" && state != "PickTile" && state != "Animating" && state != "EndGame")
+        if (state != "Menu" && state != "NextMove" && state != "PickPiece" && state != "PickTile" && state != "Animating" && state != "EndGame") {
             alert("Unknown state")
+        }
 
         this.state = state
+
+        if (state == "EndGame") alert("We have a Winner!")
     }
 
     managePick(mode, results) {
@@ -81,21 +92,26 @@ class GameOrchestrator {
 
     orchestrate() {
         if (this.state == "NextMove") {
-            if (this.gameBoard.playerPlaying.type == "Human") {
-                this.prologInterface.requestValidMoves(this.gameBoard);
-                this.state = "PickPiece";
-            }
-            else if (this.gameBoard.playerPlaying.type == "CPU") {
-                this.prologInterface.requestMove(this.gameBoard)
-                var start = new Date().getTime();
-                while (1) {
-                    if ((new Date().getTime() - start) > 4000) {
-                        break;
-                    }
+            if (this.prologInterface.winner == null || this.prologInterface.winner == -1) {
+                this.prologInterface.winner = null
+                if (this.gameBoard.playerPlaying.type == "Human") {
+                    this.prologInterface.requestValidMoves(this.gameBoard);
+                    this.state = "PickPiece";
                 }
-                this.setState("Animating")
+                else if (this.gameBoard.playerPlaying.type == "CPU") {
+                    this.prologInterface.requestMove(this.gameBoard)
+                    var start = new Date().getTime();
+                    while (1) {
+                        if ((new Date().getTime() - start) > 4000) {
+                            break;
+                        }
+                    }
+                    this.setState("Animating")
+                }
             }
-
+            else {
+                this.setState("EndGame")
+            }
             return
         }
         else if (this.state == "Animating") {
@@ -116,20 +132,41 @@ class GameOrchestrator {
                 this.gameSequence.addMove(move)
                 this.gameBoard.movePiece(piece, destTile)
                 this.prologInterface.move = null
-            }            
+            }
             
+            this.prologInterface.requestWinner(this.gameBoard)
             this.gameBoard.switchPlayer()
+            this.rotateView(0.5, 3)
             this.setState("NextMove")
         }
     }
 
+    rotateView(animationDelay, animationTime) {
+        if (this.gameBoard.playerPlaying.id == 5) {
+            this.staticKeyframe.setInstant(this.rotateAnimation.getCurrentTime() + animationDelay)
+            this.rotate.setInstant(this.rotateAnimation.getCurrentTime() + animationTime)
+            this.rotateAnimation.setKeyframes([this.staticKeyframe, this.rotate])
+        }
+        else {
+            this.rotate.setInstant(this.rotateAnimation.getCurrentTime() - 1)
+            this.rotateStatic.setInstant(this.rotateAnimation.getCurrentTime() + animationDelay)
+            this.staticKeyframe.setInstant(this.rotateAnimation.getCurrentTime() + animationTime)
+            this.rotateAnimation.setKeyframes([this.rotate, this.rotateStatic, this.staticKeyframe])
+        }
+    }
+
     update(t) {
-        if (this.gameBoard != undefined && this.gameBoard != null)
+        if (this.gameInited) {
             this.gameBoard.update(t)
+            this.rotateAnimation.update(t)
+        }
     }
 
     display() {
         this.scene.pushMatrix()
+        let mx = this.rotateAnimation.apply()
+        this.scene.multMatrix(mx)
+        this.scene.translate(-10, 0, 10)
         if (this.state != "Menu") {
             this.sceneGraph.displayScene();
             this.gameBoard.display()

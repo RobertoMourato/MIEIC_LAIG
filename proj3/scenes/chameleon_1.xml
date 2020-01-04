@@ -3,8 +3,8 @@
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="200" angle="45">
-            <from x="10" y="20" z="20" />
-            <to x="10" y="0" z="-10" />
+            <from x="0" y="15" z="25" />
+            <to x="0" y="0" z="0" />
         </perspective>
 
         <perspective id="viewFromBehind" near="0.1" far="200" angle="45">
@@ -165,7 +165,6 @@
                 <componentref id="Soil" />
             </children>
         </component>
-
         <component id="Soil">
             <transformation>
                 <scale x="100" y="1" z="100" />

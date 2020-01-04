@@ -3,6 +3,7 @@ class PrologInterface {
         this.orchestrator = orchestrator;
         this.validMoves = []
         this.move = null
+        this.winner = null
     }
 
     requestValidMoves(gameboard) {
@@ -78,7 +79,7 @@ class PrologInterface {
                                         else if (onSuccess == "move") orchestrator.parseMoveToJS(this)
                                         else if (onSuccess == "gameOver") orchestrator.parseWinnerToJS(this)
                                     };
-        request.onerror = onError || function () { console.log("Error waiting for response"); };
+        request.onerror = onError || function () { console.log("Error waiting for response"); alert("No SICStus server found"); orchestrator.orchestrator.scene.exit()};
 
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         request.send();

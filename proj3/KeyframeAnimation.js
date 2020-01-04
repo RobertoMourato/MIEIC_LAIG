@@ -22,6 +22,10 @@ class KeyframeAnimation extends Animation {
         this.frameNumber = 0;
     }
 
+    setKeyframes(keyframes) {
+        this.keyframes = keyframes
+    }
+
     get_currentFrameIndex(time) {
         for (let i = 0; i < this.keyframes.length; i++){
             if (i == 0) { 
@@ -35,7 +39,12 @@ class KeyframeAnimation extends Animation {
         return -1;
     }
 
+    getCurrentTime() {
+        return this.time;
+    }
+
     update(deltaT) {
+        //console.log("Time: " + this.time + " Delta" + deltaT)
         this.time += deltaT;
     }
 
@@ -140,6 +149,10 @@ class Keyframe {
         this.translate = translateValues;
         this.rotate = rotateValues;
         this.scale = scaleValues;
+    }
+
+    setInstant(instant) {
+        this.instant = instant;
     }
 
     getTranslate() {
