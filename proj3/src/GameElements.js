@@ -1,9 +1,9 @@
 class GameElements {
     constructor() {
+        this.blackTile;
         this.whiteTile;
-        this.blackTile; 
-        this.AuxBoard; 
-        this.horsePiece; 
+        this.auxBoard;
+        this.horsePiece;
         this.bishopPiece;
     }
 }

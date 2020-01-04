@@ -179,4 +179,16 @@
             </children>
         </component>
     </components>
+
+    <board>
+        <blackTile componentref=""/>
+        <whiteTile componentref=""/>
+    </board>
+
+    <auxBoard componentref=""/>
+
+    <pieces>
+        <horse componentref=""/>
+        <bishop componentref=""/>
+    <pieces/>
 </lxs>
