@@ -36,6 +36,13 @@ class XMLscene extends CGFscene {
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(100);
 
+        this.initInterface();
+
+        this.initCamera()
+        
+    }
+
+    initInterface() {
         this.mode = "Player vs Player";
         this.activeMode = "Player vs Player";
         this.modes = ["Player vs Player", "Player vs CPU", "CPU vs CPU"];
@@ -52,13 +59,17 @@ class XMLscene extends CGFscene {
         this.setPickEnabled(true)
         
         this.interface.scene = this;
-        this.interface.initGUI();        
+        this.interface.initGUI();  
+    }
+
+    initCamera() {
+        this.viewCamera = new CGFcamera(45, 0.1, 200, vec3.fromValues(0, 15, 25), vec3.fromValues(0, 0, 0));
     }
 
     /**
      * Initializes the scene cameras.
      */
-    initCameras() {
+    initViews() {
         this.cameras = [];
         console.log(this.graph.views);
 
@@ -70,7 +81,7 @@ class XMLscene extends CGFscene {
 
             this.viewIds.push(cam.id);
             if (cam.enableView) {
-                this.viewCamera = this.cameras[cam.id];
+                //this.viewCamera = this.cameras[cam.id];
                 this.videoCamera = this.cameras[cam.id];
                 this.activeView = cam.id;
                 this.activeCameraView = cam.id;
@@ -143,7 +154,7 @@ class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
-        this.initCameras();
+        this.initViews();
 
         this.initLights();
 
@@ -152,8 +163,7 @@ class XMLscene extends CGFscene {
 
     play() {
         this.interface.initGameGUI();
-        this.gameorchestrator.initSceneGraph()
-        this.gameorchestrator.initGameBoard()
+        this.gameorchestrator.initGame()
         this.gameorchestrator.setState("NextMove")
     }
 
@@ -180,7 +190,7 @@ class XMLscene extends CGFscene {
      */
     render(cam) {
         // ---- BEGIN Background, camera and axis setup
-        if (this.sceneInited) {
+        if (this.sceneInited || this.sceneInited == false) {
             this.camera = cam;
             this.interface.setActiveCamera(this.camera);
             
@@ -203,7 +213,7 @@ class XMLscene extends CGFscene {
                 this.lights[i].enable();
             }
 
-            if (this.sceneInited) {
+            if (this.sceneInited || this.sceneInited == false) {
                 this.gameorchestrator.orchestrate()
                 this.gameorchestrator.managePick(this.pickMode, this.pickResults)
                 this.clearPickRegistration()

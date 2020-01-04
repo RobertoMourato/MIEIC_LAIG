@@ -1338,6 +1338,8 @@ class MySceneGraph {
     }
 
 
+
+
     /**
      * Parse the coordinates from a node with ID = id
      * @param {block element} node
@@ -1469,6 +1471,11 @@ class MySceneGraph {
         //this.primitives['demoCylinder'].display();
         //this.primitives['demoSphere'].display();
         //this.primitives['demoTorus'].display();
+    }
+
+    displayComponent(component, material) {
+        var identity = mat4.create();
+        this.processNode(this.components[component], identity, material);
     }
 
     processNode(component, parentTransformationMatrix, parentMaterial, parentTexture, parentLength_s, parentLength_t) {

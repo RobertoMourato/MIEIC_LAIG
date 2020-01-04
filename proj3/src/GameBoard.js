@@ -131,8 +131,9 @@ class GameBoard {
         this.scene.popMatrix()
 
         this.scene.pushMatrix()
+        this.scene.translate(-10, 0, -2.5)
+        this.scene.translate(0, 0.2, 0)
         this.scene.rotate(-Math.PI / 2, 1,0,0)
-        this.scene.translate(-10, 0, 0.2)
         this.auxBoard.display()
         this.scene.popMatrix()
 

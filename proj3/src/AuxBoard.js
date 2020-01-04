@@ -3,7 +3,7 @@ class AuxBoard {
         this.scene = scene
         this.pieces = [];
 
-        this.shape = new MyRectangle(this.scene, null, -2, 4, 0, 15);
+        this.shape = new MyRectangle(this.scene, null, 0, 6, 0, 15);
     }
 
     addPiece(piece) {
@@ -24,11 +24,10 @@ class AuxBoard {
         this.shape.display()
 
         for (let i = 0; i < this.pieces.length; i++) {
-            let x = 0;
-            if (i > 4)
-                x = 2
+            let x = Math.floor(i / 4) * 2.5;
+            let y = i % 4 * 3 + 2
             this.scene.pushMatrix()
-            this.scene.translate(x, i * 2, 0)
+            this.scene.translate(x, y , 0)
             this.pieces[i].display()
             this.scene.popMatrix()
         }

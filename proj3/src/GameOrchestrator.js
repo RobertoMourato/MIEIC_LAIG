@@ -3,25 +3,25 @@ class GameOrchestrator {
         this.scene = scene;
         this.state = "Menu"
         this.gameInited = false;
-
-        this.prologInterface = new PrologInterface(this)
-        this.gameSequence = new GameSequence();
-        this.animator;
-
         this.staticKeyframe = new Keyframe(0, [0, 0, 0], [0, 0, 0], [1, 1, 1])
         this.rotate = new Keyframe(0, [0, 0, 0], [0, 180, 0], [1, 1, 1])
         this.rotateStatic = new Keyframe(0, [0, 0, 0], [0, 180, 0], [1, 1, 1])
-        this.rotateAnimation = new KeyframeAnimation([this.staticKeyframe])
     }
 
-    initSceneGraph() {
+    initGame() {
         let filename = this.scene.filename + ".xml"
         this.sceneGraph = new MySceneGraph(filename, this.scene);
-    }
 
-    initGameBoard() {
         this.gameBoard = new GameBoard(this.scene)
+
+        this.prologInterface = new PrologInterface(this)
+
+        this.gameSequence = new GameSequence();
+        //this.animator = new ;
+
         this.gameInited = true;
+        this.rotateAnimation = new KeyframeAnimation([this.staticKeyframe])
+        this.setState("NextMove")
     }
 
     setState(state) {
@@ -31,7 +31,11 @@ class GameOrchestrator {
 
         this.state = state
 
-        if (state == "EndGame") alert("We have a Winner!")
+        if (state == "EndGame") {
+            alert("We have a Winner!")
+            this.scene.exit()
+        }
+
     }
 
     managePick(mode, results) {
@@ -110,6 +114,7 @@ class GameOrchestrator {
                 }
             }
             else {
+                this.prologInterface.winner = null
                 this.setState("EndGame")
             }
             return
@@ -133,7 +138,7 @@ class GameOrchestrator {
                 this.gameBoard.movePiece(piece, destTile)
                 this.prologInterface.move = null
             }
-            
+
             this.prologInterface.requestWinner(this.gameBoard)
             this.gameBoard.switchPlayer()
             this.rotateView(0.5, 3)
@@ -163,14 +168,16 @@ class GameOrchestrator {
     }
 
     display() {
-        this.scene.pushMatrix()
-        let mx = this.rotateAnimation.apply()
-        this.scene.multMatrix(mx)
-        this.scene.translate(-10, 0, 10)
         if (this.state != "Menu") {
+            this.scene.pushMatrix()
+            if (this.scene.mode == "Player vs Player") {
+                let mx = this.rotateAnimation.apply()
+                this.scene.multMatrix(mx)
+            }
+            this.scene.translate(-10, 0, 10)
             this.sceneGraph.displayScene();
             this.gameBoard.display()
+            this.scene.popMatrix()
         }
-        this.scene.popMatrix()
     }
 }
