@@ -39,27 +39,27 @@ class XMLscene extends CGFscene {
         this.initInterface();
 
         this.initCamera()
-        
+
     }
 
     initInterface() {
         this.mode = "Player vs Player";
         this.activeMode = "Player vs Player";
         this.modes = ["Player vs Player", "Player vs CPU", "CPU vs CPU"];
-        
+
         this.viewIds = [];
         this.activeCameraView = "";
 
-        this.filenames = ['chameleon_1']
+        this.filenames = ['chameleon_2']
         this.filename = this.filenames[0];
 
         this.lightIds = [];
 
         this.gameorchestrator = new GameOrchestrator(this);
         this.setPickEnabled(true)
-        
+
         this.interface.scene = this;
-        this.interface.initGUI();  
+        this.interface.initGUI();
     }
 
     initCamera() {
@@ -107,7 +107,7 @@ class XMLscene extends CGFscene {
         // Reads the lights from the scene graph.
         for (var key in this.graph.lights) {
             if (i >= 8)
-                break;              // Only eight lights allowed by WebGL.
+                break; // Only eight lights allowed by WebGL.
 
             if (this.graph.lights.hasOwnProperty(key)) {
                 var light = this.graph.lights[key];
@@ -139,14 +139,14 @@ class XMLscene extends CGFscene {
     }
 
     setDefaultAppearance() {
-        this.setAmbient(0.2, 0.4, 0.8, 1.0);
-        this.setDiffuse(0.2, 0.4, 0.8, 1.0);
-        this.setSpecular(0.2, 0.4, 0.8, 1.0);
-        this.setShininess(10.0);
-    }
-    /** Handler called when the graph is finally loaded. 
-     * As loading is asynchronous, this may be called already after the application has started the run loop
-     */
+            this.setAmbient(0.2, 0.4, 0.8, 1.0);
+            this.setDiffuse(0.2, 0.4, 0.8, 1.0);
+            this.setSpecular(0.2, 0.4, 0.8, 1.0);
+            this.setShininess(10.0);
+        }
+        /** Handler called when the graph is finally loaded. 
+         * As loading is asynchronous, this may be called already after the application has started the run loop
+         */
     onGraphLoaded() {
         this.axis = new CGFaxis(this, this.graph.referenceLength);
 
@@ -178,10 +178,10 @@ class XMLscene extends CGFscene {
         this.deltaTime = (t - this.previousTime) / 1000 || 0.0;
 
         this.gameorchestrator.update(this.deltaTime)
-        /*/this.animations = this.graph.animations;
-        for (var i in this.animations) {
-            this.animations[i].update(this.deltaTime);
-        }*/
+            /*/this.animations = this.graph.animations;
+            for (var i in this.animations) {
+                this.animations[i].update(this.deltaTime);
+            }*/
         this.previousTime = t;
     }
 
@@ -193,7 +193,7 @@ class XMLscene extends CGFscene {
         if (this.sceneInited || this.sceneInited == false) {
             this.camera = cam;
             this.interface.setActiveCamera(this.camera);
-            
+
             // Clear image and depth buffer everytime we update the scene
             this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
             this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -217,7 +217,7 @@ class XMLscene extends CGFscene {
                 this.gameorchestrator.orchestrate()
                 this.gameorchestrator.managePick(this.pickMode, this.pickResults)
                 this.clearPickRegistration()
-                // Draw axis
+                    // Draw axis
                 this.setDefaultAppearance();
 
                 // Displays the scene (MySceneGraph function).
