@@ -11,6 +11,9 @@ var TRANSFORMATIONS_INDEX = 6;
 var ANIMATIONS_INDEX = 7;
 var PRIMITIVES_INDEX = 8;
 var COMPONENTS_INDEX = 9;
+var BOARD_INDEX = 10;
+var AUXBOARD_INDEX = 11;
+var PIECES_INDEX = 12;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -28,7 +31,7 @@ class MySceneGraph {
 
         this.nodes = [];
 
-        this.idRoot = null;                    // The id of the root element.
+        this.idRoot = null; // The id of the root element.
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -44,6 +47,8 @@ class MySceneGraph {
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
         this.reader.open('scenes/' + filename, this);
+
+        this.gameElements = new GameElements();
     }
 
     /*
@@ -207,6 +212,43 @@ class MySceneGraph {
             if ((error = this.parseComponents(nodes[index])) != null)
                 return error;
         }
+
+        // <board>
+        if ((index = nodeNames.indexOf("board")) == -1)
+            return "tag <board> missing";
+        else {
+            if (index != BOARD_INDEX)
+                this.onXMLMinorError("tag <board> out of order");
+
+            //Parse board block
+            if ((error = this.parseBoard(nodes[index])) != null)
+                return error;
+        }
+
+        // <auxBoard>
+        if ((index = nodeNames.indexOf("auxBoard")) == -1)
+            return "tag <auxBoard> missing";
+        else {
+            if (index != AUXBOARD_INDEX)
+                this.onXMLMinorError("tag <auxBoard> out of order");
+
+            //Parse auxBoard block
+            if ((error = this.parseAuxBoard(nodes[index])) != null)
+                return error;
+        }
+
+        // <pieces>
+        if ((index = nodeNames.indexOf("pieces")) == -1)
+            return "tag <pieces> missing";
+        else {
+            if (index != PIECES_INDEX)
+                this.onXMLMinorError("tag <pieces> out of order");
+
+            //Parse pieces block
+            if ((error = this.parsePieces(nodes[index])) != null)
+                return error;
+        }
+
         this.log("all parsed");
     }
 
@@ -261,8 +303,7 @@ class MySceneGraph {
             if (children[i].nodeName != "perspective" && children[i].nodeName != "ortho") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
-            }
-            else {
+            } else {
                 attributeNames.push(...["from", "to"]);
                 attributeTypes.push(...["position", "position"]);
             }
@@ -300,8 +341,7 @@ class MySceneGraph {
 
                     if (attributeNames[j] == "from") from = aux;
                     else if (attributeNames[j] == "to") to = aux;
-                }
-                else
+                } else
                     return "view " + attributeNames[j] + " undefined for ID = " + lightId;
             }
 
@@ -348,8 +388,7 @@ class MySceneGraph {
                         return aux;
 
                     upPosition = aux;
-                }
-                else {
+                } else {
                     upPosition = [0, 1, 0];
                 }
 
@@ -428,8 +467,7 @@ class MySceneGraph {
             if (children[i].nodeName != "omni" && children[i].nodeName != "spot") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
-            }
-            else {
+            } else {
                 attributeNames.push(...["location", "ambient", "diffuse", "specular"]);
                 attributeTypes.push(...["position", "color", "color", "color"]);
             }
@@ -476,8 +514,7 @@ class MySceneGraph {
                         return aux;
 
                     global.push(aux);
-                }
-                else
+                } else
                     return "light " + attributeNames[i] + " undefined for ID = " + lightId;
             }
 
@@ -501,8 +538,7 @@ class MySceneGraph {
                         return aux;
 
                     targetLight = aux;
-                }
-                else
+                } else
                     return "light target undefined for ID = " + lightId;
 
                 global.push(...[angle, exponent, targetLight])
@@ -636,8 +672,7 @@ class MySceneGraph {
                             break;
                     }
 
-                }
-                else return "material " + attributeName + " undefined for ID = " + materialID;
+                } else return "material " + attributeName + " undefined for ID = " + materialID;
             }
 
             //this.materials.push({ matId: materialID, shininess: materialShininess, emission: emission, ambient: ambient, diffuse: diffuse, specular: specular });
@@ -740,7 +775,7 @@ class MySceneGraph {
     /**
      * Parses the animations block
      * @param {animations block element} animationsNode 
-    */
+     */
     parseAnimations(animationsNode) {
         let children = animationsNode.children;
 
@@ -899,8 +934,7 @@ class MySceneGraph {
                 var rect = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2);
 
                 this.primitives[primitiveId] = rect;
-            }
-            else if (primitiveType == 'triangle') {
+            } else if (primitiveType == 'triangle') {
                 // x1
                 var x1 = this.reader.getFloat(grandChildren[0], 'x1');
                 if (!(x1 != null && !isNaN(x1)))
@@ -948,8 +982,7 @@ class MySceneGraph {
 
                 var triangle = new MyTriangle(this.scene, primitiveId, x1, y1, z1, x2, y2, z2, x3, y3, z3);
                 this.primitives[primitiveId] = triangle;
-            }
-            else if (primitiveType == 'cylinder') {
+            } else if (primitiveType == 'cylinder') {
                 var base, top, height, slices_c, stacks_c;
 
                 // slices
@@ -979,8 +1012,7 @@ class MySceneGraph {
 
                 var cylinder = new MyCylinder(this.scene, slices_c, stacks_c, height, base, top);
                 this.primitives[primitiveId] = cylinder;
-            }
-            else if (primitiveType == 'sphere') {
+            } else if (primitiveType == 'sphere') {
                 var radius, slices_s, stacks_s;
 
                 radius = this.reader.getFloat(grandChildren[0], 'radius');
@@ -999,8 +1031,7 @@ class MySceneGraph {
 
                 var sphere = new MySphere(this.scene, radius, slices_s, stacks_s);
                 this.primitives[primitiveId] = sphere;
-            }
-            else if (primitiveType == 'torus') {
+            } else if (primitiveType == 'torus') {
                 var inner, outer, slices_t, loops_t;
 
                 inner = this.reader.getFloat(grandChildren[0], 'inner');
@@ -1021,8 +1052,7 @@ class MySceneGraph {
 
                 var torus = new MyTorus(this.scene, inner, outer, slices_t, loops_t);
                 this.primitives[primitiveId] = torus;
-            }
-            else if (primitiveType == 'plane') {
+            } else if (primitiveType == 'plane') {
                 var npartsU, npartsV;
 
                 npartsU = this.reader.getFloat(grandChildren[0], 'npartsU');
@@ -1035,8 +1065,7 @@ class MySceneGraph {
 
                 var plane = new Plane(this.scene, npartsU, npartsV);
                 this.primitives[primitiveId] = plane;
-            }
-            else if (primitiveType == 'patch') {
+            } else if (primitiveType == 'patch') {
                 //console.log("TAS TOLO");
                 let greatGrandChildren = grandChildren[0].children;
                 var npointsU, npointsV, npartsU, npartsV;
@@ -1072,8 +1101,7 @@ class MySceneGraph {
 
                 var patch = new Patch(this.scene, npointsU, npointsV, npartsU, npartsV, controlPoints);
                 this.primitives[primitiveId] = patch;
-            }
-            else if (primitiveType == 'cylinder2') {
+            } else if (primitiveType == 'cylinder2') {
                 var base, top, height, slices_c, stacks_c;
 
                 // slices
@@ -1103,8 +1131,7 @@ class MySceneGraph {
 
                 var cylinder2 = new Cylinder2(this.scene, base, top, height, slices_c, stacks_c);
                 this.primitives[primitiveId] = cylinder2;
-            }
-            else {
+            } else {
                 this.onXMLMinorError("Unexistant primitive.");
 
             }
@@ -1115,9 +1142,9 @@ class MySceneGraph {
     }
 
     /**
-   * Parses the <components> block.
-   * @param {components block element} componentsNode
-   */
+     * Parses the <components> block.
+     * @param {components block element} componentsNode
+     */
     parseComponents(componentsNode) {
         var children = componentsNode.children;
 
@@ -1337,8 +1364,47 @@ class MySceneGraph {
         }
     }
 
+    /**
+     * Parses the <board> block.
+     * @param {board block element} boardNode
+     */
+    parseBoard(boardNode) {
+        var children = boardNode.children;
 
+        for (var i = 0; i < children.length; i++) {
+            if (children[i].nodeName == "blackTile") {
+                this.gameElements.blackTile = this.reader.getString(children[i], 'componentref');
+            } else if (children[i].nodeName == "whiteTile") {
+                this.gameElements.whiteTile = this.reader.getString(children[i], 'componentref');
+            }
+        }
+    }
 
+    /**
+     * Parses the <auxBoard> block.
+     * @param {auxBoard block element} auxBoardNode
+     */
+    parseAuxBoard(auxBoardNode) {
+        if (auxBoardNode.nodeName == "auxBoard") {
+            this.gameElements.auxBoard = this.reader.getString(auxBoardNode, 'componentref');
+        }
+    }
+
+    /**
+     * Parses the <pieces> block.
+     * @param {pieces block element} piecesNode
+     */
+    parsePieces(piecesNode) {
+        var children = piecesNode.children;
+
+        for (var i = 0; i < children.length; i++) {
+            if (children[i].nodeName == "horse") {
+                this.gameElements.horsePiece = this.reader.getString(children[i], 'componentref');
+            } else if (children[i].nodeName == "bishop") {
+                this.gameElements.bishopPiece = this.reader.getString(children[i], 'componentref');
+            }
+        }
+    }
 
     /**
      * Parse the coordinates from a node with ID = id
@@ -1498,8 +1564,7 @@ class MySceneGraph {
         if (component.animation != undefined) {
             var Manimation = component.animation.apply();
             mat4.multiply(transformation, Mn, Manimation);
-        }
-        else transformation = Mn;
+        } else transformation = Mn;
 
         // Updates material
         var activeMaterial = component.getActiveMaterialId();
@@ -1513,8 +1578,7 @@ class MySceneGraph {
             texture = parentTexture;
             ls = parentLength_s;
             lt = parentLength_t;
-        }
-        else if (texture == "none")
+        } else if (texture == "none")
             texture = null;
         else {
             texture = component.texture;
