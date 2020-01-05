@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="root" axis_length="100"/>
+    <scene root="root" axis_length="0"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="200" angle="45">
@@ -1230,14 +1230,14 @@
     </components>
 
     <board>
-        <blackTile componentref=""/>
-        <whiteTile componentref=""/>
+        <blackTile componentref="WingCloth"/>
+        <whiteTile componentref="WingCloth"/>
     </board>
 
-    <auxBoard componentref=""/>
+    <auxBoard componentref="WingCloth"/>
 
     <pieces>
-        <horse componentref=""/>
-        <bishop componentref=""/>
-    <pieces/>
+        <horse componentref="WingCloth"/>
+        <bishop componentref="WingCloth"/>
+    </pieces>
 </lxs>

@@ -25,7 +25,7 @@ class GameOrchestrator {
     }
 
     setState(state) {
-        if (state != "Menu" && state != "NextMove" && state != "PickPiece" && state != "PickTile" && state != "Animating" && state != "EndGame") {
+        if (state != "Menu" && state != "LoadScene" && state != "NextMove" && state != "PickPiece" && state != "PickTile" && state != "Animating" && state != "EvaluateWinner" && state != "EndGame") {
             alert("Unknown state")
         }
 
@@ -33,7 +33,7 @@ class GameOrchestrator {
 
         if (state == "EndGame") {
             alert("We have a Winner!")
-            this.scene.exit()
+            //this.scene.exit()
         }
 
     }
@@ -95,9 +95,15 @@ class GameOrchestrator {
     }
 
     orchestrate() {
-        if (this.state == "NextMove") {
+        if (this.state == "LoadScene") {
+            if (!this.scene.sceneInited) {
+                return
+            }
+            this.setState(this.oldState)
+            
+        }
+        else if (this.state == "NextMove") {
             if (this.prologInterface.winner == null || this.prologInterface.winner == -1) {
-                this.prologInterface.winner = null
                 if (this.gameBoard.playerPlaying.type == "Human") {
                     this.prologInterface.requestValidMoves(this.gameBoard);
                     this.state = "PickPiece";
@@ -112,10 +118,6 @@ class GameOrchestrator {
                     }
                     this.setState("Animating")
                 }
-            }
-            else {
-                this.prologInterface.winner = null
-                this.setState("EndGame")
             }
             return
         }
@@ -142,7 +144,20 @@ class GameOrchestrator {
             this.prologInterface.requestWinner(this.gameBoard)
             this.gameBoard.switchPlayer()
             this.rotateView(0.5, 3)
-            this.setState("NextMove")
+            this.setState("EvaluateWinner")
+        }
+        else if (this.state == "EvaluateWinner") {
+            if (this.prologInterface.winner == null){
+                return
+            }
+            else if (this.prologInterface.winner == -1){
+                this.prologInterface.winner = null
+                this.setState("NextMove")
+            }
+            else {
+                this.prologInterface.winner = null
+                this.setState("EndGame")
+            }
         }
     }
 
@@ -168,7 +183,7 @@ class GameOrchestrator {
     }
 
     display() {
-        if (this.state != "Menu") {
+        if (this.state != "Menu" && this.scene.sceneInited) {
             this.scene.pushMatrix()
             if (this.scene.mode == "Player vs Player") {
                 let mx = this.rotateAnimation.apply()
