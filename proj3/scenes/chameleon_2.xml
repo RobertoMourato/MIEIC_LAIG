@@ -42,7 +42,9 @@
     </lights>
 
     <textures>
+        <texture id="floorTexture" file="scenes/images/dark-wood.jpg" />
         <texture id="tableTexture" file="scenes/images/tableWood.jpg" />
+        <texture id="wallTexture" file="scenes/images/wall.jpg" />
     </textures>
 
     <materials>
@@ -58,6 +60,20 @@
             <ambient r="0.65" g="0.5" b="0.36" a="1.0" />
             <diffuse r="0.65" g="0.5" b="0.36" a="1.0" />
             <specular r="0.65" g="0.5" b="0.36" a="1.0" />
+        </material>
+
+        <material id="floorMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.4" g="0.3" b="0.2" a="1.0" />
+            <diffuse r="0.4" g="0.3" b="0.2" a="1.0" />
+            <specular r="0.4" g="0.3" b="0.2" a="1.0" />
+        </material>
+
+        <material id="wallMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.15" g="0.15" b="0.15" a="1.0" />
+            <diffuse r="0.15" g="0.15" b="0.15" a="1.0" />
+            <specular r="0.15" g="0.15" b="0.15" a="1.0" />
         </material>
     </materials>
 
@@ -113,7 +129,7 @@
             <triangle x1="0" y1="0" z1="0" x2="-3" y2="-5.5" z2="0" x3="0" y3="-5.5" z3="0.5" />
         </primitive>
 
-        <primitive id="nurbSoil">
+        <primitive id="plane">
             <plane npartsU = "20" npartsV = "20" />
         </primitive>
 
@@ -134,6 +150,118 @@
                 <componentref id="Table" />
                 <componentref id="Chair1" />
                 <componentref id="Chair2" />
+                <componentref id="Room" />
+            </children>
+        </component>
+
+        <component id="Room">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="wallMaterial" />
+            </materials>
+            <texture id="wallTexture"/>
+            <children>
+                <componentref id="Floor" />
+                <componentref id="FrontWall" />
+                <componentref id="BackWall" />
+                <componentref id="LeftWall" />
+                <componentref id="RightWall" />
+                <componentref id="Roof" />
+            </children>
+        </component>
+
+        <component id="RightWall">
+            <transformation>
+                <translate x="60" y="0" z="-10" />
+                <rotate axis="z" angle="90" />
+                <translate x="10" y="-15" z="-10" />
+                <scale x="200" y="1" z="200" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+        <component id="LeftWall">
+            <transformation>
+                <translate x="-60" y="0" z="10" />
+                <rotate axis="z" angle="-90" />
+                <translate x="10" y="-15" z="-10" />
+                <scale x="200" y="1" z="200" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+        <component id="FrontWall">
+            <transformation>
+                <translate x="0" y="0" z="-100" />
+                <rotate axis="x" angle="90" />
+                <translate x="10" y="-15" z="-10" />
+                <scale x="200" y="1" z="200" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+        <component id="BackWall">
+            <transformation>
+                <translate x="0" y="0" z="100" />
+                <rotate axis="x" angle="-90" />
+                <translate x="10" y="-15" z="-10" />
+                <scale x="200" y="1" z="200" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+        <component id="Floor">
+            <transformation>
+                <translate x="10" y="-15" z="-10" />
+                <scale x="200" y="1" z="200" />
+            </transformation>
+            <materials>
+                <material id="floorMaterial" />
+            </materials>
+            <texture id="floorTexture"/>
+            <children>
+                <primitiveref id="plane" />
+            </children>
+        </component>
+
+        <component id="Roof">
+            <transformation>
+                <translate x="0" y="10" z="0" />
+                <rotate axis="x" angle="180" />
+                <translate x="10" y="-15" z="-10" />
+                <scale x="200" y="1" z="200" />
+            </transformation>
+            <materials>
+                <material id="floorMaterial" />
+            </materials>
+            <texture id="floorTexture"/>
+            <children>
+                <primitiveref id="plane" />
             </children>
         </component>
 
