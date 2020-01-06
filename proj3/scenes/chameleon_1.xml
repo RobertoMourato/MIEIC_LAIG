@@ -53,6 +53,8 @@
         <texture id="white_wood" file="scenes/images/white-wooden-surface.jpg" />
         <texture id="wooden_door" file="scenes/images/door.jpg" /> 
         <texture id="dark_wood" file="scenes/images/dark-wood.jpg" />
+        <texture id="horseTexture" file="scenes/images/horse.png" />
+        <texture id="bishopTexture" file="scenes/images/bishop.png" />
     </textures>
 
     <materials>
@@ -278,6 +280,9 @@
             <cylinder base="1" top="1" height="1" slices="20" stacks="10"/>
         </primitive>
 
+        <primitive id="demoRectangle">
+            <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
+        </primitive>
     </primitives>
 
     <components>
@@ -1241,6 +1246,116 @@
             </children>
         </component>
 
+        <component id="Cube">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="cubePart1" />
+                <componentref id="cubePart2" />
+                <componentref id="cubePart3" />
+                <componentref id="cubePart4" />
+                <componentref id="cubePart5" />
+                <componentref id="cubePart6" />
+            </children>
+        </component>
+
+        <component id="cubePart1">
+            <transformation>
+                <translate x="0.5" y="0.5" z="1" />
+                <scale x="1" y="0.5" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="cubePart2">
+            <transformation>
+                <translate x="0" y="1" z="0" />
+                <rotate axis="x" angle="180" />
+                <translate x="0.5" y="0.5" z="0" />
+                <scale x="1" y="0.5" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="cubePart3">
+            <transformation>
+                <rotate axis="y" angle="-90" />
+                <translate x="0.5" y="0.5" z="0" />
+                <scale x="1" y="0.5" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="cubePart4">
+            <transformation>
+                <translate x="1" y="0" z="1" />
+                <rotate axis="y" angle="90" />
+                <translate x="0.5" y="0.5" z="0" />
+                <scale x="1" y="0.5" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="cubePart5">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <rotate axis="x" angle="90" />
+                <translate x="0.5" y="0.5" z="0" />
+                <scale x="1" y="0.5" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="cubePart6">
+            <transformation>
+                <translate x="0" y="1" z="1" />
+                <rotate axis="x" angle="-90" />
+                <translate x="0.5" y="0.5" z="0" />
+                <scale x="1" y="0.5" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
         <component id="whiteTile">
             <transformation>
             </transformation>
@@ -1277,7 +1392,7 @@
             </children>
         </component>
 
-        <component id="piece">
+        <component id="horse">
             <transformation>
             </transformation>
             <materials>
@@ -1285,11 +1400,25 @@
             </materials>
             <texture id="inherit" />
             <children>
+                <componentref id="CubeHorse" />
                 <primitiveref id="pieceCylinder"/>
             </children>
         </component>
 
-        <component id="bishop_piece">
+        <component id="CubeHorse">
+            <transformation>
+                <translate x="-0.5" y="-0.5" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="WhiteWood" />
+            </materials>
+            <texture id="horseTexture" />
+            <children>
+                <componentref id="Cube" />
+            </children>
+        </component>
+
+        <component id="bishop">
             <transformation>
             </transformation>
             <materials>
@@ -1297,7 +1426,21 @@
             </materials>
             <texture id="inherit" />
             <children>
+                <componentref id="CubeBishop" />
                 <primitiveref id="pieceCylinder"/>
+            </children>
+        </component>
+
+        <component id="CubeBishop">
+            <transformation>
+                <translate x="-0.5" y="-0.5" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="WhiteWood" />
+            </materials>
+            <texture id="bishopTexture" />
+            <children>
+                <componentref id="Cube" />
             </children>
         </component>
     </components>
@@ -1310,7 +1453,7 @@
     <auxBoard componentref="auxBoard"/>
 
     <pieces>
-        <horse componentref="piece"/>
-        <bishop componentref="piece"/>
+        <horse componentref="horse"/>
+        <bishop componentref="bishop"/>
     </pieces>
 </lxs>

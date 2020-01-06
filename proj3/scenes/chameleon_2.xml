@@ -45,6 +45,8 @@
         <texture id="floorTexture" file="scenes/images/dark-wood.jpg" />
         <texture id="tableTexture" file="scenes/images/tableWood.jpg" />
         <texture id="wallTexture" file="scenes/images/wall.jpg" />
+        <texture id="horseTexture" file="scenes/images/horse.png" />
+        <texture id="bishopTexture" file="scenes/images/bishop.png" />
     </textures>
 
     <materials>
@@ -75,6 +77,13 @@
             <diffuse r="0.15" g="0.15" b="0.15" a="1.0" />
             <specular r="0.15" g="0.15" b="0.15" a="1.0" />
         </material>
+
+        <material id="WhiteWood" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.2" b="0.0" a="1.0" />
+            <diffuse r="0.7" g="0.6" b="0.6" a="1.0" />
+            <specular r="0.1" g="0.1" b="0.1" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
@@ -93,30 +102,6 @@
     </animations>
 
     <primitives>
-        <primitive id="soil">
-            <rectangle x1="-1" y1="-1" x2="1" y2="1" />
-        </primitive>
-
-        <primitive id="roof">
-            <cylinder base="2.5" top="0" height="2" slices="30" stacks="15"/>
-        </primitive>
-
-        <primitive id="door">
-            <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
-        </primitive>
-
-        <primitive id="joint">
-            <sphere radius="0.2" slices="50" stacks="50"/>
-        </primitive>
-
-        <primitive id="handrail">
-            <torus inner = "0.05" outer = "4.5" slices="100" loops="100" />
-        </primitive>
-
-        <primitive id="wing_cloth">
-            <triangle x1="0" y1="0" z1="0" x2="-3" y2="-5.5" z2="0" x3="0" y3="-5.5" z3="0.5" />
-        </primitive>
-
         <primitive id="plane">
             <plane npartsU = "20" npartsV = "20" />
         </primitive>
@@ -687,7 +672,7 @@
             </children>
         </component>
 
-        <component id="piece">
+        <component id="horse">
             <transformation>
             </transformation>
             <materials>
@@ -695,11 +680,25 @@
             </materials>
             <texture id="inherit" />
             <children>
+                <componentref id="CubeHorse" />
                 <primitiveref id="pieceCylinder"/>
             </children>
         </component>
 
-        <component id="bishop_piece">
+        <component id="CubeHorse">
+            <transformation>
+                <translate x="-0.5" y="-0.5" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="WhiteWood" />
+            </materials>
+            <texture id="horseTexture" />
+            <children>
+                <componentref id="Cube" />
+            </children>
+        </component>
+
+        <component id="bishop">
             <transformation>
             </transformation>
             <materials>
@@ -707,7 +706,21 @@
             </materials>
             <texture id="inherit" />
             <children>
+                <componentref id="CubeBishop" />
                 <primitiveref id="pieceCylinder"/>
+            </children>
+        </component>
+
+        <component id="CubeBishop">
+            <transformation>
+                <translate x="-0.5" y="-0.5" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="WhiteWood" />
+            </materials>
+            <texture id="bishopTexture" />
+            <children>
+                <componentref id="Cube" />
             </children>
         </component>
     </components>
@@ -720,7 +733,7 @@
     <auxBoard componentref="auxBoard"/>
 
     <pieces>
-        <horse componentref="piece"/>
-        <bishop componentref="piece"/>
+        <horse componentref="horse"/>
+        <bishop componentref="bishop"/>
     </pieces>
 </lxs>
