@@ -20,13 +20,6 @@ void main() {
 	vec4 gradientColor = vec4(textureColor.r * gradientValue, textureColor.g * gradientValue, textureColor.b * gradientValue, 1.0);
 	gl_FragColor = gradientColor;
 
-	/*	Stripes
-	*
-	*/
-	float stripeValue = 2.0;
-	if(mod(textureCoords.y * 175.0 - timeFactor, 2.0) > 1.0)
-		gl_FragColor = vec4(gradientColor.rgb * stripeValue + 0.1, 1.0);
-
 	// Frame
 	if (textureCoords.x < 0.01 || textureCoords.x > 0.99 || textureCoords.y < 0.02 || textureCoords.y > 0.98)
 		gl_FragColor = vec4(0.2, 0.2, 0.2, 1.0);
