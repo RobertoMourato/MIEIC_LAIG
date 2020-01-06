@@ -38,7 +38,7 @@ class XMLscene extends CGFscene {
 
         this.initInterface();
 
-        this.initCamera()
+        this.initCamera();
 
     }
 

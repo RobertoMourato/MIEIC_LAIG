@@ -9,7 +9,7 @@ varying vec2 vTextureCoord;
 uniform sampler2D uSampler;
 
 void main() {
-	vec3 offset = vec3(0.45,-1.0,0);
+	vec3 offset = vec3(-1.0,-1.0,0);
 	vec4 vertex=vec4(aVertexPosition + offset, 1.0);
 
 	gl_Position = vertex;
