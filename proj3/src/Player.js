@@ -4,6 +4,7 @@ class Player {
         this.type = type
         this.color = color
         this.level = level
+        this.score = 0;
     }
 
     getType() {

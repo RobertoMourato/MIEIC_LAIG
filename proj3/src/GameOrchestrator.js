@@ -4,6 +4,7 @@ class GameOrchestrator {
         this.state = "Menu"
         this.gameInited = false;
         this.initLogo();
+        this.initMarker();
         this.staticKeyframe = new Keyframe(0, [0, 0, 0], [0, 0, 0], [1, 1, 1])
         this.rotate = new Keyframe(0, [0, 0, 0], [0, 180, 0], [1, 1, 1])
         this.rotateStatic = new Keyframe(0, [0, 0, 0], [0, 180, 0], [1, 1, 1])
@@ -25,6 +26,26 @@ class GameOrchestrator {
         this.setState("NextMove")
     }
 
+    initMarker() {
+        this.marker = new MyRectangle(this.scene, '', 0, 0.5, 0, 0.5);
+        this.markerShader = new CGFshader(this.scene.gl, 'shaders/marker.vert', 'shaders/marker.frag');
+
+        this.markerShader.setUniformsValues({ uSampler: 0 });
+        this.markerShader.setUniformsValues({ timeFactor: 0 });
+
+        this.green0 = new CGFtexture(this.scene, 'scenes/images/green0.png')
+        this.green1 = new CGFtexture(this.scene, 'scenes/images/green1.png');
+        this.green2 = new CGFtexture(this.scene, 'scenes/images/green2.png');
+        this.green3 = new CGFtexture(this.scene, 'scenes/images/green3.png');
+        this.green4 = new CGFtexture(this.scene, 'scenes/images/green4.png');
+
+        this.blue0 = new CGFtexture(this.scene, 'scenes/images/blue0.png');
+        this.blue1 = new CGFtexture(this.scene, 'scenes/images/blue1.png');
+        this.blue2 = new CGFtexture(this.scene, 'scenes/images/blue2.png');
+        this.blue3 = new CGFtexture(this.scene, 'scenes/images/blue3.png');
+        this.blue4 = new CGFtexture(this.scene, 'scenes/images/blue4.png');
+    }
+
     initLogo() {
         this.rectangle = new MyRectangle(this.scene, '', 0, 2, 0, 2);
         this.shader = new CGFshader(this.scene.gl, 'shaders/camera.vert', 'shaders/camera.frag');
@@ -44,13 +65,13 @@ class GameOrchestrator {
 
         if (state == "EndGame") {
             alert("We have a Winner!")
-            //this.scene.exit()
+                //this.scene.exit()
         }
 
     }
 
     managePick(mode, results) {
-        if (mode == false /* && some other game conditions */)
+        if (mode == false /* && some other game conditions */ )
             if (results != null && results.length > 0) { // any results?
                 for (var i = 0; i < results.length; i++) {
                     var obj = this.scene.pickResults[i][0]; // get object from result
@@ -93,6 +114,11 @@ class GameOrchestrator {
                         }
                         this.gameBoard.highlightTiles(this.prologInterface.validMoves)
                         this.setState("Animating")
+
+                        if (obj.piece != null) {
+                            this.gameBoard.playerPlaying.score++;
+                        }
+
                         let move = new GameMove(piece, piece.tile, obj, this.gameBoard)
                         this.gameSequence.addMove(move)
                         this.gameBoard.movePiece(piece, obj)
@@ -110,8 +136,7 @@ class GameOrchestrator {
             }
             this.setState(this.oldState)
 
-        }
-        else if (this.state == "NextMove") {
+        } else if (this.state == "NextMove") {
             if (this.gameBoard.playerPlaying.type == "Human") {
                 this.prologInterface.requestValidMoves(this.gameBoard);
                 this.state = "PickPiece";
@@ -140,6 +165,10 @@ class GameOrchestrator {
                 let piece = this.gameBoard.tiles[srcLine][srcColumn].piece
                 let destTile = this.gameBoard.tiles[destLine][destColumn]
 
+                if (destTile != null) {
+                    this.gameBoard.playerPlaying.score++;
+                }
+
                 let move = new GameMove(piece, piece.tile, destTile, this.gameBoard)
                 this.gameSequence.addMove(move)
                 this.gameBoard.movePiece(piece, destTile)
@@ -150,16 +179,13 @@ class GameOrchestrator {
             this.gameBoard.switchPlayer()
             this.rotateView(0.5, 3)
             this.setState("EvaluateWinner")
-        }
-        else if (this.state == "EvaluateWinner") {
+        } else if (this.state == "EvaluateWinner") {
             if (this.prologInterface.winner == null) {
                 return
-            }
-            else if (this.prologInterface.winner == -1) {
+            } else if (this.prologInterface.winner == -1) {
                 this.prologInterface.winner = null
                 this.setState("NextMove")
-            }
-            else {
+            } else {
                 this.prologInterface.winner = null
                 this.setState("EndGame")
             }
@@ -188,6 +214,69 @@ class GameOrchestrator {
 
     display() {
         if (this.state != "Menu" && this.scene.sceneInited) {
+
+            /*MARKER*/
+            this.scene.setActiveShader(this.markerShader);
+            if (this.gameBoard.playerPlaying == this.gameBoard.players[0]) {
+                switch (this.gameBoard.playerPlaying.score) {
+                    case 0:
+                        this.green0.bind();
+                        this.marker.display();
+                        this.green0.unbind();
+                        break;
+                    case 1:
+                        this.green1.bind();
+                        this.marker.display();
+                        this.green1.unbind();
+                        break;
+                    case 2:
+                        this.green2.bind();
+                        this.marker.display();
+                        this.green2.unbind();
+                        break;
+                    case 3:
+                        this.green3.bind();
+                        this.marker.display();
+                        this.green3.unbind();
+                        break;
+                    case 4:
+                        this.green4.bind();
+                        this.marker.display();
+                        this.green4.unbind();
+                        break;
+                }
+            } else {
+                switch (this.gameBoard.playerPlaying.score) {
+                    case 0:
+                        this.blue0.bind();
+                        this.marker.display();
+                        this.blue0.unbind();
+                        break;
+                    case 1:
+                        this.blue1.bind();
+                        this.marker.display();
+                        this.blue1.unbind();
+                        break;
+                    case 2:
+                        this.blue2.bind();
+                        this.marker.display();
+                        this.blue2.unbind();
+                        break;
+                    case 3:
+                        this.blue3.bind();
+                        this.marker.display();
+                        this.blue3.unbind();
+                        break;
+                    case 4:
+                        this.blue4.bind();
+                        this.marker.display();
+                        this.blue4.unbind();
+                        break;
+                }
+            }
+            this.scene.setActiveShader(this.scene.defaultShader);
+            /*MARKER*/
+
             this.scene.pushMatrix()
             if (this.scene.mode == "Player vs Player") {
                 let mx = this.rotateAnimation.apply()
@@ -204,7 +293,5 @@ class GameOrchestrator {
             this.texture.unbind();
             this.scene.setActiveShader(this.scene.defaultShader);
         }
-
-
     }
 }
