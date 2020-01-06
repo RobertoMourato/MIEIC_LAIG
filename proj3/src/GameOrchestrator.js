@@ -3,6 +3,7 @@ class GameOrchestrator {
         this.scene = scene;
         this.state = "Menu"
         this.gameInited = false;
+        this.initLogo();
         this.staticKeyframe = new Keyframe(0, [0, 0, 0], [0, 0, 0], [1, 1, 1])
         this.rotate = new Keyframe(0, [0, 0, 0], [0, 180, 0], [1, 1, 1])
         this.rotateStatic = new Keyframe(0, [0, 0, 0], [0, 180, 0], [1, 1, 1])
@@ -22,6 +23,16 @@ class GameOrchestrator {
         this.gameInited = true;
         this.rotateAnimation = new KeyframeAnimation([this.staticKeyframe])
         this.setState("NextMove")
+    }
+
+    initLogo() {
+        this.rectangle = new MyRectangle(this.scene, '', 0, 2, 0, 2);
+        this.shader = new CGFshader(this.scene.gl, 'shaders/camera.vert', 'shaders/camera.frag');
+
+        this.shader.setUniformsValues({ uSampler: 0 });
+        this.shader.setUniformsValues({ timeFactor: 0 });
+
+        this.texture = new CGFtexture(this.scene, 'scenes/images/chameleon.png')
     }
 
     setState(state) {
@@ -64,14 +75,12 @@ class GameOrchestrator {
 
                     if (pieceSelected) {
                         this.state = "PickTile"
-                    }
-                    else {
+                    } else {
                         this.state = "PickPiece"
                     }
                     this.gameBoard.highlightTiles(this.prologInterface.validMoves)
                 }
-            }
-            else if (obj instanceof Tile) {
+            } else if (obj instanceof Tile) {
                 if (this.state == "PickTile") {
                     if (obj.highlighted) {
                         let piece
@@ -100,28 +109,24 @@ class GameOrchestrator {
                 return
             }
             this.setState(this.oldState)
-            
+
         }
         else if (this.state == "NextMove") {
-            if (this.prologInterface.winner == null || this.prologInterface.winner == -1) {
-                if (this.gameBoard.playerPlaying.type == "Human") {
-                    this.prologInterface.requestValidMoves(this.gameBoard);
-                    this.state = "PickPiece";
-                }
-                else if (this.gameBoard.playerPlaying.type == "CPU") {
-                    this.prologInterface.requestMove(this.gameBoard)
-                    var start = new Date().getTime();
-                    while (1) {
-                        if ((new Date().getTime() - start) > 4000) {
-                            break;
-                        }
+            if (this.gameBoard.playerPlaying.type == "Human") {
+                this.prologInterface.requestValidMoves(this.gameBoard);
+                this.state = "PickPiece";
+            } else if (this.gameBoard.playerPlaying.type == "CPU") {
+                this.prologInterface.requestMove(this.gameBoard)
+                var start = new Date().getTime();
+                while (1) {
+                    if ((new Date().getTime() - start) > 4000) {
+                        break;
                     }
-                    this.setState("Animating")
                 }
+                this.setState("Animating")
             }
             return
-        }
-        else if (this.state == "Animating") {
+        } else if (this.state == "Animating") {
             if (this.gameBoard.playerPlaying.type == "CPU" && this.prologInterface.move == null) {
                 return
             }
@@ -147,10 +152,10 @@ class GameOrchestrator {
             this.setState("EvaluateWinner")
         }
         else if (this.state == "EvaluateWinner") {
-            if (this.prologInterface.winner == null){
+            if (this.prologInterface.winner == null) {
                 return
             }
-            else if (this.prologInterface.winner == -1){
+            else if (this.prologInterface.winner == -1) {
                 this.prologInterface.winner = null
                 this.setState("NextMove")
             }
@@ -166,8 +171,7 @@ class GameOrchestrator {
             this.staticKeyframe.setInstant(this.rotateAnimation.getCurrentTime() + animationDelay)
             this.rotate.setInstant(this.rotateAnimation.getCurrentTime() + animationTime)
             this.rotateAnimation.setKeyframes([this.staticKeyframe, this.rotate])
-        }
-        else {
+        } else {
             this.rotate.setInstant(this.rotateAnimation.getCurrentTime() - 1)
             this.rotateStatic.setInstant(this.rotateAnimation.getCurrentTime() + animationDelay)
             this.staticKeyframe.setInstant(this.rotateAnimation.getCurrentTime() + animationTime)
@@ -193,6 +197,12 @@ class GameOrchestrator {
             this.sceneGraph.displayScene();
             this.gameBoard.display()
             this.scene.popMatrix()
+        } else {
+            this.scene.setActiveShader(this.shader);
+            this.texture.bind();
+            this.rectangle.display();
+            this.texture.unbind();
+            this.scene.setActiveShader(this.scene.defaultShader);
         }
 
 

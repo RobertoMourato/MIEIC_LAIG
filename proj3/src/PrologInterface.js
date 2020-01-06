@@ -16,7 +16,7 @@ class PrologInterface {
     requestMove(gameboard) {
         let request = this.parseBoardToProlog(gameboard)
         let level
-        if (gameboard.playerPlaying.type == "Level2")
+        if (gameboard.playerPlaying.level == "Level2")
             level = 2
         else level = 1
         request = "[chooseMove," + request + "," + gameboard.playerPlaying.id + "," + level +"]"
