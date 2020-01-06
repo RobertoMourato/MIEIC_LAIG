@@ -80,8 +80,8 @@ class Piece {
             if (this.picked == true)
                 this.scene.translate(0,0,this.delta)
 
-            this.shape.display()
-            this.scene.popMatrix()
+                this.scene.graph.gameElements.displayBishopPiece()
+                this.scene.popMatrix()
         }
         else if (this.type == 'Horse') {            
             this.scene.pushMatrix()
@@ -89,7 +89,7 @@ class Piece {
             if (this.picked == true)
                 this.scene.translate(0,0,this.delta);
 
-            this.shape.display()
+            this.scene.graph.gameElements.displayHorsePiece()
             this.scene.popMatrix()
         }
         else {

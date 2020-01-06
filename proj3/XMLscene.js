@@ -47,10 +47,18 @@ class XMLscene extends CGFscene {
         this.activeMode = "Player vs Player";
         this.modes = ["Player vs Player", "Player vs CPU", "CPU vs CPU"];
 
+        this.bot1Level = "Level1"
+        this.bot1ActiveLevel = "Level1"
+
+        this.bot2Level = "Level1"
+        this.bot2ActiveLevel = "Level1"
+
+        this.levels = ["Level1", "Level2"];
+
         this.viewIds = [];
         this.activeCameraView = "";
 
-        this.filenames = ['chameleon_2']
+        this.filenames = ['chameleon_1', 'chameleon_2']
         this.filename = this.filenames[0];
 
         this.lightIds = [];
@@ -63,7 +71,7 @@ class XMLscene extends CGFscene {
     }
 
     initCamera() {
-        this.viewCamera = new CGFcamera(45, 0.1, 200, vec3.fromValues(0, 15, 25), vec3.fromValues(0, 0, 0));
+        this.viewCamera = new CGFcamera(45, 0.1, 200, vec3.fromValues(0, 18, 25), vec3.fromValues(0, 0, 0));
     }
 
     /**
@@ -81,8 +89,6 @@ class XMLscene extends CGFscene {
 
             this.viewIds.push(cam.id);
             if (cam.enableView) {
-                //this.viewCamera = this.cameras[cam.id];
-                this.videoCamera = this.cameras[cam.id];
                 this.activeView = cam.id;
                 this.activeCameraView = cam.id;
             }
@@ -93,8 +99,12 @@ class XMLscene extends CGFscene {
         this.mode = this.activeMode;
     }
 
-    onVideoCameraChange(v) {
-        this.videoCamera = this.cameras[this.activeCameraView];
+    onBot1Change(v) {
+        this.bot1Level = this.bot1ActiveLevel;
+    }
+
+    onBot2Change(v) {
+        this.bot2Level = this.bot2ActiveLevel;
     }
 
     /**

@@ -32,16 +32,21 @@ class MyInterface extends CGFinterface {
 
         // add a group of controls (and open/expand by defult)
         this.gui.add(this.scene, 'filename', this.scene.filenames).name('Ambient')
-        this.gui.add(this.scene, 'activeCameraView', this.scene.viewIds).name('VideoCamera View').onChange(this.scene.onVideoCameraChange.bind(this.scene));
-        
-        
+                
         this.mode = this.gui.add(this.scene, 'activeMode', this.scene.modes).name('Mode').onChange(this.scene.onModeChange.bind(this.scene));
+        this.bot1 = this.gui.add(this.scene, 'bot1ActiveLevel', this.scene.levels).name('Bot1 Level').onChange(this.scene.onBot1Change.bind(this.scene));
+        this.bot2 = this.gui.add(this.scene, 'bot2ActiveLevel', this.scene.levels).name('Bot2 Level').onChange(this.scene.onBot2Change.bind(this.scene));
+
         this.play = this.gui.add(this.scene, 'play').name('Play')
     }
 
     initMenuGUI() {
         this.gui.remove(this.exit)
         this.mode = this.gui.add(this.scene, 'activeMode', this.scene.modes).name('Mode').onChange(this.scene.onModeChange.bind(this.scene)); 
+        
+        this.bot1 = this.gui.add(this.scene, 'bot1ActiveLevel', this.scene.levels).name('Bot1 Level').onChange(this.scene.onBot1Change.bind(this.scene));
+        this.bot2 = this.gui.add(this.scene, 'bot2ActiveLevel', this.scene.levels).name('Bot2 Level').onChange(this.scene.onBot2Change.bind(this.scene));
+        
         this.play = this.gui.add(this.scene, 'play').name('Play')
 
     }
@@ -49,6 +54,8 @@ class MyInterface extends CGFinterface {
     initGameGUI() {
         this.gui.remove(this.mode)
         this.gui.remove(this.play)
+        this.gui.remove(this.bot1)
+        this.gui.remove(this.bot2)
         this.exit = this.gui.add(this.scene, 'exit').name('Exit')
     }
 

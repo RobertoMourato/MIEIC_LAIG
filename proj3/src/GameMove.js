@@ -5,6 +5,8 @@ class GameMove {
         this.destTile = destTile
         this.gameBoardState = []
 
+        //this animation = new ArcAnimation
+
         for (let i = 0; i < 5; i++){
             let line = []
             for (let j = 0; j < 5; j++) {
@@ -18,7 +20,7 @@ class GameMove {
         }
     }
 
-    animate() {
-
+    animate(t) {
+        
     }
 }

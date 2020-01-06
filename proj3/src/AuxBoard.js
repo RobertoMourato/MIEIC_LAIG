@@ -21,7 +21,7 @@ class AuxBoard {
     }
 
     display() {
-        this.shape.display()
+        this.scene.graph.gameElements.displayAuxBoard()
 
         for (let i = 0; i < this.pieces.length; i++) {
             let x = Math.floor(i / 4) * 2.5;

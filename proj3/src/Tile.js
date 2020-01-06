@@ -59,10 +59,10 @@ class Tile {
         }
         else if (this.color == "White") {
             this.white.apply()
-            this.shape.display();
+            this.scene.graph.gameElements.displayWhiteTile()
         } else if (this.color == "Black") {
             this.black.apply()
-            this.shape.display();
+            this.scene.graph.gameElements.displayBlackTile()
         } else {
             alert("Undefined Tile Type");
         }

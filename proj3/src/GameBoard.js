@@ -5,11 +5,29 @@ class GameBoard {
         this.pieces = [];
         this.auxBoard = new AuxBoard(this.scene);
 
-        if (this.scene.mode == "Player vs Player")
-            this.players = [new Player(5, "Human", "Green"), new Player(9, "Human", "Blue")]
-        else if (this.scene.mode == "Player vs CPU")
-            this.players = [new Player(5, "CPU", "Green"), new Player(9, "Human", "Blue")]
-        else this.players = [new Player(5, "CPU", "Green"), new Player(9, "CPU", "Blue")]
+        let player1;
+        let player2;
+
+        if (this.scene.mode == "Player vs Player") {
+            player1 = new Player(5, "Human", "Green")
+            player2 = new Player(9, "Human", "Blue")
+        }
+        else if (this.scene.mode == "Player vs CPU") {
+            if (this.scene.bot1Level == "Level1")
+                player1 = new Player(5, "CPU", "Green", "Level1")
+            else player1 = new Player(5, "CPU", "Green", "Level2")
+            player2 = new Player(9, "Human", "Blue")
+        }
+        else {
+            if (this.scene.bot1Level == "Level1")
+                player1 = new Player(5, "CPU", "Green", "Level1")
+            else player1 = new Player(5, "CPU", "Green", "Level2")
+
+            if (this.scene.bot2Level == "Level1")
+                player2 = new Player(5, "CPU", "Green", "Level1")
+            else player2 = new Player(5, "CPU", "Green", "Level2")
+        }
+        this.players = [player1, player2]
         
         this.playerPlaying = this.players[1]
 

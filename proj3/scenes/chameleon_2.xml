@@ -89,19 +89,7 @@
         </transformation>
     </transformations>
 
-    <animations>
-        <animation id="switchPlayer">
-            <keyframe instant="4">
-                <translate x="0" y="0" z="0" />
-                <rotate angle_x="0" angle_y="0" angle_z="0" />
-                <scale x="1" y="1" z="1" />
-            </keyframe>
-            <keyframe instant="10" >
-                <translate x="0" y="0" z="0" />
-                <rotate angle_x="0" angle_y="180" angle_z="0"/>
-                <scale x="1" y="1" z="1" />
-            </keyframe>
-        </animation>     
+    <animations>   
     </animations>
 
     <primitives>
@@ -135,6 +123,18 @@
 
         <primitive id="demoRectangle">
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
+        </primitive>
+
+        <primitive id="tileSquare">
+            <rectangle x1="-2.5" y1="-2.5" x2="2.5" y2="2.5" />
+        </primitive>
+
+        <primitive id="AuxBoard">
+            <rectangle x1="0" y1="0" x2="6" y2="15" />
+        </primitive>
+
+        <primitive id="pieceCylinder">
+            <cylinder base="1" top="1" height="1" slices="20" stacks="10"/>
         </primitive>
     </primitives>
 
@@ -650,17 +650,77 @@
                 <primitiveref id="demoRectangle"/>
             </children>
         </component>
+        
+        <component id="whiteTile">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="tileSquare"/>
+            </children>
+        </component>
+
+        <component id="blackTile">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="tileSquare"/>
+            </children>
+        </component>
+
+        <component id="auxBoard">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="AuxBoard"/>
+            </children>
+        </component>
+
+        <component id="piece">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="pieceCylinder"/>
+            </children>
+        </component>
+
+        <component id="bishop_piece">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="pieceCylinder"/>
+            </children>
+        </component>
     </components>
 
     <board>
-        <blackTile componentref=""/>
-        <whiteTile componentref=""/>
+        <blackTile componentref="blackTile"/>
+        <whiteTile componentref="whiteTile"/>
     </board>
 
-    <auxBoard componentref=""/>
+    <auxBoard componentref="auxBoard"/>
 
     <pieces>
-        <horse componentref=""/>
-        <bishop componentref=""/>
-    <pieces/>
+        <horse componentref="piece"/>
+        <bishop componentref="piece"/>
+    </pieces>
 </lxs>

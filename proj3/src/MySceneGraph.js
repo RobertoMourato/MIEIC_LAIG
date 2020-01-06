@@ -48,7 +48,7 @@ class MySceneGraph {
          */
         this.reader.open('scenes/' + filename, this);
 
-        this.gameElements = new GameElements();
+        this.gameElements = new GameElements(this);
     }
 
     /*
@@ -1279,15 +1279,15 @@ class MySceneGraph {
             if (animationIndex != null) {
                 let animationId = this.reader.getString(grandChildren[animationIndex], 'id');
 
-                if (textureId == null) {
+                /*if (animationId == null) {
                     this.onXMLMinorError("No animation ID defined for component " + componentID);
-                }
+                }*/
 
                 animation = this.animations[animationId];
 
-                if (animation == null) {
+                /*if (animation == null) {
                     this.onXMLMinorError("No animation defined with ID = " + animationId + " (component ID = " + componentID);
-                }
+                }*/
             }
 
             // Materials    
@@ -1373,9 +1373,11 @@ class MySceneGraph {
 
         for (var i = 0; i < children.length; i++) {
             if (children[i].nodeName == "blackTile") {
-                this.gameElements.blackTile = this.reader.getString(children[i], 'componentref');
+                let blackTileId = this.reader.getString(children[i], 'componentref');
+                this.gameElements.blackTile = this.components[blackTileId]
             } else if (children[i].nodeName == "whiteTile") {
-                this.gameElements.whiteTile = this.reader.getString(children[i], 'componentref');
+                let whiteTileId = this.reader.getString(children[i], 'componentref');
+                this.gameElements.whiteTile = this.components[whiteTileId]
             }
         }
     }
@@ -1386,7 +1388,8 @@ class MySceneGraph {
      */
     parseAuxBoard(auxBoardNode) {
         if (auxBoardNode.nodeName == "auxBoard") {
-            this.gameElements.auxBoard = this.reader.getString(auxBoardNode, 'componentref');
+            let auxBoardId = this.reader.getString(auxBoardNode, 'componentref');
+            this.gameElements.auxBoard = this.components[auxBoardId]
         }
     }
 
@@ -1399,9 +1402,11 @@ class MySceneGraph {
 
         for (var i = 0; i < children.length; i++) {
             if (children[i].nodeName == "horse") {
-                this.gameElements.horsePiece = this.reader.getString(children[i], 'componentref');
+                let horsePieceId = this.reader.getString(children[i], 'componentref');
+                this.gameElements.horsePiece = this.components[horsePieceId]
             } else if (children[i].nodeName == "bishop") {
-                this.gameElements.bishopPiece = this.reader.getString(children[i], 'componentref');
+                let bishopPieceId = this.reader.getString(children[i], 'componentref');
+                this.gameElements.bishopPiece = this.components[bishopPieceId] 
             }
         }
     }
@@ -1541,7 +1546,7 @@ class MySceneGraph {
 
     displayComponent(component, material) {
         var identity = mat4.create();
-        this.processNode(this.components[component], identity, material);
+        this.processNode(component, identity, material);
     }
 
     processNode(component, parentTransformationMatrix, parentMaterial, parentTexture, parentLength_s, parentLength_t) {
@@ -1631,14 +1636,19 @@ class MySceneGraph {
                 if (parentLength_s != null && parentLength_t != null)
                     primitive.scaleFactors(parentLength_s, parentLength_t);
 
-                parentMaterial.setTexture(parentTexture);
-                parentMaterial.setTextureWrap('REPEAT', 'REPEAT');
+                if (parentMaterial != undefined && parentMaterial != null) {
+                    parentMaterial.setTexture(parentTexture);
+                    parentMaterial.setTextureWrap('REPEAT', 'REPEAT');
+                }
             }
-            parentMaterial.apply();
+            if (parentMaterial != undefined && parentMaterial != null) {
+                parentMaterial.apply();
+            }
+
             this.scene.multMatrix(parentTransformationMatrix);
             primitive.display();
-
-            parentMaterial.setTexture(null);
+            if (parentMaterial != undefined && parentMaterial != null)
+                parentMaterial.setTexture(null);
         }
     }
 }

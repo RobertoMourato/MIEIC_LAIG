@@ -1,8 +1,9 @@
 class Player {
-    constructor(id, type, color) {
+    constructor(id, type, color, level) {
         this.id = id
         this.type = type
         this.color = color
+        this.level = level
     }
 
     getType() {
